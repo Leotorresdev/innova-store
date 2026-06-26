@@ -1,0 +1,110 @@
+'use client';
+
+import { motion } from 'framer-motion';
+import { Target, Users, Zap } from 'lucide-react';
+import Image from 'next/image';
+
+const VALUES = [
+  {
+    icon: Zap,
+    title: 'Innovación',
+    desc: 'Empujamos los límites de la tecnología actual.',
+  },
+  {
+    icon: Target,
+    title: 'Precisión',
+    desc: 'Diseño meticuloso en cada milímetro de producto.',
+  },
+  {
+    icon: Users,
+    title: 'Comunidad',
+    desc: 'Una red global de creadores y pioneros.',
+  },
+];
+
+export function AboutSection() {
+  return (
+    <section id="nosotros" className="relative py-24 sm:py-32 overflow-hidden">
+      {/* Abstract Background Elements */}
+      <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] -translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+      
+      <div className="mx-auto max-w-7xl px-6 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7 }}
+          >
+            <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+              Redefiniendo el <span className="text-gradient">estándar</span> de la industria.
+            </h2>
+            <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+              En Innova no nos conformamos con seguir tendencias; las creamos. Desde nuestros inicios, nuestra misión ha sido proporcionar herramientas de hardware y software que potencien la creatividad humana, eliminando la fricción entre la idea y la ejecución.
+            </p>
+            
+            <div className="space-y-6">
+              {VALUES.map((val, i) => (
+                <motion.div 
+                  key={val.title}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.15 }}
+                  className="flex items-start gap-4 group"
+                >
+                  <div className="size-12 rounded-2xl bg-surface flex items-center justify-center shadow-sm border border-border group-hover:border-primary/30 group-hover:shadow-glow transition-all">
+                    <val.icon className="size-5 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-display text-lg font-bold">{val.title}</h4>
+                    <p className="text-sm text-muted-foreground mt-1">{val.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
+            whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="relative"
+          >
+            <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-elegant border border-border">
+              {/* Fallback pattern if no image */}
+              <div className="absolute inset-0 bg-ink" />
+              <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '30px 30px' }} />
+              
+              <Image 
+                src="/assets/innova/hero.jpg" 
+                alt="Equipo Innova" 
+                fill 
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover opacity-80 mix-blend-overlay hover:scale-105 hover:opacity-100 transition-all duration-700" 
+              />
+              
+              <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-transparent opacity-80" />
+              
+              <div className="absolute bottom-8 left-8 right-8 p-6 glass-dark rounded-3xl border border-white/10 shadow-glow">
+                <p className="font-display text-2xl font-bold text-white mb-2">Diseño en California.</p>
+                <p className="text-white/70 text-sm">Innovación global. Construido para el futuro.</p>
+              </div>
+            </div>
+            
+            {/* Decorative element */}
+            <div className="absolute -top-6 -right-6 size-32 rounded-full border border-primary/20 bg-surface/80 backdrop-blur-md shadow-glow animate-float flex items-center justify-center z-20">
+              <div className="text-center">
+                <p className="font-display text-3xl font-bold text-primary">15+</p>
+                <p className="text-[10px] uppercase font-mono tracking-widest text-muted-foreground mt-1">Años<br/>liderando</p>
+              </div>
+            </div>
+          </motion.div>
+          
+        </div>
+      </div>
+    </section>
+  );
+}
