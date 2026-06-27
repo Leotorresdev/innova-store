@@ -7,8 +7,8 @@ export function ContactSection() {
   return (
     <section id="contacto" className="relative py-24 sm:py-32 overflow-hidden bg-ink text-ink-foreground rounded-[3rem] mx-4 sm:mx-6 my-12 shadow-elegant border border-white/5">
       {/* Background elements */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-secondary/10 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/3 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-150 h-150 bg-primary/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-100 h-100 bg-secondary/10 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/3 pointer-events-none" />
       
       <div className="mx-auto max-w-7xl px-6 relative z-10">
         <div className="text-center max-w-2xl mx-auto mb-16">
@@ -98,7 +98,7 @@ export function ContactSection() {
             className="lg:col-span-3"
           >
             <form className="glass-dark p-8 sm:p-10 rounded-[2.5rem] border border-white/10 shadow-glow relative overflow-hidden group hover:border-primary/30 transition-colors duration-500">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               
               <div className="grid sm:grid-cols-2 gap-6 mb-6">
                 <div className="space-y-2">

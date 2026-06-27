@@ -13,10 +13,6 @@ export interface Countdown {
   total: number;
 }
 
-/**
- * Countdown en segundos que decae desde `hours` hasta 0.
- * Devuelve los componentes formateados con dos dígitos.
- */
 export function useCountdown(hours: number): Countdown {
   const [total, setTotal] = useState(hours * 3600);
 
@@ -33,3 +29,4 @@ export function useCountdown(hours: number): Countdown {
 
   return { h: pad(h), m: pad(m), s: pad(s), total };
 }
+//!Hook que se usa para crear un contador regresivo en segundos desde un número de horas especificado hasta 0. Devuelve los componentes de tiempo formateados con dos dígitos y el total de segundos restantes.

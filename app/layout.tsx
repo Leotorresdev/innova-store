@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 import { siteConfig } from '@/config/site';
+import { Navbar } from '@/components/layout/Navbar';
+import { Footer } from '@/components/layout/Footer';
+import { CartDrawer } from '@/components/layout/CartDrawer';
 import './globals.css';
 
 const inter = Inter({
@@ -80,7 +83,12 @@ export default function RootLayout({
       className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="antialiased font-sans">{children}</body>
+      <body className="antialiased font-sans">
+        <Navbar />
+        <main className="pt-24">{children}</main>
+        <Footer />
+        <CartDrawer />
+      </body>
     </html>
   );
 }

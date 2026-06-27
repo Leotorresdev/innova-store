@@ -14,14 +14,15 @@ export function HeroSection() {
           loop
           muted
           playsInline
+          preload='auto'
           className="absolute inset-0 w-full h-full object-cover scale-105"
         >
           <source src="/innova.mp4" type="video/mp4" />
         </video>
         {/* Dark overlay for readability */}
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-black/30 " />
         {/* Gradient overlay for blending */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+        <div className="absolute inset-0  from-black/30 via-transparent to-transparent" />
       </div>
 
       {/* Content */}
@@ -32,19 +33,19 @@ export function HeroSection() {
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="glass-dark inline-flex items-center gap-3 rounded-full px-4 py-2 text-sm font-medium text-white mb-8 shadow-glow"
         >
-          <span className="size-2 rounded-full bg-primary animate-glow-pulse" />
-          Descubre el Futuro de la Innovación
+          <span className="size-2 rounded-full bg-primary animate-glow-pulse " />
+          <span>¡Novedades en preventa! Descubre lo último en tecnología.</span>
         </motion.div>
 
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
-          className="font-display text-5xl sm:text-7xl lg:text-[96px] font-bold leading-[1.05] tracking-tight text-white drop-shadow-2xl max-w-5xl"
+          className="font-display text-5xl sm:text-4xl lg:text-[96px] font-bold leading-[1.05] tracking-tight text-white drop-shadow-2xl max-w-5xl"
         >
-          Diseño en <span className="text-gradient drop-shadow-none">3D</span>
+          <span className="text-lg sm:text-6xl">Conoce la nueva era de </span><span className="text-gradient drop-shadow-none text-lg sm:text-6xl">Innovación</span>
           <br />
-          <span className="text-white/90">Evolución Constante.</span>
+          <span className="text-white/90 text-lg sm:text-5xl">Descubre lo último en tecnología.</span>
         </motion.h1>
 
         <motion.p
@@ -53,7 +54,7 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
           className="mt-8 text-lg sm:text-xl text-white/80 max-w-2xl leading-relaxed font-light drop-shadow-md"
         >
-          Sumérgete en una experiencia visual única. Software y hardware premium diseñados para romper los límites de tu creatividad.
+          Explora nuestra tienda digital y descubre productos innovadores que transformarán tu vida. Desde tecnología de vanguardia hasta soluciones inteligentes, tenemos todo lo que necesitas para estar a la vanguardia.
         </motion.p>
 
         <motion.div

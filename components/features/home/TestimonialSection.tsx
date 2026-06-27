@@ -28,7 +28,7 @@ export function TestimonialSection() {
   return (
     <section className="relative py-24 sm:py-32 overflow-hidden">
       {/* Subtle Glow Background */}
-      <div className="absolute top-1/2 left-1/2 w-full h-[300px] bg-primary/5 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 w-full h-75 bg-primary/5 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
       
       <div className="mx-auto max-w-7xl px-6 relative z-10">
         <div className="text-center max-w-2xl mx-auto mb-16">
@@ -65,7 +65,7 @@ export function TestimonialSection() {
                 ))}
               </div>
               <p className="text-base text-foreground/80 leading-relaxed mb-8 italic">
-                "{t.quote}"
+                &quot;{t.quote}&quot;
               </p>
               <div className="flex items-center gap-4 mt-auto">
                 <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center font-display font-bold text-primary">
