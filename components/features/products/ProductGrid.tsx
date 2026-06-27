@@ -27,7 +27,7 @@ export function ProductGrid({ products, cols = 3, emptyMessage = 'Sin resultados
         : 'sm:grid-cols-2 lg:grid-cols-3';
 
   return (
-    <div className={`grid gap-6 ${colClass}`}>
+    <div className={`grid gap-5 ${colClass}`}>
       {products.map((p, i) => (
         <ProductCard key={p.id} product={p} index={i} />
       ))}

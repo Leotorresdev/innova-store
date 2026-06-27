@@ -7,6 +7,7 @@ interface LogoProps {
   size?: 'sm' | 'md' | 'lg';
   showVersion?: boolean;
   className?: string;
+  textClassName?: string;
 }
 
 /**
@@ -18,6 +19,7 @@ export function Logo({
   size = 'md',
   showVersion = false,
   className,
+  textClassName,
 }: LogoProps) {
   const dim = size === 'sm' ? 'size-8' : size === 'lg' ? 'size-12' : 'size-10';
   const text =
@@ -44,7 +46,7 @@ export function Logo({
           className="size-full object-contain"
         />
       </div>
-      <span className={cn('font-display font-bold tracking-tight', text)}>
+      <span className={cn('font-display font-bold tracking-tight', text, textClassName)}>
         {BRAND.name}
       </span>
       {showVersion && (

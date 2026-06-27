@@ -15,12 +15,12 @@ export default function PreventasPage() {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden rounded-[2.5rem] glass-dark text-ink-foreground p-8 sm:p-12 min-h-[360px] flex flex-col justify-center shadow-elegant border border-white/10"
+          className="relative overflow-hidden rounded-[2.5rem] glass-dark text-ink-foreground p-8 sm:p-12 min-h-90 flex flex-col justify-center shadow-elegant border border-white/10"
         >
           {/* Dynamic background glow */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-secondary/10 opacity-60" />
+          <div className="absolute inset-0 bg-linear-to-br from-primary/20 via-transparent to-secondary/10 opacity-60" />
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/30 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
-          
+
           <div
             aria-hidden
             className="absolute inset-0 opacity-[0.05]"
@@ -30,7 +30,7 @@ export default function PreventasPage() {
               backgroundSize: '24px 24px',
             }}
           />
-          
+
           <div className="relative z-10">
             <span className="inline-flex items-center rounded-full bg-primary/20 text-primary px-4 py-1.5 text-xs font-semibold border border-primary/30 shadow-glow backdrop-blur-md mb-6">
               <span className="size-1.5 rounded-full bg-primary animate-glow-pulse mr-2" />

@@ -26,7 +26,7 @@ export function AboutSection() {
   return (
     <section id="nosotros" className="relative py-24 sm:py-32 overflow-hidden">
       {/* Abstract Background Elements */}
-      <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] -translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+      <div className="absolute top-1/2 left-0 w-125 h-125 bg-primary/5 rounded-full blur-[100px] -translate-y-1/2 -translate-x-1/2 pointer-events-none" />
       
       <div className="mx-auto max-w-7xl px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -73,7 +73,7 @@ export function AboutSection() {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-elegant border border-border">
+            <div className="relative aspect-4/5 rounded-[3rem] overflow-hidden shadow-elegant border border-border">
               {/* Fallback pattern if no image */}
               <div className="absolute inset-0 bg-ink" />
               <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '30px 30px' }} />
@@ -86,7 +86,7 @@ export function AboutSection() {
                 className="object-cover opacity-80 mix-blend-overlay hover:scale-105 hover:opacity-100 transition-all duration-700" 
               />
               
-              <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-transparent opacity-80" />
+              <div className="absolute inset-0 bg-linear-to-t from-ink via-transparent to-transparent opacity-80" />
               
               <div className="absolute bottom-8 left-8 right-8 p-6 glass-dark rounded-3xl border border-white/10 shadow-glow">
                 <p className="font-display text-2xl font-bold text-white mb-2">Diseño en California.</p>

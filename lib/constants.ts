@@ -19,8 +19,10 @@ export const ASSETS = {
 } as const;
 
 export const NAV_LINKS = [
-  { href: '/#features', label: 'Beneficios' },
+  { href: '/#inicio', label: 'Inicio' },,
+  { href: '/#tienda', label: 'Productos' },
   { href: '/#nosotros', label: 'Nosotros' },
+  { href: '/#features', label: 'Beneficios' },
   { href: '/#contacto', label: 'Contacto' },
   { href: '/preventas', label: 'Preventas' },
 ] as const;
