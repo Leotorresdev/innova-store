@@ -10,8 +10,8 @@ interface CartState {
   isOpen: boolean;
   setOpen: (open: boolean) => void;
   add: (product: Product) => void;
-  remove: (id: number) => void;
-  setQty: (id: number, cantidad: number) => void;
+  remove: (id: string | number) => void;
+  setQty: (id: string | number, cantidad: number) => void;
   clear: () => void;
 }
 
@@ -65,14 +65,14 @@ export const useCartStore = create<CartStore>((set, get) => ({
   clear: () => set({ items: [] }),
 
   getTotal: () =>
-    get().items.reduce((acc, i) => acc + i.precio * i.cantidad, 0),
+    get().items.reduce((acc, i) => acc + i.precioOriginal * i.cantidad, 0),
 
   getCount: () => get().items.reduce((acc, i) => acc + i.cantidad, 0),
 
   getTotals: () => {
     const items = get().items;
     return {
-      total: items.reduce((acc, i) => acc + i.precio * i.cantidad, 0),
+      total: items.reduce((acc, i) => acc + i.precioOriginal * i.cantidad, 0),
       count: items.reduce((acc, i) => acc + i.cantidad, 0),
     };
   },

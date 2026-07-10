@@ -1,11 +1,43 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { products } from '@/lib/data/products';
 import { ProductGrid } from '@/components/features/products/ProductGrid';
+import type { Product } from '@/types';
 
 export function ProductsShowcase() {
-  const featured = products.slice(0, 4);
+  const [dbProducts, setDbProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const response = await fetch('/api/products');
+        if (!response.ok) throw new Error('Error al cargar productos');
+        const data = await response.json();
+        
+        const mappedProducts: Product[] = data.map((p: any) => ({
+          id: p.id,
+          nombre: p.name,
+          precio: p.price,
+          precioOriginal: Math.round(p.price * 1.25),
+          categoria: p.type === 'PRESALE' ? 'Preventa' : 'Novedad',
+          imagen: p.imageUrl,
+          rating: 5,
+          ventas: Math.floor(Math.random() * 200) + 50,
+          etiqueta: p.isNew ? 'Nuevo' : undefined,
+          stock: p.stock,
+          descripcion: p.description,
+        }));
+        
+        setDbProducts(mappedProducts);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    }
+    fetchProducts();
+  }, []);
+
+  const featured = dbProducts.slice(0, 6);
 
   return (
     <motion.section 
@@ -24,7 +56,7 @@ export function ProductsShowcase() {
           transition={{ duration: 0.5 }}
           className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 text-primary px-4 py-1.5 text-xs font-semibold mb-6"
         >
-          ✦ Colección Destacada
+          ✦ Colección Oficial
         </motion.div>
         
         <motion.h2 
@@ -49,7 +81,6 @@ export function ProductsShowcase() {
       </div>
       
       <div className="relative">
-        {/* Subtle glow behind products */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary/5 rounded-full blur-[120px] pointer-events-none" />       
         <ProductGrid products={featured} cols={3} />
       </div>
