@@ -4,8 +4,7 @@ export const BRAND = {
 } as const;
 
 export const ASSETS = {
-  logo: '/assets/innova/logo.jpg',
-  hero: '/assets/innova/hero.jpg',
+  logo: '/favicon.png',
   products: {
     headphones: '/assets/innova/products/headphones.jpg',
     watch: '/assets/innova/products/watch.jpg',

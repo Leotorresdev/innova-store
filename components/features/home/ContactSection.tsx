@@ -121,19 +121,6 @@ export function ContactSection() {
                 </div>
               </div>
               
-              <div className="space-y-2 mb-6">
-                <label htmlFor="subject" className="text-sm font-medium text-white/80 ml-1">Asunto</label>
-                <select 
-                  id="subject" 
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all appearance-none cursor-pointer"
-                >
-                  <option value="sales" className="bg-ink">Ventas Corporativas</option>
-                  <option value="support" className="bg-ink">Soporte Técnico</option>
-                  <option value="partnership" className="bg-ink">Alianzas</option>
-                  <option value="other" className="bg-ink">Otro</option>
-                </select>
-              </div>
-              
               <div className="space-y-2 mb-8">
                 <label htmlFor="message" className="text-sm font-medium text-white/80 ml-1">Mensaje</label>
                 <textarea 

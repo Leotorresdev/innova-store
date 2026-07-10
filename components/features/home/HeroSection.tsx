@@ -6,7 +6,7 @@ import { ArrowRight, Play } from 'lucide-react';
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden rounded-b-[3rem] mx-2 sm:mx-4 mt-2">
+    <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden rounded-b-[1rem] mx-2 sm:mx-4 mt-2">
       {/* Video Background */}
       <div className="absolute inset-0 w-full h-full">
         <video
@@ -25,36 +25,27 @@ export function HeroSection() {
         <div className="absolute inset-0  from-black/30 via-transparent to-transparent" />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 mx-auto max-w-7xl px-6 w-full flex flex-col items-center text-center">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="glass-dark inline-flex items-center gap-3 rounded-full px-4 py-2 text-sm font-medium text-white mb-8 shadow-glow"
-        >
-          <span className="size-2 rounded-full bg-primary animate-glow-pulse " />
-          <span>¡Novedades en preventa! Descubre lo último en tecnología.</span>
-        </motion.div>
 
+      <div className="relative z-10 mx-auto max-w-7xl px-6 w-full flex flex-col items-center text-center">
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
-          className="font-display text-5xl sm:text-4xl lg:text-[96px] font-bold leading-[1.05] tracking-tight text-white drop-shadow-2xl max-w-5xl"
+          className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight tracking-tighter text-white drop-shadow-2xl max-w-5xl"
         >
-          <span className="text-lg sm:text-6xl">Conoce la nueva era de </span><span className="text-gradient drop-shadow-none text-lg sm:text-6xl">Innovación</span>
-          <br />
-          <span className="text-white/90 text-lg sm:text-5xl">Descubre lo último en tecnología.</span>
+          La nueva era de la <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-black to-black bg-[length:200%_auto] animate-gradient-x drop-shadow-lg">
+            Innovación
+          </span>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
-          className="mt-8 text-lg sm:text-xl text-white/80 max-w-2xl leading-relaxed font-light drop-shadow-md"
+          className="mt-8 text-lg sm:text-2xl text-white/90 max-w-2xl leading-relaxed font-light drop-shadow-md"
         >
-          Explora nuestra tienda digital y descubre productos innovadores que transformarán tu vida. Desde tecnología de vanguardia hasta soluciones inteligentes, tenemos todo lo que necesitas para estar a la vanguardia.
+          Explora nuestra tienda digital. Desde tecnología de vanguardia hasta soluciones inteligentes para transformar tu vida.
         </motion.p>
 
         <motion.div
@@ -75,7 +66,7 @@ export function HeroSection() {
           </Link>
           <Link
             href="/preventas"
-            className="group inline-flex items-center gap-2 glass text-white font-medium px-8 py-4 rounded-full hover:bg-white/20 transition-all hover:scale-105 border-white/20 shadow-elegant"
+            className="group inline-flex items-center gap-2 glass text-black font-medium px-8 py-4 rounded-full hover:bg-white/20 transition-all hover:scale-105 border-white/20 shadow-elegant"
           >
             <Play className="size-5 fill-current" />
             Ver Preventas Exclusivas
@@ -83,16 +74,16 @@ export function HeroSection() {
         </motion.div>
       </div>
       
-      {/* Decorative floating elements */}
+      {/* Decorative floating elements (Premium Auroras) */}
       <motion.div 
-        animate={{ y: [0, -15, 0] }} 
-        transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-        className="absolute bottom-20 left-10 w-32 h-32 rounded-full bg-primary/20 blur-3xl" 
+        animate={{ y: [0, -30, 0], scale: [1, 1.1, 1], opacity: [0.4, 0.6, 0.4] }} 
+        transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
+        className="absolute bottom-10 left-0 w-96 h-96 rounded-full bg-primary/30 blur-[120px] pointer-events-none" 
       />
       <motion.div 
-        animate={{ y: [0, 20, 0] }} 
-        transition={{ repeat: Infinity, duration: 7, ease: "easeInOut", delay: 1 }}
-        className="absolute top-20 right-20 w-48 h-48 rounded-full bg-secondary/20 blur-3xl" 
+        animate={{ y: [0, 40, 0], scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }} 
+        transition={{ repeat: Infinity, duration: 10, ease: "easeInOut", delay: 1 }}
+        className="absolute top-20 right-0 w-[30rem] h-[30rem] rounded-full bg-blue-500/20 blur-[120px] pointer-events-none" 
       />
     </section>
   );

@@ -79,28 +79,22 @@ export function AboutSection() {
               <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '30px 30px' }} />
               
               <Image 
-                src="/assets/innova/hero.jpg" 
+                src="/images/innova.jpg" 
+                sizes="(max-width: 768px) 100vw, 50vw"
                 alt="Equipo Innova" 
                 fill 
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover opacity-80 mix-blend-overlay hover:scale-105 hover:opacity-100 transition-all duration-700" 
+                
+                className="" 
               />
               
               <div className="absolute inset-0 bg-linear-to-t from-ink via-transparent to-transparent opacity-80" />
               
               <div className="absolute bottom-8 left-8 right-8 p-6 glass-dark rounded-3xl border border-white/10 shadow-glow">
-                <p className="font-display text-2xl font-bold text-white mb-2">Diseño en California.</p>
                 <p className="text-white/70 text-sm">Innovación global. Construido para el futuro.</p>
               </div>
             </div>
             
-            {/* Decorative element */}
-            <div className="absolute -top-6 -right-6 size-32 rounded-full border border-primary/20 bg-surface/80 backdrop-blur-md shadow-glow animate-float flex items-center justify-center z-20">
-              <div className="text-center">
-                <p className="font-display text-3xl font-bold text-primary">15+</p>
-                <p className="text-[10px] uppercase font-mono tracking-widest text-muted-foreground mt-1">Años<br/>liderando</p>
-              </div>
-            </div>
+
           </motion.div>
           
         </div>

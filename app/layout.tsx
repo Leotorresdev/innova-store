@@ -4,6 +4,7 @@ import { siteConfig } from '@/config/site';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/layout/CartDrawer';
+import { NoiseBackground } from '@/components/ui/NoiseBackground';
 import './globals.css';
 
 const inter = Inter({
@@ -82,8 +83,10 @@ export default function RootLayout({
       lang={siteConfig.locale}
       className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
     >
-      <body className="antialiased font-sans">
+      <body className="antialiased font-sans relative">
+        <NoiseBackground />
         <Navbar />
         <main className="pt-24">{children}</main>
         <Footer />

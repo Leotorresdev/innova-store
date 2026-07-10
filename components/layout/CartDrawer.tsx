@@ -20,8 +20,7 @@ import {
   selectCartTotal,
 } from '@/store/useCartStore';
 import { Button } from '@/components/ui/button';
-
-const FREE_SHIPPING_THRESHOLD = 500;
+import { useRouter } from 'next/navigation';
 
 export function CartDrawer() {
   const open = useCartStore(selectCartIsOpen);
@@ -31,10 +30,10 @@ export function CartDrawer() {
   const setQty = useCartStore((s) => s.setQty);
   const remove = useCartStore((s) => s.remove);
   const clear = useCartStore((s) => s.clear);
+  const router = useRouter();
 
   const count = items.reduce((acc, i) => acc + i.cantidad, 0);
-  const shippingProgress = Math.min((total / FREE_SHIPPING_THRESHOLD) * 100, 100);
-  const remaining = Math.max(FREE_SHIPPING_THRESHOLD - total, 0);
+  const SHIPPING_COST = 5; // Costo de envío configurable
 
   return (
     <AnimatePresence>
@@ -84,33 +83,7 @@ export function CartDrawer() {
               </button>
             </div>
 
-            {/* ── Free shipping progress ── */}
-            {items.length > 0 && (
-              <div className="px-6 py-3 bg-primary/5 border-b border-border/40">
-                <div className="flex items-center gap-2 text-xs mb-2">
-                  <Truck className="size-3.5 text-primary" />
-                  {remaining === 0 ? (
-                    <span className="font-semibold text-primary">¡Envío gratis desbloqueado! 🎉</span>
-                  ) : (
-                    <span className="text-muted-foreground">
-                      Agrega{' '}
-                      <span className="font-semibold text-foreground">
-                        ${remaining.toLocaleString()}
-                      </span>{' '}
-                      más para envío gratis
-                    </span>
-                  )}
-                </div>
-                <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                  <motion.div
-                    className="h-full bg-gradient-primary rounded-full"
-                    initial={{ width: 0 }}
-                    animate={{ width: `${shippingProgress}%` }}
-                    transition={{ duration: 0.6, ease: 'easeOut' }}
-                  />
-                </div>
-              </div>
-            )}
+
 
             {/* ── Items list ── */}
             <div className="flex-1 overflow-y-auto px-6 py-4 space-y-3">
@@ -233,40 +206,20 @@ export function CartDrawer() {
             {/* ── Footer / Checkout ── */}
             {items.length > 0 && (
               <div className="border-t border-border/60 px-6 pt-5 pb-6 space-y-4 bg-surface">
-                {/* Promo code */}
-                <div className="flex gap-2">
-                  <div className="relative flex-1">
-                    <Tag className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
-                    <input
-                      type="text"
-                      placeholder="Código de descuento"
-                      className="w-full rounded-xl pl-9 pr-4 py-2.5 text-sm bg-muted/60 border border-border/60 focus:outline-none focus:ring-2 focus:ring-primary/30 placeholder:text-muted-foreground/60"
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    className="px-4 rounded-xl border border-border/60 text-sm font-medium hover:bg-muted transition"
-                  >
-                    Aplicar
-                  </button>
-                </div>
-
                 {/* Summary */}
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Subtotal</span>
+                    <span className="text-muted-foreground">Productos</span>
                     <span className="font-mono">${total.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Envío</span>
-                    <span className={remaining === 0 ? 'text-emerald-500 font-semibold' : 'font-mono'}>
-                      {remaining === 0 ? 'Gratis' : `$${(25).toLocaleString()}`}
-                    </span>
+                    <span className="font-mono">${SHIPPING_COST.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between font-display text-lg font-bold pt-2 border-t border-border/60">
                     <span>Total</span>
                     <span className="text-gradient">
-                      ${(total + (remaining === 0 ? 0 : 25)).toLocaleString()}
+                      ${(total + SHIPPING_COST).toLocaleString()}
                     </span>
                   </div>
                 </div>
@@ -286,9 +239,13 @@ export function CartDrawer() {
                 {/* CTA */}
                 <Button
                   id="checkout-btn"
+                  onClick={() => {
+                    setOpen(false);
+                    router.push('/pay');
+                  }}
                   className="w-full rounded-xl py-3.5 h-auto text-sm font-semibold gap-2 shadow-glow"
                 >
-                  Finalizar compra
+                  Comprar
                   <ArrowRight className="size-4" />
                 </Button>
 

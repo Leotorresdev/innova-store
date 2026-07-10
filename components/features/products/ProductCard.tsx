@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { ShoppingBag, Star, Check, Zap } from 'lucide-react';
+import { ShoppingBag, Check } from 'lucide-react';
 import { useCartStore } from '@/store/useCartStore';
 import type { Product } from '@/types';
 
@@ -16,19 +16,18 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
   const add = useCartStore((s) => s.add);
   const [added, setAdded] = useState(false);
 
-  const hasDiscount =
-    typeof product.descuento === 'number' && product.descuento > 0;
-
-  const savings =
-    product.precioOriginal
-      ? product.precioOriginal - product.precio
-      : null;
+  const isNewProduct =
+    product.badge?.toLowerCase() === 'nuevo' ||
+    product.etiqueta?.toLowerCase() === 'nuevo';
 
   function handleAdd() {
+    if (product.stock !== undefined && product.stock <= 0) return;
     add(product);
     setAdded(true);
     setTimeout(() => setAdded(false), 1800);
   }
+
+  const isOutOfStock = product.stock !== undefined && product.stock <= 0;
 
   return (
     <motion.article
@@ -39,11 +38,11 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
       className={`
         group relative flex flex-col
         rounded-3xl overflow-hidden
-        bg-card border border-border/50
+        bg-gradient-to-b from-card to-primary/5 border border-border/50
         shadow-card
         transition-all duration-500
-        hover:-translate-y-2 hover:shadow-elegant
-        hover:border-primary/20
+        hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12),0_0_30px_rgba(var(--primary),0.15)]
+        hover:border-primary/40
       `}
     >
       {/* ── Glow ring on hover ── */}
@@ -77,60 +76,47 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
             type="button"
             id={`quick-add-${product.id}`}
             onClick={handleAdd}
-            className="w-full flex items-center justify-center gap-2
+            disabled={isOutOfStock}
+            className={`w-full flex items-center justify-center gap-2
               bg-white/95 backdrop-blur-sm text-ink
               text-sm font-semibold py-3 rounded-2xl
-              hover:bg-primary hover:text-primary-foreground
-              active:scale-[0.97]
-              transition-all duration-200 shadow-lg"
+              transition-all duration-200 shadow-lg
+              ${isOutOfStock 
+                ? 'opacity-70 cursor-not-allowed bg-neutral-200 text-neutral-500' 
+                : 'hover:bg-primary hover:text-primary-foreground active:scale-[0.97]'
+              }`}
           >
             <ShoppingBag className="size-4" />
-            Agregar al carrito
+            {isOutOfStock ? 'Agotado' : 'Agregar al carrito'}
           </button>
         </div>
 
-        {/* ── Top-left badges ── */}
+        {/* ── Top-left badge ── */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
-          {product.badge && (
+          {isOutOfStock ? (
+            <span className="inline-flex items-center gap-1
+              text-[10px] font-semibold uppercase tracking-widest
+              px-2.5 py-1 rounded-lg
+              bg-red-500/90 text-white backdrop-blur-md shadow-lg"
+            >
+              Agotado
+            </span>
+          ) : isNewProduct ? (
             <span className="inline-flex items-center gap-1
               text-[10px] font-semibold uppercase tracking-widest
               px-2.5 py-1 rounded-lg
               bg-ink/85 text-ink-foreground backdrop-blur-md"
             >
-              {product.badge === 'Destacado' && <Zap className="size-2.5 fill-current" />}
-              {product.badge}
+              Nuevo
             </span>
-          )}
-          {hasDiscount && (
-            <span className="text-[11px] font-bold px-2.5 py-1 rounded-lg
-              bg-primary text-primary-foreground shadow-glow"
-            >
-              -{product.descuento}%
-            </span>
-          )}
+          ) : null}
         </div>
-
-        {/* ── Top-right rating pill ── */}
-        {product.rating && (
-          <div className="absolute top-3 right-3 z-10
-            flex items-center gap-1
-            rounded-full bg-black/40 backdrop-blur-md
-            border border-white/10
-            px-2.5 py-1 text-xs font-semibold text-white"
-          >
-            <Star className="size-3 fill-amber-400 text-amber-400" />
-            {product.rating}
-          </div>
-        )}
       </div>
 
       <div className="flex flex-col flex-1 px-5 pt-4 pb-5 gap-3">
 
-        {/* Category + Title */}
+        {/* Title + Description */}
         <div>
-          <span className="text-[10px] font-mono uppercase tracking-[0.15em] text-primary/70 mb-1.5 block">
-            {product.categoria}
-          </span>
           <h3 className="font-display text-[1.05rem] font-bold leading-tight
             group-hover:text-primary transition-colors duration-200"
           >
@@ -141,11 +127,18 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
           </p>
         </div>
 
-        {/* Stock warning */}
-        {product.stock && product.stock <= 20 && (
-          <div className="flex items-center gap-1.5 text-xs text-amber-500 font-medium">
-            <span className="size-1.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
-            Solo {product.stock} unidades disponibles
+        {/* Stock warning / Available units */}
+        {product.stock !== undefined && product.stock > 0 && (
+          <div className={`flex items-center gap-1.5 text-xs font-medium ${product.stock <= 20 ? 'text-amber-500' : 'text-emerald-500'}`}>
+            <span className={`size-1.5 rounded-full shrink-0 ${product.stock <= 20 ? 'bg-amber-400 animate-pulse' : 'bg-emerald-500'}`} />
+            {product.stock} unidades disponibles
+          </div>
+        )}
+
+        {isOutOfStock && (
+          <div className="flex items-center gap-1.5 text-xs text-red-500 font-medium">
+            <span className="size-1.5 rounded-full bg-red-500 shrink-0" />
+            No hay unidades disponibles
           </div>
         )}
 
@@ -163,18 +156,6 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
             <span className="font-display text-[1.6rem] font-bold leading-none tracking-tight">
               ${product.precio.toLocaleString()}
             </span>
-            {product.precioOriginal && (
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground line-through">
-                  ${product.precioOriginal.toLocaleString()}
-                </span>
-                {savings && savings > 0 && (
-                  <span className="text-[10px] font-semibold text-emerald-500">
-                    Ahorras ${savings.toLocaleString()}
-                  </span>
-                )}
-              </div>
-            )}
           </div>
 
           {/* Add-to-cart button with confirmation state */}
@@ -182,15 +163,18 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
             type="button"
             id={`add-cart-${product.id}`}
             onClick={handleAdd}
+            disabled={isOutOfStock}
             aria-label={`Añadir ${product.nombre} al carrito`}
             className={`
               shrink-0 size-12 rounded-2xl flex items-center justify-center
               font-semibold text-sm
-              active:scale-95 transition-all duration-300
+              transition-all duration-300
               shadow-sm
-              ${added
-                ? 'bg-emerald-500 text-white scale-110'
-                : 'bg-ink text-ink-foreground hover:bg-primary hover:scale-105 hover:shadow-glow'
+              ${isOutOfStock
+                ? 'bg-neutral-200/50 text-neutral-400 cursor-not-allowed'
+                : added
+                  ? 'bg-emerald-500 text-white scale-110 active:scale-95'
+                  : 'bg-primary text-primary-foreground shadow-[0_0_15px_rgba(var(--primary),0.3)] hover:bg-primary/90 hover:scale-105 active:scale-95'
               }
             `}
           >
