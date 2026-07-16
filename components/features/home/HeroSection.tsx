@@ -6,7 +6,7 @@ import { ArrowRight, Play } from 'lucide-react';
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden rounded-b-[1rem] mx-2 sm:mx-4 mt-2">
+    <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden rounded-b-[1rem] mx-2 sm:mx-4 mt-2">
       {/* Video Background */}
       <div className="absolute inset-0 w-full h-full">
         <video
@@ -34,7 +34,7 @@ export function HeroSection() {
           className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight tracking-tighter text-white drop-shadow-2xl max-w-5xl"
         >
           La nueva era de la <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-black to-black bg-[length:200%_auto] animate-gradient-x drop-shadow-lg">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-100 to-primary bg-[length:200%_auto] animate-gradient-x drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
             Innovación
           </span>
         </motion.h1>

@@ -13,6 +13,11 @@ enum ProductType {
   PRESALE
 }
 
+enum OrderStatus {
+  PROCESSING // Pago montado, a la espera de envío/confirmación manual
+  COMPLETED  // Envío realizado
+}
+
 model Product {
   id          String      @id @default(uuid())
   name        String
@@ -24,4 +29,35 @@ model Product {
   stock       Int         @default(0)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+  
+  orderItems  OrderItem[]
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  customerName    String
+  customerIdDoc   String      // Cédula
+  customerPhone   String
+  shippingAgency  String
+  shippingAddress String
+  paymentMethod   String
+  paymentProofUrl String
+  total           Float
+  status          OrderStatus @default(PROCESSING)
+  
+  items           OrderItem[]
+  
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Float    // Precio al momento de la compra
+  
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
