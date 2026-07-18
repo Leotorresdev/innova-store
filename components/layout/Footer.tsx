@@ -1,17 +1,18 @@
-import { Github, Twitter, Linkedin, Mail } from 'lucide-react';
+import { Instagram } from 'lucide-react';
 import { Logo } from '@/components/shared/Logo';
 import { siteConfig } from '@/config/site';
 
-const SOCIAL = [Twitter, Github, Linkedin, Mail];
+const SOCIAL = [Instagram];
 
 const NAV_COLUMNS = [
   {
     title: 'Navegación',
     links: [
-      { label: 'Colección V2', href: '/tienda' },
-      { label: 'Novedades', href: '/tienda' },
-      { label: 'Preventas', href: '/preventas' },
-      { label: 'Acerca de', href: '#' },
+      { label: 'Inicio', href: '/' },
+      { label: 'Productos', href: '/#tienda' },
+      { label: 'Nosotros', href: '/#nosotros' },
+      { label: 'Beneficios', href: '/#features' },
+      { label: 'Contactos', href: '/#contacto' },
     ],
   }
 ];
@@ -63,8 +64,7 @@ export function Footer() {
       <div className="border-t border-white/10 py-5 px-6 max-w-7xl mx-auto flex flex-wrap gap-4 justify-between text-xs text-white/50">
         <p>© {new Date().getFullYear()} {siteConfig.name}. Diseñado con precisión.</p>
         <div className="flex gap-6">
-          <a href="#" className="hover:text-white transition">Términos Legales</a>
-          <a href="#" className="hover:text-white transition">Privacidad</a>
+          {/* Enlaces legales removidos */}
         </div>
       </div>
     </footer>

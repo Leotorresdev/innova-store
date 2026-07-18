@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Clock, Package, Eye, Trash2, MapPin, Phone, User, CreditCard } from 'lucide-react';
 import { markOrderAsCompleted, deleteOrder } from '@/app/actions/orders';
@@ -30,6 +30,11 @@ type Order = {
 export function OrdersClient({ initialOrders }: { initialOrders: Order[] }) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleComplete = async (id: string) => {
     setLoadingId(id);
@@ -79,7 +84,9 @@ export function OrdersClient({ initialOrders }: { initialOrders: Order[] }) {
                 {order.customerIdDoc}
               </span>
             </h3>
-            <p className="text-sm text-muted-foreground mt-1">{new Date(order.createdAt).toLocaleString('es-VE')}</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              {mounted ? new Date(order.createdAt).toLocaleString('es-VE') : ''}
+            </p>
           </div>
           <div className="text-right">
             <span className="text-xl font-display font-bold">${order.total.toLocaleString()}</span>

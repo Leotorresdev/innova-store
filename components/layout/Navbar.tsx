@@ -8,7 +8,7 @@ import { useUIStore } from '@/store/useUIStore';
 import { Logo } from '@/components/shared/Logo';
 import { NAV_LINKS, BRAND } from '@/lib/constants';
 
-export function Navbar() {
+export function Navbar({ preventasEnabled = true }: { preventasEnabled?: boolean }) {
   const count = useCartStore(selectCartCount);
   const setCartOpen = useCartStore((s) => s.setOpen);
   const isMobileMenuOpen = useUIStore((s) => s.isMobileMenuOpen);
@@ -32,12 +32,17 @@ export function Navbar() {
           <div className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
             {NAV_LINKS.map((l) => {
               if (!l) return null;
+              if (l.href === '/preventas' && !preventasEnabled) return null;
 
               return (
                 <Link
                   key={l.href}
                   href={l.href}
-                  className="px-4 py-2 rounded-full text-sm font-medium transition-all text-white/70 hover:text-white hover:bg-white/5"
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    l.href === '/preventas'
+                      ? 'text-primary bg-primary/10 hover:bg-primary/20'
+                      : 'text-white/70 hover:text-white hover:bg-white/5'
+                  }`}
                 >
                   {l.label}
                 </Link>
@@ -88,13 +93,18 @@ export function Navbar() {
             >
               {NAV_LINKS.map((l) => {
                 if (!l) return null;
+                if (l.href === '/preventas' && !preventasEnabled) return null;
 
                 return (
                   <Link
                     key={l.href}
                     href={l.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="px-4 py-3 rounded-2xl text-sm font-medium text-white/80 hover:text-white hover:bg-white/5 transition-all"
+                    className={`px-4 py-3 rounded-2xl text-sm font-medium transition-all ${
+                      l.href === '/preventas'
+                        ? 'text-primary bg-primary/10 hover:bg-primary/20'
+                        : 'text-white/80 hover:text-white hover:bg-white/5'
+                    }`}
                   >
                     {l.label}
                   </Link>

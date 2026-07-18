@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { 
@@ -21,20 +21,33 @@ import {
   selectCartTotal,
 } from '@/store/useCartStore';
 
-const SHIPPING_COST = 5;
-const EXCHANGE_RATE_VES = 40.50; // Tasa de cambio manual (Bs por USD)
-
 export default function PayPage() {
   const router = useRouter();
   const items = useCartStore(selectCartItems);
   const total = useCartStore(selectCartTotal);
-  const finalTotal = total + SHIPPING_COST;
+  const finalTotal = total;
 
   const clearCart = useCartStore((s) => s.clear);
   const [paymentMethod, setPaymentMethod] = useState<'binance' | 'pagomovil' | null>(null);
   const [shippingAgency, setShippingAgency] = useState<'zoom' | 'mrw' | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [exchangeRateVES, setExchangeRateVES] = useState<number | null>(null);
+
+  useEffect(() => {
+    async function fetchRate() {
+      try {
+        const res = await fetch('https://ve.dolarapi.com/v1/dolares/oficial');
+        const data = await res.json();
+        if (data && data.promedio) {
+          setExchangeRateVES(data.promedio);
+        }
+      } catch (error) {
+        console.error('Error fetching BCV rate:', error);
+      }
+    }
+    fetchRate();
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -368,22 +381,16 @@ export default function PayPage() {
               </div>
 
               <div className="space-y-3 pt-6 border-t border-border/60 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Productos</span>
-                  <span className="font-mono">${total.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Envío a Agencia</span>
-                  <span className="font-mono">${SHIPPING_COST.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between items-end pt-4 border-t border-border/60 mt-4">
+                <div className="flex justify-between items-end pt-4 border-border/60 mt-4">
                   <span className="text-base font-semibold">Total a Pagar</span>
                   <div className="text-right">
                     <span className="text-2xl font-display font-bold text-gradient block">
                       ${finalTotal.toLocaleString()}
                     </span>
                     <span className="text-sm font-medium text-muted-foreground mt-1 block">
-                      ~ Bs. {(finalTotal * EXCHANGE_RATE_VES).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      {exchangeRateVES 
+                        ? `~ Bs. ${(finalTotal * exchangeRateVES).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (BCV)`
+                        : 'Calculando tasa BCV...'}
                     </span>
                   </div>
                 </div>

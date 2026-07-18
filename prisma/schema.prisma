@@ -13,6 +13,11 @@ enum ProductType {
   PRESALE
 }
 
+model GlobalSettings {
+  id              String  @id @default("global")
+  preventasEnabled Boolean @default(true)
+}
+
 enum OrderStatus {
   PROCESSING // Pago montado, a la espera de envío/confirmación manual
   COMPLETED  // Envío realizado
@@ -22,12 +27,13 @@ model Product {
   id          String      @id @default(uuid())
   name        String
   description String
-  price       Float
-  isNew       Boolean     @default(true)
-  imageUrl    String
-  type        ProductType
-  stock       Int         @default(0)
-  createdAt   DateTime    @default(now())
+  price        Float
+  regularPrice Float?      // Precio regular (sin descuento), usado principalmente en preventas
+  isNew        Boolean     @default(true)
+  imageUrl     String
+  type         ProductType
+  stock        Int         @default(0)
+  createdAt    DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   
   orderItems  OrderItem[]

@@ -55,7 +55,7 @@ export function HeroSection() {
           className="mt-12 flex flex-col sm:flex-row gap-5 items-center justify-center"
         >
           <Link
-            href="/tienda"
+            href="/#tienda"
             className="group relative inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold px-8 py-4 rounded-full overflow-hidden transition-all hover:scale-105 shadow-glow"
           >
             <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />

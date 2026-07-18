@@ -7,26 +7,34 @@ function pad(n: number): string {
 }
 
 export interface Countdown {
+  d: string;
   h: string;
   m: string;
   s: string;
   total: number;
 }
 
-export function useCountdown(hours: number): Countdown {
-  const [total, setTotal] = useState(hours * 3600);
+export function useCountdown(targetDate: string | Date): Countdown {
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
+    const calculateTimeLeft = () => {
+      const difference = new Date(targetDate).getTime() - new Date().getTime();
+      return Math.max(0, Math.floor(difference / 1000));
+    };
+
+    setTotal(calculateTimeLeft());
+
     const id = setInterval(() => {
-      setTotal((prev) => (prev > 0 ? prev - 1 : 0));
+      setTotal(calculateTimeLeft());
     }, 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [targetDate]);
 
-  const h = Math.floor(total / 3600);
+  const d = Math.floor(total / (3600 * 24));
+  const h = Math.floor((total % (3600 * 24)) / 3600);
   const m = Math.floor((total % 3600) / 60);
   const s = total % 60;
 
-  return { h: pad(h), m: pad(m), s: pad(s), total };
+  return { d: pad(d), h: pad(h), m: pad(m), s: pad(s), total };
 }
-//!Hook que se usa para crear un contador regresivo en segundos desde un número de horas especificado hasta 0. Devuelve los componentes de tiempo formateados con dos dígitos y el total de segundos restantes.

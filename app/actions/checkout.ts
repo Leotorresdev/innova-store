@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { supabase } from '@/lib/supabase';
 import { revalidatePath } from 'next/cache';
 import { v4 as uuidv4 } from 'uuid';
+import { sendOrderNotificationToTelegram } from '@/lib/telegram';
 
 export async function processCheckout(formData: FormData) {
   try {
@@ -91,6 +92,26 @@ export async function processCheckout(formData: FormData) {
       });
 
       return newOrder;
+    });
+
+    // Enviar notificación a Telegram (en segundo plano, sin bloquear la respuesta)
+    // Extraemos los nombres de los productos para que el mensaje sea más legible
+    const itemsWithNames = await Promise.all(items.map(async (item: any) => {
+      const product = await prisma.product.findUnique({ where: { id: item.id }, select: { name: true } });
+      return { ...item, productName: product?.name || 'Producto' };
+    }));
+    
+    sendOrderNotificationToTelegram({
+      id: order.id,
+      customerName,
+      customerIdDoc,
+      customerPhone,
+      shippingAgency,
+      shippingAddress,
+      paymentMethod,
+      total,
+      paymentProofUrl,
+      items: itemsWithNames
     });
 
     // Revalidar rutas

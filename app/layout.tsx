@@ -5,6 +5,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/layout/CartDrawer';
 import { NoiseBackground } from '@/components/ui/NoiseBackground';
+import { getGlobalSettings } from '@/app/actions/settings';
 import './globals.css';
 
 const inter = Inter({
@@ -73,11 +74,13 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getGlobalSettings();
+
   return (
     <html
       lang={siteConfig.locale}
@@ -87,7 +90,7 @@ export default function RootLayout({
     >
       <body className="antialiased font-sans relative">
         <NoiseBackground />
-        <Navbar />
+        <Navbar preventasEnabled={settings.preventasEnabled} />
         <main className="pt-24">{children}</main>
         <Footer />
         <CartDrawer />

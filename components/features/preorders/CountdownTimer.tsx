@@ -4,14 +4,15 @@ import { Clock } from 'lucide-react';
 import { useCountdown } from '@/hooks/useCountdown';
 
 interface CountdownTimerProps {
-  hours?: number;
+  targetDate: string | Date;
   label?: string;
 }
 
-export function CountdownTimer({ hours = 24, label = 'Vence en' }: CountdownTimerProps) {
-  const { h, m, s } = useCountdown(hours);
+export function CountdownTimer({ targetDate, label = 'Vence en' }: CountdownTimerProps) {
+  const { d, h, m, s } = useCountdown(targetDate);
 
   const units = [
+    { v: d, l: 'Días' },
     { v: h, l: 'Horas' },
     { v: m, l: 'Min' },
     { v: s, l: 'Seg' },
@@ -39,7 +40,7 @@ export function CountdownTimer({ hours = 24, label = 'Vence en' }: CountdownTime
       </div>
       <div className="mt-6 w-full rounded-xl bg-destructive/10 text-destructive text-sm font-medium py-2.5 px-3 flex items-center justify-center gap-2">
         <span className="size-1.5 rounded-full bg-destructive" />
-        Acción Requerida: 48 Horas
+        Precios sujetos a disponibilidad
       </div>
     </div>
   );

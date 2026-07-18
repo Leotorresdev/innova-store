@@ -96,7 +96,7 @@ export function PreorderCard({ item, index = 0 }: PreorderCardProps) {
           }}
           className="mt-6 w-full rounded-2xl bg-ink text-ink-foreground py-3.5 text-sm font-semibold hover:opacity-90 transition"
         >
-          Asegurar en Preventa
+          Comprar
         </button>
       </div>
     </motion.article>

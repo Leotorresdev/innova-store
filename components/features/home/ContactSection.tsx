@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Send, Mail, MapPin, Phone } from 'lucide-react';
+import { MessageCircle, Mail, MapPin, Phone } from 'lucide-react';
 
 export function ContactSection() {
   return (
@@ -89,59 +89,38 @@ export function ContactSection() {
             </div>
           </motion.div>
 
-          {/* Contact Form */}
+          {/* WhatsApp CTA */}
           <motion.div 
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-3"
+            className="lg:col-span-3 h-full"
           >
-            <form className="glass-dark p-8 sm:p-10 rounded-[2.5rem] border border-white/10 shadow-glow relative overflow-hidden group hover:border-primary/30 transition-colors duration-500">
-              <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+            <div className="glass-dark p-8 sm:p-12 rounded-[2.5rem] border border-white/10 shadow-glow relative overflow-hidden group h-full flex flex-col justify-center items-center text-center hover:border-green-500/30 transition-colors duration-500">
+              <div className="absolute inset-0 bg-linear-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               
-              <div className="grid sm:grid-cols-2 gap-6 mb-6">
-                <div className="space-y-2">
-                  <label htmlFor="name" className="text-sm font-medium text-white/80 ml-1">Nombre completo</label>
-                  <input 
-                    type="text" 
-                    id="name" 
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all"
-                    placeholder="Ej. Jane Doe"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium text-white/80 ml-1">Correo electrónico</label>
-                  <input 
-                    type="email" 
-                    id="email" 
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all"
-                    placeholder="ejemplo@empresa.com"
-                  />
-                </div>
+              <div className="size-20 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center mb-6">
+                <MessageCircle className="size-10 text-green-400" />
               </div>
               
-              <div className="space-y-2 mb-8">
-                <label htmlFor="message" className="text-sm font-medium text-white/80 ml-1">Mensaje</label>
-                <textarea 
-                  id="message" 
-                  rows={4}
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all resize-none"
-                  placeholder="¿En qué podemos ayudarte?"
-                ></textarea>
-              </div>
+              <h3 className="font-display text-2xl font-bold text-white mb-3">Atención Inmediata</h3>
+              <p className="text-white/60 max-w-md mb-8">
+                Nuestro equipo está disponible en WhatsApp para brindarte atención personalizada, resolver tus dudas y ayudarte a concretar tu compra al instante.
+              </p>
               
-              <button 
-                type="button" 
-                className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold px-8 py-4 rounded-full overflow-hidden transition-all hover:scale-[1.02] active:scale-[0.98] shadow-glow relative"
+              <a 
+                href="https://wa.me/1234567890"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-10 py-4 rounded-full overflow-hidden transition-all hover:scale-[1.02] active:scale-[0.98] shadow-[0_0_20px_rgba(34,197,94,0.3)] relative"
               >
                 <span className="relative z-10 flex items-center gap-2">
-                  Enviar Mensaje
-                  <Send className="size-4" />
+                  <MessageCircle className="size-5" />
+                  Escríbenos al WhatsApp
                 </span>
-                <div className="absolute inset-0 bg-white/20 translate-y-full hover:translate-y-0 transition-transform duration-300 ease-in-out" />
-              </button>
-            </form>
+              </a>
+            </div>
           </motion.div>
         </div>
       </div>
