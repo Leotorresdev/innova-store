@@ -15,19 +15,21 @@ export function ProductsShowcase() {
         if (!response.ok) throw new Error('Error al cargar productos');
         const data = await response.json();
         
-        const mappedProducts: Product[] = data.map((p: any) => ({
-          id: p.id,
-          nombre: p.name,
-          precio: p.price,
-          precioOriginal: Math.round(p.price * 1.25),
-          categoria: p.type === 'PRESALE' ? 'Preventa' : 'Novedad',
-          imagen: p.imageUrl,
-          rating: 5,
-          ventas: Math.floor(Math.random() * 200) + 50,
-          etiqueta: p.isNew ? 'Nuevo' : undefined,
-          stock: p.stock,
-          descripcion: p.description,
-        }));
+        const mappedProducts: Product[] = data
+          .filter((p: any) => p.type === 'PRODUCT')
+          .map((p: any) => ({
+            id: p.id,
+            nombre: p.name,
+            precio: p.price,
+            precioOriginal: p.regularPrice || Math.round(p.price * 1.25),
+            categoria: p.isNew ? 'Novedad' : 'Tecnología',
+            imagen: p.imageUrl,
+            rating: 5,
+            ventas: Math.floor(Math.random() * 200) + 50,
+            etiqueta: p.isNew ? 'Nuevo' : undefined,
+            stock: p.stock,
+            descripcion: p.description,
+          }));
         
         setDbProducts(mappedProducts);
       } catch (error) {

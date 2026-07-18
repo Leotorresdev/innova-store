@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { 
@@ -21,19 +21,33 @@ import {
   selectCartTotal,
 } from '@/store/useCartStore';
 
-const SHIPPING_COST = 5;
-
 export default function PayPage() {
   const router = useRouter();
   const items = useCartStore(selectCartItems);
   const total = useCartStore(selectCartTotal);
-  const finalTotal = total + SHIPPING_COST;
+  const finalTotal = total;
 
   const clearCart = useCartStore((s) => s.clear);
   const [paymentMethod, setPaymentMethod] = useState<'binance' | 'pagomovil' | null>(null);
   const [shippingAgency, setShippingAgency] = useState<'zoom' | 'mrw' | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [exchangeRateVES, setExchangeRateVES] = useState<number | null>(null);
+
+  useEffect(() => {
+    async function fetchRate() {
+      try {
+        const res = await fetch('https://ve.dolarapi.com/v1/dolares/oficial');
+        const data = await res.json();
+        if (data && data.promedio) {
+          setExchangeRateVES(data.promedio);
+        }
+      } catch (error) {
+        console.error('Error fetching BCV rate:', error);
+      }
+    }
+    fetchRate();
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -41,19 +55,40 @@ export default function PayPage() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (items.length === 0) {
       alert('Tu carrito está vacío.');
       return;
     }
+    if (!shippingAgency) {
+      alert('Por favor selecciona una agencia de envío.');
+      return;
+    }
+    if (!paymentMethod) {
+      alert('Por favor selecciona un método de pago.');
+      return;
+    }
+
+    const formData = new FormData(e.currentTarget);
+    const file = formData.get('paymentProof') as File;
+    if (!file || file.size === 0) {
+      alert('Por favor sube el capture de tu pago.');
+      return;
+    }
+
+    // Agregar datos adicionales que no son inputs directos
+    formData.append('shippingAgency', shippingAgency);
+    formData.append('paymentMethod', paymentMethod);
+    formData.append('total', finalTotal.toString());
+    formData.append('items', JSON.stringify(
+      items.map(i => ({ id: i.id, cantidad: i.cantidad, nombre: i.nombre, precio: i.precio }))
+    ));
 
     setIsSubmitting(true);
     
     try {
-      const result = await processCheckout(
-        items.map(i => ({ id: i.id, cantidad: i.cantidad, nombre: i.nombre }))
-      );
+      const result = await processCheckout(formData);
 
       if (result.success) {
         alert('Pedido procesado con éxito. ¡Gracias por tu compra!');
@@ -102,11 +137,23 @@ export default function PayPage() {
                   <h2 className="text-xl font-semibold">Datos de Envío</h2>
                 </div>
 
+                <div className="space-y-2 mb-5">
+                  <label className="text-sm font-medium text-muted-foreground">Nombre Completo</label>
+                  <input 
+                    required
+                    name="customerName"
+                    type="text" 
+                    placeholder="Ej. Juan Pérez"
+                    className="w-full bg-surface border border-border/60 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition"
+                  />
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-muted-foreground">Cédula de Identidad (V/E)</label>
                     <input 
                       required
+                      name="customerIdDoc"
                       type="text" 
                       placeholder="Ej. V-12345678"
                       className="w-full bg-surface border border-border/60 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition"
@@ -118,6 +165,7 @@ export default function PayPage() {
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                       <input 
                         required
+                        name="customerPhone"
                         type="tel" 
                         placeholder="Ej. 0414-1234567"
                         className="w-full bg-surface border border-border/60 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition"
@@ -160,6 +208,7 @@ export default function PayPage() {
                   <label className="text-sm font-medium text-muted-foreground">Ubicación exacta de la Sucursal</label>
                   <input 
                     required
+                    name="shippingAddress"
                     type="text" 
                     placeholder="Estado, Ciudad, Nombre de la sucursal..."
                     className="w-full bg-surface border border-border/60 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition"
@@ -266,6 +315,7 @@ export default function PayPage() {
                     <div className="relative">
                       <input 
                         required
+                        name="paymentProof"
                         type="file" 
                         accept="image/*"
                         onChange={handleFileChange}
@@ -331,19 +381,16 @@ export default function PayPage() {
               </div>
 
               <div className="space-y-3 pt-6 border-t border-border/60 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Productos</span>
-                  <span className="font-mono">${total.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Envío a Agencia</span>
-                  <span className="font-mono">${SHIPPING_COST.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between items-end pt-4 border-t border-border/60 mt-4">
+                <div className="flex justify-between items-end pt-4 border-border/60 mt-4">
                   <span className="text-base font-semibold">Total a Pagar</span>
                   <div className="text-right">
-                    <span className="text-2xl font-display font-bold text-gradient">
+                    <span className="text-2xl font-display font-bold text-gradient block">
                       ${finalTotal.toLocaleString()}
+                    </span>
+                    <span className="text-sm font-medium text-muted-foreground mt-1 block">
+                      {exchangeRateVES 
+                        ? `~ Bs. ${(finalTotal * exchangeRateVES).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (BCV)`
+                        : 'Calculando tasa BCV...'}
                     </span>
                   </div>
                 </div>

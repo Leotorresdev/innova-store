@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UploadCloud, CheckCircle, AlertCircle, Loader2, Package, Trash2, Tag } from 'lucide-react';
+import { UploadCloud, CheckCircle, AlertCircle, Loader2, Package, Trash2, Tag, Power } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { getGlobalSettings, togglePreventas } from '@/app/actions/settings';
 
 export default function AdminPage() {
   const [loading, setLoading] = useState(false);
@@ -14,6 +16,9 @@ export default function AdminPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [productType, setProductType] = useState('PRODUCT');
+  const [preventasEnabled, setPreventasEnabled] = useState(true);
+  const [toggling, setToggling] = useState(false);
 
   const fetchProducts = async () => {
     try {
@@ -29,9 +34,24 @@ export default function AdminPage() {
     }
   };
 
+  const fetchSettings = async () => {
+    const settings = await getGlobalSettings();
+    setPreventasEnabled(settings.preventasEnabled);
+  };
+
   useEffect(() => {
     fetchProducts();
+    fetchSettings();
   }, []);
+
+  const handleTogglePreventas = async () => {
+    setToggling(true);
+    const res = await togglePreventas(!preventasEnabled);
+    if (res.success && res.settings) {
+      setPreventasEnabled(res.settings.preventasEnabled);
+    }
+    setToggling(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -103,6 +123,21 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 p-4 md:p-8 lg:p-12 selection:bg-indigo-500/30">
+      
+      {/* Top Global Header */}
+      <div className="max-w-7xl mx-auto mb-8 flex items-center justify-between bg-neutral-900/50 backdrop-blur-xl border border-neutral-800 p-6 rounded-2xl shadow-xl">
+        <h2 className="text-xl font-bold text-neutral-100 flex items-center gap-2">
+          ⚙️ Gestión Central de Tienda
+        </h2>
+        <Link 
+          href="/admin/orders" 
+          className="bg-indigo-500 hover:bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg hover:shadow-indigo-500/25 flex items-center gap-2"
+        >
+          <Package className="w-4 h-4" />
+          Ver Órdenes y Envíos
+        </Link>
+      </div>
+
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
         {/* Columna Izquierda - Formulario */}
@@ -112,13 +147,28 @@ export default function AdminPage() {
           transition={{ duration: 0.5, ease: 'easeOut' }}
           className="lg:col-span-5 w-full bg-neutral-900/50 backdrop-blur-xl border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden"
         >
-          <div className="px-8 py-6 border-b border-neutral-800 bg-neutral-900/80">
-            <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
-              Panel de Administración
-            </h1>
-            <p className="text-sm text-neutral-400 mt-1">
-              Agrega nuevos productos o preventas a tu catálogo
-            </p>
+          <div className="px-8 py-6 border-b border-neutral-800 bg-neutral-900/80 flex justify-between items-center">
+            <div>
+              <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
+                Panel de Administración
+              </h1>
+              <p className="text-sm text-neutral-400 mt-1">
+                Agrega nuevos productos o preventas a tu catálogo
+              </p>
+            </div>
+            
+            {/* Master Toggle */}
+            <div className="flex flex-col items-end">
+              <span className="text-xs text-neutral-500 font-medium mb-2 uppercase tracking-wider">Módulo Preventas</span>
+              <button
+                type="button"
+                onClick={handleTogglePreventas}
+                disabled={toggling}
+                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none ${preventasEnabled ? 'bg-indigo-500' : 'bg-neutral-700'}`}
+              >
+                <span className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${preventasEnabled ? 'translate-x-6' : 'translate-x-1'}`} />
+              </button>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit} className="p-8 space-y-6">
@@ -159,11 +209,23 @@ export default function AdminPage() {
 
               <div className="space-y-2 md:col-span-2">
                 <label className="text-sm font-medium text-neutral-300">Categoría / Tipo</label>
-                <select required name="type" className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-neutral-300 appearance-none">
+                <select required name="type" value={productType} onChange={(e) => setProductType(e.target.value)} className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-neutral-300 appearance-none">
                   <option value="PRODUCT">Producto Regular</option>
                   <option value="PRESALE">Preventa Exclusiva</option>
                 </select>
               </div>
+
+              {productType === 'PRESALE' && (
+                <AnimatePresence>
+                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-2 md:col-span-2 bg-indigo-500/5 border border-indigo-500/20 p-5 rounded-2xl">
+                    <label className="text-sm font-medium text-indigo-300 flex items-center gap-2">
+                      <Tag className="w-4 h-4" /> Precio Regular (Sin Descuento)
+                    </label>
+                    <input required name="regularPrice" type="number" step="0.01" className="w-full bg-neutral-950/50 border border-indigo-500/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-neutral-200 mt-2" placeholder="Ej. 150.00" />
+                    <p className="text-xs text-indigo-400 mt-2">El sistema calculará el % de descuento automáticamente usando este precio y el Precio de Preventa ingresado arriba.</p>
+                  </motion.div>
+                </AnimatePresence>
+              )}
 
               <div className="space-y-2 md:col-span-2 mt-2">
                 <label className="text-sm font-medium text-neutral-300">Fotografía Principal</label>

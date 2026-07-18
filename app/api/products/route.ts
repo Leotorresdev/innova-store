@@ -13,6 +13,7 @@ export async function POST(request: Request) {
     const stock = formData.get('stock') as string;
     const isNew = formData.get('isNew') === 'true';
     const type = formData.get('type') as 'PRODUCT' | 'PRESALE';
+    const regularPriceStr = formData.get('regularPrice') as string;
     const file = formData.get('image') as File | null;
 
     if (!file) {
@@ -38,6 +39,7 @@ export async function POST(request: Request) {
         name,
         description,
         price: parseFloat(price),
+        regularPrice: regularPriceStr ? parseFloat(regularPriceStr) : null,
         stock: parseInt(stock) || 0,
         isNew,
         imageUrl: publicUrlData.publicUrl,

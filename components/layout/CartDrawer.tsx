@@ -144,11 +144,6 @@ export function CartDrawer() {
                             <p className="text-xs text-muted-foreground truncate mt-0.5">
                               {item.categoria}
                             </p>
-                            {item.preorder && item.fechaLanzamiento && (
-                              <span className="text-[10px] text-primary font-mono mt-1 inline-block">
-                                PREVENTA · {item.fechaLanzamiento}
-                              </span>
-                            )}
                           </div>
                           <button
                             type="button"
@@ -208,18 +203,10 @@ export function CartDrawer() {
               <div className="border-t border-border/60 px-6 pt-5 pb-6 space-y-4 bg-surface">
                 {/* Summary */}
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Productos</span>
-                    <span className="font-mono">${total.toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Envío</span>
-                    <span className="font-mono">${SHIPPING_COST.toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between font-display text-lg font-bold pt-2 border-t border-border/60">
+                  <div className="flex justify-between font-display text-lg font-bold">
                     <span>Total</span>
                     <span className="text-gradient">
-                      ${(total + SHIPPING_COST).toLocaleString()}
+                      ${total.toLocaleString()}
                     </span>
                   </div>
                 </div>

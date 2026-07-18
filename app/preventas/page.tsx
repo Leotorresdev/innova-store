@@ -1,90 +1,51 @@
-'use client';
+import { Lock } from 'lucide-react';
+import { prisma } from '@/lib/prisma';
+import { getGlobalSettings } from '@/app/actions/settings';
+import { PreventasClient } from './PreventasClient';
 
-import { motion } from 'framer-motion';
-import { SlidersHorizontal } from 'lucide-react';
-import { wholesale } from '@/lib/data/preorders';
-import { PreorderCard } from '@/components/features/preorders/PreorderCard';
-import { CountdownTimer } from '@/components/features/preorders/CountdownTimer';
-import { PreorderBenefits } from '@/components/features/preorders/PreorderBenefits';
-
-export default function PreventasPage() {
-  return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-8 pb-16">
-      {/* Top: hero + timer */}
-      <div className="grid lg:grid-cols-[1.7fr_1fr] gap-6">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden rounded-[2.5rem] glass-dark text-ink-foreground p-8 sm:p-12 min-h-90 flex flex-col justify-center shadow-elegant border border-white/10"
-        >
-          {/* Dynamic background glow */}
-          <div className="absolute inset-0 bg-linear-to-br from-primary/20 via-transparent to-secondary/10 opacity-60" />
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/30 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
-
-          <div
-            aria-hidden
-            className="absolute inset-0 opacity-[0.05]"
-            style={{
-              backgroundImage:
-                'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
-              backgroundSize: '24px 24px',
-            }}
-          />
-
-          <div className="relative z-10">
-            <span className="inline-flex items-center rounded-full bg-primary/20 text-primary px-4 py-1.5 text-xs font-semibold border border-primary/30 shadow-glow backdrop-blur-md mb-6">
-              <span className="size-1.5 rounded-full bg-primary animate-glow-pulse mr-2" />
-              Oportunidad Limitada
-            </span>
-            <h1 className="font-display text-5xl sm:text-7xl font-bold tracking-tight text-white mb-6 leading-[1.1]">
-              Preventas <span className="text-gradient">Exclusivas</span>
-            </h1>
-            <p className="max-w-xl text-base sm:text-lg text-white/70 leading-relaxed font-light">
-              Acceso directo a inventario premium. Precios al por mayor por tiempo limitado.
-              Aprovecha el margen de ganancia más alto del mercado y lidera con tecnología de punta.
-            </p>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="h-full"
-        >
-          <CountdownTimer hours={24} />
-        </motion.div>
-      </div>
-
-      {/* Catalog header */}
-      <div className="mt-20 flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight">
-            Catálogo <span className="text-primary/90">Mayorista</span>
-          </h2>
-          <p className="mt-3 text-base text-muted-foreground max-w-lg">
-            Unidades limitadas reservadas para distribuidores autorizados y pioneros tecnológicos.
-          </p>
+export default async function PreventasPage() {
+  const settings = await getGlobalSettings();
+  
+  if (!settings.preventasEnabled) {
+    return (
+      <div className="mx-auto max-w-3xl px-6 pt-32 pb-24 text-center h-[70vh] flex flex-col justify-center items-center">
+        <div className="w-20 h-20 bg-neutral-900 rounded-full flex items-center justify-center mb-6 border border-neutral-800">
+          <Lock className="w-10 h-10 text-neutral-500" />
         </div>
-        <button
-          type="button"
-          className="inline-flex items-center gap-2 rounded-full border border-border/50 glass px-6 py-3 text-sm font-medium hover:bg-white/5 hover:border-primary/30 transition-all shadow-sm hover:shadow-md"
-        >
-          <SlidersHorizontal className="size-4" />
-          Filtrar por Categoría
-        </button>
+        <h1 className="text-3xl font-display font-bold text-white mb-4">Módulo de Preventas Cerrado</h1>
+        <p className="text-neutral-400">Actualmente no hay ninguna preventa activa o la temporada de preventas ha finalizado. Mantente atento a nuestras redes sociales para próximas aperturas de importación.</p>
       </div>
+    );
+  }
 
-      {/* Cards */}
-      <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {wholesale.map((item, i) => (
-          <PreorderCard key={item.id} item={item} index={i} />
-        ))}
-      </div>
+  // Fetch real presale products
+  const dbProducts = await prisma.product.findMany({
+    where: { type: 'PRESALE' },
+    orderBy: { createdAt: 'desc' }
+  });
 
-      <div className="mt-24">
-        <PreorderBenefits />
-      </div>
-    </div>
+  // Map to the expected WholesaleItem format for PreorderCard
+  const mappedProducts = dbProducts.map(p => ({
+    id: p.id,
+    name: p.name,
+    description: p.description,
+    price: p.price,
+      // Some product records don't have a regularPrice field in the DB schema.
+      // Use the actual price as the regular price fallback and compute discount safely.
+      regular: (p.regularPrice ?? p.price),
+      off: (p.regularPrice && p.regularPrice > p.price)
+        ? Math.round(((p.regularPrice - p.price) / p.regularPrice) * 100)
+        : 0,
+    stock: p.stock,
+    low: p.stock < 10,
+    image: p.imageUrl
+  }));
+
+  // Configura aquí manualmente la fecha de finalización de la preventa
+  // Formato recomendado: 'YYYY-MM-DDTHH:mm:ss' (ej. '2026-12-31T23:59:59')
+  const PREVENTA_END_DATE = '2026-07-24T23:59:59';
+
+  return (
+    <PreventasClient products={mappedProducts} preventaEndDate={PREVENTA_END_DATE} />
   );
 }
