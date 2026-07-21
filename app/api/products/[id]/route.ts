@@ -59,6 +59,12 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     await prisma.product.delete({
       where: { id }
     });
+    
+    // Clear cache
+    const { revalidatePath } = await import('next/cache');
+    revalidatePath('/preventas');
+    revalidatePath('/admin');
+    
     return NextResponse.json({ message: 'Producto eliminado exitosamente' }, { status: 200 });
   } catch (error) {
     console.error('Error DELETE /api/products/[id]:', error);

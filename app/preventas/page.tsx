@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma';
 import { getGlobalSettings } from '@/app/actions/settings';
 import { PreventasClient } from './PreventasClient';
 
+export const dynamic = 'force-dynamic';
+
 export default async function PreventasPage() {
   const settings = await getGlobalSettings();
   
