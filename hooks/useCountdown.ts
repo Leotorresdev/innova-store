@@ -12,29 +12,48 @@ export interface Countdown {
   m: string;
   s: string;
   total: number;
+  status: 'BEFORE' | 'DURING' | 'ENDED';
 }
 
-export function useCountdown(targetDate: string | Date): Countdown {
-  const [total, setTotal] = useState(0);
+export function useCountdown(startDateStr: string | Date | null, endDateStr: string | Date | null): Countdown {
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [status, setStatus] = useState<'BEFORE' | 'DURING' | 'ENDED'>('BEFORE');
 
   useEffect(() => {
-    const calculateTimeLeft = () => {
-      const difference = new Date(targetDate).getTime() - new Date().getTime();
-      return Math.max(0, Math.floor(difference / 1000));
+    if (!startDateStr || !endDateStr) return;
+
+    const startDate = new Date(startDateStr).getTime();
+    const endDate = new Date(endDateStr).getTime();
+
+    const calculateTime = () => {
+      const now = new Date().getTime();
+      
+      if (now < startDate) {
+        setStatus('BEFORE');
+        return Math.max(0, Math.floor((startDate - now) / 1000));
+      } else if (now < endDate) {
+        setStatus('DURING');
+        return Math.max(0, Math.floor((endDate - now) / 1000));
+      } else {
+        setStatus('ENDED');
+        return 0;
+      }
     };
 
-    setTotal(calculateTimeLeft());
+    // Inicializar
+    setTimeLeft(calculateTime());
 
     const id = setInterval(() => {
-      setTotal(calculateTimeLeft());
+      setTimeLeft(calculateTime());
     }, 1000);
+    
     return () => clearInterval(id);
-  }, [targetDate]);
+  }, [startDateStr, endDateStr]);
 
-  const d = Math.floor(total / (3600 * 24));
-  const h = Math.floor((total % (3600 * 24)) / 3600);
-  const m = Math.floor((total % 3600) / 60);
-  const s = total % 60;
+  const d = Math.floor(timeLeft / (3600 * 24));
+  const h = Math.floor((timeLeft % (3600 * 24)) / 3600);
+  const m = Math.floor((timeLeft % 3600) / 60);
+  const s = timeLeft % 60;
 
-  return { d: pad(d), h: pad(h), m: pad(m), s: pad(s), total };
+  return { d: pad(d), h: pad(h), m: pad(m), s: pad(s), total: timeLeft, status };
 }

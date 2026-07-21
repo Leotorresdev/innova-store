@@ -33,6 +33,12 @@ model Product {
   imageUrl     String
   type         ProductType
   stock        Int         @default(0)
+  
+  presaleStartDate DateTime?   // Inicio de la preventa
+  presaleEndDate   DateTime?   // Fin de la preventa
+  wholesalePrice   Float?      // Precio de venta al mayor (cuando termina preventa)
+  wholesaleRegularPrice Float? // Precio regular al mayor (para mostrar descuento)
+
   createdAt    DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   

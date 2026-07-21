@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UploadCloud, CheckCircle, AlertCircle, Loader2, Package, Trash2, Tag, Power } from 'lucide-react';
+import { UploadCloud, CheckCircle, AlertCircle, Loader2, Package, Trash2, Tag, Power, Calendar, Clock } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getGlobalSettings, togglePreventas } from '@/app/actions/settings';
@@ -217,12 +217,55 @@ export default function AdminPage() {
 
               {productType === 'PRESALE' && (
                 <AnimatePresence>
-                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-2 md:col-span-2 bg-indigo-500/5 border border-indigo-500/20 p-5 rounded-2xl">
-                    <label className="text-sm font-medium text-indigo-300 flex items-center gap-2">
-                      <Tag className="w-4 h-4" /> Precio Regular (Sin Descuento)
-                    </label>
-                    <input required name="regularPrice" type="number" step="0.01" className="w-full bg-neutral-950/50 border border-indigo-500/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-neutral-200 mt-2" placeholder="Ej. 150.00" />
-                    <p className="text-xs text-indigo-400 mt-2">El sistema calculará el % de descuento automáticamente usando este precio y el Precio de Preventa ingresado arriba.</p>
+                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-4 md:col-span-2 bg-indigo-500/5 border border-indigo-500/20 p-5 rounded-2xl">
+                    
+                    {/* Precios de Preventa */}
+                    <div>
+                      <label className="text-sm font-medium text-indigo-300 flex items-center gap-2">
+                        <Tag className="w-4 h-4" /> Precio Regular (Sin Descuento)
+                      </label>
+                      <input required name="regularPrice" type="number" step="0.01" className="w-full bg-neutral-950/50 border border-indigo-500/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-neutral-200 mt-2" placeholder="Ej. 150.00" />
+                      <p className="text-xs text-indigo-400 mt-2">El sistema calculará el % de descuento automáticamente usando este precio y el Precio de Preventa ingresado arriba.</p>
+                    </div>
+
+                    <hr className="border-indigo-500/20" />
+
+                    {/* Fechas de Preventa */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium text-indigo-300 flex items-center gap-2">
+                          <Calendar className="w-4 h-4" /> Fecha de Inicio
+                        </label>
+                        <input required name="presaleStartDate" type="datetime-local" className="w-full bg-neutral-950/50 border border-indigo-500/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-neutral-200 mt-2 [color-scheme:dark]" />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-indigo-300 flex items-center gap-2">
+                          <Clock className="w-4 h-4" /> Fecha de Fin
+                        </label>
+                        <input required name="presaleEndDate" type="datetime-local" className="w-full bg-neutral-950/50 border border-indigo-500/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-neutral-200 mt-2 [color-scheme:dark]" />
+                      </div>
+                    </div>
+
+                    <hr className="border-indigo-500/20" />
+
+                    {/* Precios Al Mayor */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium text-emerald-400 flex items-center gap-2">
+                          <Tag className="w-4 h-4" /> Precio al Mayor
+                        </label>
+                        <input required name="wholesalePrice" type="number" step="0.01" className="w-full bg-neutral-950/50 border border-emerald-500/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all text-neutral-200 mt-2" placeholder="Ej. 90.00" />
+                        <p className="text-[11px] text-emerald-400/80 mt-1">Precio una vez termine la preventa.</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-emerald-400 flex items-center gap-2">
+                          <Tag className="w-4 h-4" /> Precio Regular al Mayor
+                        </label>
+                        <input name="wholesaleRegularPrice" type="number" step="0.01" className="w-full bg-neutral-950/50 border border-emerald-500/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all text-neutral-200 mt-2" placeholder="Ej. 120.00 (Opcional)" />
+                        <p className="text-[11px] text-emerald-400/80 mt-1">Para calcular el descuento al mayor.</p>
+                      </div>
+                    </div>
+
                   </motion.div>
                 </AnimatePresence>
               )}
