@@ -61,4 +61,6 @@ export interface WholesaleItem {
   stock: number;
   low?: boolean;
   image: string;
+  presaleStartDate?: string | Date | null;
+  presaleEndDate?: string | Date | null;
 }

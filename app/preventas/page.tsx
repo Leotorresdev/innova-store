@@ -24,28 +24,42 @@ export default async function PreventasPage() {
     orderBy: { createdAt: 'desc' }
   });
 
-  // Map to the expected WholesaleItem format for PreorderCard
-  const mappedProducts = dbProducts.map(p => ({
-    id: p.id,
-    name: p.name,
-    description: p.description,
-    price: p.price,
-      // Some product records don't have a regularPrice field in the DB schema.
-      // Use the actual price as the regular price fallback and compute discount safely.
-      regular: (p.regularPrice ?? p.price),
-      off: (p.regularPrice && p.regularPrice > p.price)
-        ? Math.round(((p.regularPrice - p.price) / p.regularPrice) * 100)
-        : 0,
-    stock: p.stock,
-    low: p.stock < 10,
-    image: p.imageUrl
-  }));
+  const now = new Date();
 
-  // Configura aquí manualmente la fecha de finalización de la preventa
-  // Formato recomendado: 'YYYY-MM-DDTHH:mm:ss' (ej. '2026-12-31T23:59:59')
-  const PREVENTA_END_DATE = '2026-07-24T23:59:59';
+  // Active or upcoming presale (latest one that hasn't ended)
+  const activePresaleDb = dbProducts.find(p => !p.presaleEndDate || p.presaleEndDate > now);
+  
+  // Past presales with stock (wholesale)
+  const wholesaleDb = dbProducts.filter(p => p.presaleEndDate && p.presaleEndDate <= now && p.stock > 0);
+
+  const mapToWholesaleItem = (p: any, isWholesaleMode: boolean) => {
+    const currentPrice = isWholesaleMode && p.wholesalePrice ? p.wholesalePrice : p.price;
+    const currentRegular = isWholesaleMode && p.wholesaleRegularPrice 
+        ? p.wholesaleRegularPrice 
+        : (p.regularPrice ?? currentPrice);
+    
+    return {
+      id: p.id,
+      name: p.name,
+      description: p.description,
+      price: currentPrice,
+      regular: currentRegular,
+      off: (currentRegular > currentPrice)
+        ? Math.round(((currentRegular - currentPrice) / currentRegular) * 100)
+        : 0,
+      stock: p.stock,
+      low: p.stock < 10,
+      image: p.imageUrl,
+      // Pass dates for the active presale card/timer
+      presaleStartDate: p.presaleStartDate,
+      presaleEndDate: p.presaleEndDate,
+    };
+  };
+
+  const activePresale = activePresaleDb ? mapToWholesaleItem(activePresaleDb, false) : null;
+  const wholesaleProducts = wholesaleDb.map(p => mapToWholesaleItem(p, true));
 
   return (
-    <PreventasClient products={mappedProducts} preventaEndDate={PREVENTA_END_DATE} />
+    <PreventasClient activePresale={activePresale} wholesaleProducts={wholesaleProducts} />
   );
 }

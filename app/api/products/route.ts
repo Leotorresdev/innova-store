@@ -15,6 +15,12 @@ export async function POST(request: Request) {
     const type = formData.get('type') as 'PRODUCT' | 'PRESALE';
     const regularPriceStr = formData.get('regularPrice') as string;
     const file = formData.get('image') as File | null;
+    
+    // Nuevos campos
+    const presaleStartDateStr = formData.get('presaleStartDate') as string;
+    const presaleEndDateStr = formData.get('presaleEndDate') as string;
+    const wholesalePriceStr = formData.get('wholesalePrice') as string;
+    const wholesaleRegularPriceStr = formData.get('wholesaleRegularPrice') as string;
 
     if (!file) {
       return NextResponse.json({ error: 'La imagen es requerida' }, { status: 400 });
@@ -44,6 +50,10 @@ export async function POST(request: Request) {
         isNew,
         imageUrl: publicUrlData.publicUrl,
         type,
+        presaleStartDate: presaleStartDateStr ? new Date(presaleStartDateStr) : null,
+        presaleEndDate: presaleEndDateStr ? new Date(presaleEndDateStr) : null,
+        wholesalePrice: wholesalePriceStr ? parseFloat(wholesalePriceStr) : null,
+        wholesaleRegularPrice: wholesaleRegularPriceStr ? parseFloat(wholesaleRegularPriceStr) : null,
       },
     });
 

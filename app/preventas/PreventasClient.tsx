@@ -6,11 +6,11 @@ import { CountdownTimer } from '@/components/features/preorders/CountdownTimer';
 import { PreorderBenefits } from '@/components/features/preorders/PreorderBenefits';
 
 interface PreventasClientProps {
-  products: any[];
-  preventaEndDate: string;
+  activePresale: any | null;
+  wholesaleProducts: any[];
 }
 
-export function PreventasClient({ products, preventaEndDate }: PreventasClientProps) {
+export function PreventasClient({ activePresale, wholesaleProducts }: PreventasClientProps) {
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-8 pb-16">
       {/* Top: hero + timer */}
@@ -55,11 +55,25 @@ export function PreventasClient({ products, preventaEndDate }: PreventasClientPr
           transition={{ delay: 0.1 }}
           className="h-full"
         >
-          <CountdownTimer targetDate={preventaEndDate} />
+          {activePresale ? (
+            <div className="flex flex-col h-full gap-4">
+              <CountdownTimer 
+                startDate={activePresale.presaleStartDate} 
+                endDate={activePresale.presaleEndDate} 
+              />
+              <div className="flex-1 bg-card border border-border shadow-card rounded-3xl overflow-hidden">
+                <PreorderCard item={activePresale} index={0} />
+              </div>
+            </div>
+          ) : (
+             <div className="relative rounded-3xl bg-card border border-border p-8 flex flex-col items-center justify-center text-center shadow-card overflow-hidden h-full">
+               <p className="font-display text-xl text-muted-foreground">Próximamente nuevas preventas</p>
+             </div>
+          )}
         </motion.div>
       </div>
 
-      {/* Catalog header */}
+      {/* Catalog header for Wholesale */}
       <div className="mt-20 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight">
@@ -71,15 +85,15 @@ export function PreventasClient({ products, preventaEndDate }: PreventasClientPr
         </div>
       </div>
 
-      {/* Cards */}
+      {/* Cards Wholesale */}
       <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {products.length > 0 ? (
-          products.map((item, i) => (
+        {wholesaleProducts.length > 0 ? (
+          wholesaleProducts.map((item, i) => (
             <PreorderCard key={item.id} item={item} index={i} />
           ))
         ) : (
           <div className="col-span-full py-20 text-center text-neutral-500 border border-dashed border-neutral-800 rounded-3xl">
-            No hay productos en preventa en este momento.
+            No hay productos disponibles al mayor en este momento.
           </div>
         )}
       </div>

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { AlertTriangle } from 'lucide-react';
 import { useCartStore } from '@/store/useCartStore';
 import type { WholesaleItem } from '@/types';
+import { useCountdown } from '@/hooks/useCountdown';
 
 interface PreorderCardProps {
   item: WholesaleItem;
@@ -14,6 +15,17 @@ interface PreorderCardProps {
 export function PreorderCard({ item, index = 0 }: PreorderCardProps) {
   const add = useCartStore((s) => s.add);
   const setOpen = useCartStore((s) => s.setOpen);
+  
+  // Use dates to determine status if it's the active presale. If not passed, it's wholesale.
+  const { status } = useCountdown(item.presaleStartDate || null, item.presaleEndDate || null);
+  
+  const isWholesaleMode = !item.presaleEndDate || status === 'ENDED';
+  const isBefore = status === 'BEFORE';
+  const isDuring = status === 'DURING';
+  
+  let buttonLabel = 'Comprar Al Mayor';
+  if (isBefore) buttonLabel = 'Próximamente';
+  if (isDuring) buttonLabel = 'Comprar Preventa';
 
   return (
     <motion.article
@@ -25,7 +37,7 @@ export function PreorderCard({ item, index = 0 }: PreorderCardProps) {
       <div className="relative p-4">
         <div className="absolute top-6 left-6 z-10 flex flex-col gap-1.5">
           <span className="rounded-md bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wider px-2.5 py-1">
-            Venta al por mayor
+            {isWholesaleMode ? 'Venta al por mayor' : 'Preventa Exclusiva'}
           </span>
           <span
             className={`inline-flex items-center gap-1 rounded-md text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 ${
@@ -76,27 +88,28 @@ export function PreorderCard({ item, index = 0 }: PreorderCardProps) {
 
         <button
           type="button"
+          disabled={isBefore || item.stock === 0}
           onClick={() => {
             add({
-              id: Math.floor(Math.random() * 1_000_000),
+              id: item.id, // ID real de la base de datos
               nombre: item.name,
               descripcion: item.description,
               precio: item.price,
               precioOriginal: item.regular,
-              categoria: 'Mayorista',
+              categoria: isWholesaleMode ? 'Mayorista' : 'Preventa',
               imagen: item.image,
-              rating: 0,
+              rating: 5,
               ventas: 0,
               stock: item.stock,
               tagline: item.description,
-              preorder: true,
-              fechaLanzamiento: 'Próximamente',
+              preorder: !isWholesaleMode,
+              fechaLanzamiento: 'Pronto',
             });
             setOpen(true);
           }}
-          className="mt-6 w-full rounded-2xl bg-ink text-ink-foreground py-3.5 text-sm font-semibold hover:opacity-90 transition"
+          className="mt-6 w-full rounded-2xl bg-ink text-ink-foreground py-3.5 text-sm font-semibold hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Comprar
+          {item.stock === 0 ? 'Agotado' : buttonLabel}
         </button>
       </div>
     </motion.article>
