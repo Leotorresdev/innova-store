@@ -16,14 +16,14 @@ export function HeroSection() {
           muted
           playsInline
           preload='auto'
-          className="absolute inset-0 w-full h-full object-cover object-center scale-105 opacity-60"
+          className="absolute inset-0 w-full h-full object-cover object-center scale-105 opacity-110"
         >
           <source src="/innova.mp4" type="video/mp4" />
         </video>
         {/* Dark elegant overlay for deep contrast */}
         <div className="absolute inset-0 bg-ink/50 mix-blend-multiply" />
         {/* Glowing gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-transparent to-ink/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-transparent to-ink/80" />
       </div>
 
 
@@ -46,7 +46,7 @@ export function HeroSection() {
           className="font-display text-6xl sm:text-7xl lg:text-8xl font-black leading-[1.05] tracking-tight text-white drop-shadow-2xl max-w-5xl"
         >
           Experimenta la <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-primary bg-[length:200%_auto] animate-gradient-x relative inline-block">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-400 to-primary bg-[length:200%_auto] animate-gradient-x relative inline-block">
             Innovación
             <div className="absolute -inset-2 bg-primary/20 blur-2xl -z-10 rounded-full" />
           </span>
