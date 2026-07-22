@@ -15,11 +15,11 @@ export function PreventasClient({ activePresale, wholesaleProducts }: PreventasC
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-8 pb-16">
       {/* Top: hero + timer */}
-      <div className="grid lg:grid-cols-[1.7fr_1fr] gap-6">
+      <div className="grid lg:grid-cols-[1fr_1.2fr] gap-8">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden rounded-[2.5rem] glass-dark text-white p-8 sm:p-12 min-h-90 flex flex-col justify-center shadow-elegant border border-white/10"
+          className="relative overflow-hidden rounded-[2.5rem] glass-dark text-white p-8 sm:p-10 flex flex-col justify-center shadow-elegant border border-white/10 h-full"
         >
           <Image
             src="/images/hero-bg.png"
@@ -31,17 +31,16 @@ export function PreventasClient({ activePresale, wholesaleProducts }: PreventasC
           <div className="absolute inset-0 bg-ink/50" />
           <div className="absolute inset-0 bg-gradient-to-r from-ink/80 via-transparent to-transparent" />
 
-          <div className="relative z-10 max-w-xl">
-            <span className="inline-flex items-center rounded-full bg-primary/20 text-primary-foreground px-4 py-1.5 text-xs font-bold border border-primary/30 shadow-glow backdrop-blur-md mb-6 tracking-wide">
+          <div className="relative z-10 max-w-md">
+            <span className="inline-flex items-center rounded-full bg-primary/20 text-primary-foreground px-3 py-1 text-[10px] sm:text-xs font-bold border border-primary/30 shadow-glow backdrop-blur-md mb-4 tracking-wide">
               <span className="size-1.5 rounded-full bg-primary animate-pulse mr-2" />
               Oportunidad Limitada
             </span>
-            <h1 className="font-display text-5xl sm:text-7xl font-black tracking-tight text-white mb-6 leading-[1.05]">
-              Preventas <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-400">Exclusivas</span>
+            <h1 className="font-display text-4xl sm:text-5xl font-black tracking-tight text-white mb-4 leading-[1.05]">
+              Preventas <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-400">Exclusivas</span>
             </h1>
-            <p className="text-base sm:text-lg text-neutral-300 leading-relaxed font-light drop-shadow-md">
-              Acceso directo a inventario premium. Precios al por mayor por tiempo limitado.
-              Aprovecha el margen de ganancia más alto del mercado y lidera con tecnología de punta.
+            <p className="text-sm sm:text-base text-neutral-300 leading-relaxed font-light drop-shadow-md">
+              Acceso directo a inventario premium a precios de mayorista por tiempo limitado.
             </p>
           </div>
         </motion.div>
@@ -53,14 +52,12 @@ export function PreventasClient({ activePresale, wholesaleProducts }: PreventasC
           className="h-full"
         >
           {activePresale ? (
-            <div className="flex flex-col h-full gap-4">
+            <div className="flex flex-col h-full gap-6">
               <CountdownTimer 
                 startDate={activePresale.presaleStartDate} 
                 endDate={activePresale.presaleEndDate} 
               />
-              <div className="flex-1 bg-card border border-border shadow-card rounded-3xl overflow-hidden">
-                <PreorderCard item={activePresale} index={0} />
-              </div>
+              <PreorderCard item={activePresale} index={0} />
             </div>
           ) : (
              <div className="relative rounded-3xl bg-card border border-border p-8 flex flex-col items-center justify-center text-center shadow-card overflow-hidden h-full">
