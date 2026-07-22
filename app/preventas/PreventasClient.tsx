@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { PreorderCard } from '@/components/features/preorders/PreorderCard';
 import { CountdownTimer } from '@/components/features/preorders/CountdownTimer';
 import { PreorderBenefits } from '@/components/features/preorders/PreorderBenefits';
@@ -18,31 +19,27 @@ export function PreventasClient({ activePresale, wholesaleProducts }: PreventasC
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden rounded-[2.5rem] glass-dark text-ink-foreground p-8 sm:p-12 min-h-90 flex flex-col justify-center shadow-elegant border border-white/10"
+          className="relative overflow-hidden rounded-[2.5rem] glass-dark text-white p-8 sm:p-12 min-h-90 flex flex-col justify-center shadow-elegant border border-white/10"
         >
-          {/* Dynamic background glow */}
-          <div className="absolute inset-0 bg-linear-to-br from-primary/20 via-transparent to-secondary/10 opacity-60" />
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/30 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
-
-          <div
-            aria-hidden
-            className="absolute inset-0 opacity-[0.05]"
-            style={{
-              backgroundImage:
-                'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
-              backgroundSize: '24px 24px',
-            }}
+          <Image
+            src="/images/hero-bg.png"
+            alt="Fondo Preventas"
+            fill
+            className="object-cover opacity-60 mix-blend-screen"
+            sizes="(max-width: 1024px) 100vw, 60vw"
           />
+          <div className="absolute inset-0 bg-ink/50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-ink/80 via-transparent to-transparent" />
 
-          <div className="relative z-10">
-            <span className="inline-flex items-center rounded-full bg-primary/20 text-primary px-4 py-1.5 text-xs font-semibold border border-primary/30 shadow-glow backdrop-blur-md mb-6">
-              <span className="size-1.5 rounded-full bg-primary animate-glow-pulse mr-2" />
+          <div className="relative z-10 max-w-xl">
+            <span className="inline-flex items-center rounded-full bg-primary/20 text-primary-foreground px-4 py-1.5 text-xs font-bold border border-primary/30 shadow-glow backdrop-blur-md mb-6 tracking-wide">
+              <span className="size-1.5 rounded-full bg-primary animate-pulse mr-2" />
               Oportunidad Limitada
             </span>
-            <h1 className="font-display text-5xl sm:text-7xl font-bold tracking-tight text-white mb-6 leading-[1.1]">
-              Preventas <span className="text-gradient">Exclusivas</span>
+            <h1 className="font-display text-5xl sm:text-7xl font-black tracking-tight text-white mb-6 leading-[1.05]">
+              Preventas <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-400">Exclusivas</span>
             </h1>
-            <p className="max-w-xl text-base sm:text-lg text-white/70 leading-relaxed font-light">
+            <p className="text-base sm:text-lg text-neutral-300 leading-relaxed font-light drop-shadow-md">
               Acceso directo a inventario premium. Precios al por mayor por tiempo limitado.
               Aprovecha el margen de ganancia más alto del mercado y lidera con tecnología de punta.
             </p>

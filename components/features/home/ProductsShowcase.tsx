@@ -56,9 +56,10 @@ export function ProductsShowcase() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 text-primary px-4 py-1.5 text-xs font-semibold mb-6"
+          className="inline-flex items-center gap-2 rounded-full glass-dark border border-primary/20 text-primary-foreground px-5 py-2 text-sm font-semibold mb-6 shadow-glow"
         >
-          ✦ Colección Oficial
+          <span className="size-2 rounded-full bg-primary animate-pulse" />
+          Colección Oficial
         </motion.div>
         
         <motion.h2 
@@ -66,9 +67,9 @@ export function ProductsShowcase() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight text-foreground"
+          className="font-display text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight leading-[1.1] text-ink"
         >
-          Explora nuestro <span className="text-gradient">catálogo</span> de productos
+          Catálogo <span className="text-gradient">Premium</span>
         </motion.h2>
 
         <motion.p 
@@ -76,14 +77,14 @@ export function ProductsShowcase() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
+          className="mt-6 text-lg sm:text-xl text-ink/70 max-w-2xl mx-auto leading-relaxed"
         >
           Diseño sin concesiones y rendimiento de vanguardia. Encuentra los dispositivos y herramientas profesionales que llevarán tu productividad al siguiente nivel.
         </motion.p>
       </div>
       
       <div className="relative">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary/5 rounded-full blur-[120px] pointer-events-none" />       
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[120%] bg-gradient-innova rounded-full blur-[150px] pointer-events-none opacity-10" />       
         <ProductGrid products={featured} cols={3} />
       </div>
     </motion.section>

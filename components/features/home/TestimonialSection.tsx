@@ -57,7 +57,7 @@ export function TestimonialSection() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.15, duration: 0.5 }}
               whileHover={{ y: -5 }}
-              className="relative p-8 rounded-[2rem] bg-surface border border-border shadow-card hover:shadow-glow transition-all duration-300"
+              className="relative p-8 rounded-[2rem] glass-card flex flex-col h-full border border-neutral-200/50 hover:border-primary/20"
             >
               <div className="flex gap-1 mb-6">
                 {[...Array(5)].map((_, j) => (
@@ -68,12 +68,12 @@ export function TestimonialSection() {
                 &quot;{t.quote}&quot;
               </p>
               <div className="flex items-center gap-4 mt-auto">
-                <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center font-display font-bold text-primary">
+                <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center font-display font-bold text-primary shrink-0 border border-primary/20">
                   {t.name.charAt(0)}
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sm">{t.name}</h4>
-                  <p className="text-xs text-muted-foreground">{t.role}, {t.company}</p>
+                  <h4 className="font-semibold text-sm text-ink">{t.name}</h4>
+                  <p className="text-xs text-ink/60">{t.role}, {t.company}</p>
                 </div>
               </div>
             </motion.div>

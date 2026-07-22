@@ -32,7 +32,7 @@ export function PreorderCard({ item, index = 0 }: PreorderCardProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.07 }}
-      className="rounded-3xl bg-card border border-border shadow-card overflow-hidden flex flex-col"
+      className={`rounded-3xl glass-card overflow-hidden flex flex-col h-full`}
     >
       <div className="relative p-4">
         <div className="absolute top-6 left-6 z-10 flex flex-col gap-1.5">
@@ -107,7 +107,13 @@ export function PreorderCard({ item, index = 0 }: PreorderCardProps) {
             });
             setOpen(true);
           }}
-          className="mt-6 w-full rounded-2xl bg-ink text-ink-foreground py-3.5 text-sm font-semibold hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className={`mt-6 w-full rounded-2xl py-3.5 text-sm font-semibold transition-all duration-300 shadow-sm
+            ${
+              isBefore || item.stock === 0
+                ? 'bg-neutral-200/50 text-neutral-400 cursor-not-allowed'
+                : 'bg-ink text-ink-foreground hover:bg-ink/90 active:scale-[0.98]'
+            }
+          `}
         >
           {item.stock === 0 ? 'Agotado' : buttonLabel}
         </button>
