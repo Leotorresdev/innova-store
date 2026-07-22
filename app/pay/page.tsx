@@ -11,7 +11,8 @@ import {
   CreditCard, 
   Wallet,
   CheckCircle2,
-  Building2
+  Building2,
+  MessageCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { processCheckout } from '@/app/actions/checkout';
@@ -33,6 +34,8 @@ export default function PayPage() {
   const [fileName, setFileName] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [exchangeRateVES, setExchangeRateVES] = useState<number | null>(null);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [customerName, setCustomerName] = useState('');
 
   useEffect(() => {
     async function fetchRate() {
@@ -81,6 +84,9 @@ export default function PayPage() {
     formData.append('shippingAgency', shippingAgency);
     formData.append('paymentMethod', paymentMethod);
     formData.append('total', finalTotal.toString());
+    if (exchangeRateVES) {
+      formData.append('totalBs', (finalTotal * exchangeRateVES).toString());
+    }
     formData.append('items', JSON.stringify(
       items.map(i => ({ id: i.id, cantidad: i.cantidad, nombre: i.nombre, precio: i.precio }))
     ));
@@ -91,9 +97,9 @@ export default function PayPage() {
       const result = await processCheckout(formData);
 
       if (result.success) {
-        alert('Pedido procesado con éxito. ¡Gracias por tu compra!');
+        setCustomerName(formData.get('customerName') as string);
+        setIsSuccess(true);
         clearCart();
-        router.push('/');
       } else {
         alert(`Hubo un error: ${result.message}`);
       }
@@ -106,6 +112,40 @@ export default function PayPage() {
 
   // Redirigir al inicio si no hay productos (opcional, pero buena práctica)
   // useEffect(() => { if (items.length === 0) router.push('/'); }, [items]);
+
+  if (isSuccess) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }} 
+          animate={{ opacity: 1, scale: 1 }} 
+          className="glass-card p-10 rounded-3xl max-w-lg shadow-elegant border border-white/20"
+        >
+          <div className="size-20 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <CheckCircle2 className="size-10" />
+          </div>
+          <h1 className="font-display text-3xl font-bold text-foreground mb-4">¡Pago Exitoso!</h1>
+          <p className="text-lg text-muted-foreground leading-relaxed">
+            Muchas gracias por tu compra <span className="font-semibold text-foreground">{customerName}</span>, te contactaremos en breve por whatsapp para enviarte el traking del envio.
+          </p>
+          <div className="mt-8 flex flex-col gap-4">
+            <a 
+              href="https://wa.me/584141234567" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full h-12 rounded-xl bg-green-500 hover:bg-green-600 text-white font-semibold shadow-glow transition-all hover:scale-[1.02]"
+            >
+              <MessageCircle className="size-5" />
+              Si necesitas ayuda contáctanos al WhatsApp
+            </a>
+            <Button onClick={() => router.push('/')} variant="outline" className="w-full h-12 rounded-xl border-white/20 bg-transparent text-foreground hover:bg-white/5">
+              Volver al Inicio
+            </Button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background pb-20 pt-24 md:pt-32">

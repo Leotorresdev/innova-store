@@ -27,7 +27,7 @@ export function HeroSection() {
       </div>
 
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6 w-full flex flex-col items-center text-center pt-20">
+      <div className="relative z-10 mx-auto max-w-7xl px-6 w-full flex flex-col items-center text-center pb-16 pt-8">
         
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}

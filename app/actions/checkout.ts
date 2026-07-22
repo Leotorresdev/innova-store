@@ -18,6 +18,8 @@ export async function processCheckout(formData: FormData) {
     const shippingAddress = formData.get('shippingAddress') as string;
     const paymentMethod = formData.get('paymentMethod') as string;
     const total = parseFloat(formData.get('total') as string);
+    const totalBsStr = formData.get('totalBs');
+    const totalBs = totalBsStr ? parseFloat(totalBsStr as string) : undefined;
     const file = formData.get('paymentProof') as File | null;
 
     if (!file) {
@@ -110,6 +112,7 @@ export async function processCheckout(formData: FormData) {
       shippingAddress,
       paymentMethod,
       total,
+      totalBs,
       paymentProofUrl,
       items: itemsWithNames
     });

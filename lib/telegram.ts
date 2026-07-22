@@ -9,7 +9,7 @@ export async function sendOrderNotificationToTelegram(orderData: any) {
 
   // Formatear los items para el mensaje
   const itemsText = orderData.items.map((item: any) => 
-    `🔸 ${item.quantity}x ${item.productName || item.productId} - $${item.price}`
+    `🔸 ${item.productName || item.nombre || item.productId}`
   ).join('\n');
 
   // Construir el mensaje en Markdown
@@ -28,7 +28,7 @@ _ID:_ #${orderData.id.slice(0, 8).toUpperCase()}
 
 💰 *DATOS DE PAGO*
 - *Método:* ${orderData.paymentMethod}
-- *Total:* $${orderData.total}
+- *Total:* $${orderData.total} ${orderData.totalBs ? `(Bs. ${Number(orderData.totalBs).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})` : ''}
 
 🛒 *PRODUCTOS COMPRADOS*
 ${itemsText}
