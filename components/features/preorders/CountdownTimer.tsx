@@ -25,7 +25,7 @@ export function CountdownTimer({ startDate, endDate }: CountdownTimerProps) {
   ];
 
   return (
-    <div className="relative rounded-3xl bg-card border border-border p-8 flex flex-col items-center justify-center text-center shadow-card overflow-hidden">
+    <div className="relative rounded-3xl glass-card border border-neutral-200/60 p-8 flex flex-col items-center justify-center text-center shadow-card overflow-hidden h-full">
       <div className="absolute top-0 inset-x-0 h-1 bg-linear-to-r from-primary via-primary to-primary/40" />
       <div className="size-12 rounded-full border-2 border-primary/30 text-primary flex items-center justify-center mb-3">
         <Clock className="size-6" />

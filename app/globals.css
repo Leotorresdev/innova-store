@@ -112,12 +112,14 @@
   --sidebar-border: oklch(0.16 0.03 250 / 8%);
   --sidebar-ring: oklch(0.62 0.21 245);
 
-  --gradient-primary: linear-gradient(135deg, oklch(0.62 0.21 245), oklch(0.72 0.18 220));
+  --gradient-primary: linear-gradient(135deg, oklch(0.62 0.21 245), oklch(0.42 0.25 255));
   --gradient-soft: linear-gradient(180deg, oklch(0.99 0.003 250), oklch(0.96 0.008 250));
+  --gradient-innova: linear-gradient(135deg, var(--ink) 0%, oklch(0.20 0.05 250) 100%);
+  --gradient-glow: conic-gradient(from 180deg at 50% 50%, oklch(0.62 0.21 245 / 0) 0deg, oklch(0.62 0.21 245 / 0.5) 180deg, oklch(0.62 0.21 245 / 0) 360deg);
 
-  --shadow-glow: 0 10px 40px -10px oklch(0.62 0.21 245 / 35%);
-  --shadow-elegant: 0 30px 60px -30px oklch(0.16 0.03 250 / 25%);
-  --shadow-card: 0 1px 3px oklch(0.16 0.03 250 / 4%), 0 8px 24px -12px oklch(0.16 0.03 250 / 8%);
+  --shadow-glow: 0 0 30px -5px oklch(0.62 0.21 245 / 40%);
+  --shadow-elegant: 0 20px 40px -15px oklch(0.14 0.035 250 / 30%);
+  --shadow-card: 0 4px 20px -2px oklch(0.16 0.03 250 / 6%), 0 0 3px oklch(0.16 0.03 250 / 4%);
 }
 
 .dark {
@@ -179,17 +181,27 @@
   .shadow-card { box-shadow: var(--shadow-card); }
 
   .glass {
-    background: oklch(1 0 0 / 70%);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border: 1px solid oklch(0.16 0.03 250 / 6%);
+    background: linear-gradient(135deg, oklch(1 0 0 / 80%), oklch(1 0 0 / 40%));
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid oklch(0.16 0.03 250 / 8%);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.03);
   }
 
   .glass-dark {
-    background: oklch(0.14 0.035 250 / 70%);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border: 1px solid oklch(1 0 0 / 8%);
+    background: linear-gradient(135deg, oklch(0.14 0.035 250 / 85%), oklch(0.10 0.03 250 / 65%));
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid oklch(1 0 0 / 12%);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+  }
+  
+  .glass-card {
+    @apply relative overflow-hidden bg-white rounded-3xl border border-neutral-200/60 transition-all duration-500 hover:-translate-y-1;
+    box-shadow: var(--shadow-card);
+  }
+  .glass-card:hover {
+    box-shadow: var(--shadow-elegant);
   }
 }
 

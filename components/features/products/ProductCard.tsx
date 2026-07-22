@@ -37,12 +37,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
       transition={{ duration: 0.5, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
       className={`
         group relative flex flex-col
-        rounded-3xl overflow-hidden
-        bg-gradient-to-b from-card to-primary/5 border border-border/50
-        shadow-card
-        transition-all duration-500
-        hover:-translate-y-2 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12),0_0_30px_rgba(var(--primary),0.15)]
-        hover:border-primary/40
+        glass-card
       `}
     >
       {/* ── Glow ring on hover ── */}
@@ -63,7 +58,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
         )}
 
         {/* Dark scrim — only visible on hover for the CTA */}
-        <div className="absolute inset-0 bg-linear-to-t from-ink/70 via-ink/10 to-transparent
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent
           opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
 
         {/* Quick-add CTA that slides up */}

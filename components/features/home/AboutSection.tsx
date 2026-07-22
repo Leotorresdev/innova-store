@@ -26,7 +26,7 @@ export function AboutSection() {
   return (
     <section id="nosotros" className="relative py-24 sm:py-32 overflow-hidden">
       {/* Abstract Background Elements */}
-      <div className="absolute top-1/2 left-0 w-125 h-125 bg-primary/5 rounded-full blur-[100px] -translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+      <div className="absolute top-1/2 left-0 w-[40rem] h-[40rem] bg-gradient-innova rounded-full blur-[150px] -translate-y-1/2 -translate-x-1/4 pointer-events-none opacity-20" />
       
       <div className="mx-auto max-w-7xl px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -52,14 +52,14 @@ export function AboutSection() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.15 }}
-                  className="flex items-start gap-4 group"
+                  className="flex items-start gap-5 group p-4 rounded-3xl hover:bg-white transition-all hover:shadow-card cursor-default"
                 >
-                  <div className="size-12 rounded-2xl bg-surface flex items-center justify-center shadow-sm border border-border group-hover:border-primary/30 group-hover:shadow-glow transition-all">
-                    <val.icon className="size-5 text-primary" />
+                  <div className="size-14 rounded-2xl bg-primary/10 flex items-center justify-center shadow-sm border border-primary/20 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                    <val.icon className="size-6 text-primary group-hover:text-white transition-colors" />
                   </div>
                   <div>
-                    <h4 className="font-display text-lg font-bold">{val.title}</h4>
-                    <p className="text-sm text-muted-foreground mt-1">{val.desc}</p>
+                    <h4 className="font-display text-xl font-bold text-ink">{val.title}</h4>
+                    <p className="text-sm text-ink/70 mt-1 leading-relaxed">{val.desc}</p>
                   </div>
                 </motion.div>
               ))}
