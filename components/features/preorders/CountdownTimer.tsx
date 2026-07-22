@@ -25,24 +25,24 @@ export function CountdownTimer({ startDate, endDate }: CountdownTimerProps) {
   ];
 
   return (
-    <div className="relative rounded-3xl glass-card border border-neutral-200/60 p-8 flex flex-col items-center justify-center text-center shadow-card overflow-hidden h-full">
+    <div className="relative rounded-3xl glass-card border border-neutral-200/60 p-5 sm:p-6 flex flex-col items-center justify-center text-center shadow-card overflow-hidden">
       <div className="absolute top-0 inset-x-0 h-1 bg-linear-to-r from-primary via-primary to-primary/40" />
-      <div className="size-12 rounded-full border-2 border-primary/30 text-primary flex items-center justify-center mb-3">
-        <Clock className="size-6" />
+      <div className="flex items-center gap-2 mb-2">
+        <Clock className="size-5 text-primary" />
+        <p className="font-display text-base font-semibold">{getLabel()}</p>
       </div>
-      <p className="font-display text-xl font-semibold">{getLabel()}</p>
       
       {status !== 'ENDED' ? (
-        <div className="mt-5 flex items-end gap-3 font-display">
+        <div className="mt-3 flex items-end gap-3 font-display">
           {units.map((u, i) => (
-            <div key={u.l} className="flex items-end gap-3">
+            <div key={u.l} className="flex items-end gap-2">
               <div className="text-center">
-                <div className="text-4xl sm:text-5xl font-bold tabular-nums">{u.v}</div>
-                <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground mt-1">
+                <div className="text-2xl sm:text-3xl font-bold tabular-nums">{u.v}</div>
+                <div className="text-[9px] font-mono uppercase tracking-wider text-muted-foreground mt-0.5">
                   {u.l}
                 </div>
               </div>
-              {i < units.length - 1 && <div className="text-3xl text-muted-foreground pb-6">:</div>}
+              {i < units.length - 1 && <div className="text-xl text-muted-foreground pb-4">:</div>}
             </div>
           ))}
         </div>

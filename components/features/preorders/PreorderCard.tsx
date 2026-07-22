@@ -50,7 +50,7 @@ export function PreorderCard({ item, index = 0 }: PreorderCardProps) {
             Solo quedan {item.stock} unidades
           </span>
         </div>
-        <div className="relative aspect-square rounded-2xl bg-ink overflow-hidden">
+        <div className="relative aspect-[4/3] rounded-2xl bg-ink overflow-hidden">
           <Image
             src={item.image}
             alt={item.name}
@@ -69,18 +69,18 @@ export function PreorderCard({ item, index = 0 }: PreorderCardProps) {
 
         <div className="mt-5 flex items-end justify-between">
           <div>
-            <p className="text-xs text-muted-foreground line-through">
+            <p className="text-sm text-muted-foreground line-through font-medium">
               Regular: ${item.regular.toLocaleString()}.00
             </p>
-            <p className="font-display text-2xl font-bold mt-0.5">
+            <p className="font-display text-3xl sm:text-4xl font-black mt-0.5 text-primary tracking-tight">
               ${item.price.toLocaleString()}.00
             </p>
           </div>
           <div className="text-right">
-            <p className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+            <p className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">
               Ahorro
             </p>
-            <span className="inline-block mt-1 rounded-md bg-primary text-primary-foreground text-xs font-bold px-2 py-1">
+            <span className="inline-block mt-1 rounded-md bg-primary text-primary-foreground text-xs font-bold px-2.5 py-1">
               {item.off}% OFF
             </span>
           </div>

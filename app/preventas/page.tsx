@@ -46,6 +46,9 @@ export default async function PreventasPage() {
       description: p.description,
       price: currentPrice,
       regular: currentRegular,
+      presalePrice: p.price,
+      wholesalePrice: p.wholesalePrice,
+      regularPrice: p.regularPrice,
       off: (currentRegular > currentPrice)
         ? Math.round(((currentRegular - currentPrice) / currentRegular) * 100)
         : 0,

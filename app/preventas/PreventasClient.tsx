@@ -15,11 +15,11 @@ export function PreventasClient({ activePresale, wholesaleProducts }: PreventasC
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-8 pb-16">
       {/* Top: hero + timer */}
-      <div className="grid lg:grid-cols-[1fr_1.2fr] gap-8">
+      <div className="grid lg:grid-cols-2 gap-6 items-start">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden rounded-[2.5rem] glass-dark text-white p-8 sm:p-10 flex flex-col justify-center shadow-elegant border border-white/10 h-full"
+          className="relative overflow-hidden rounded-[2.5rem] glass-dark text-white p-6 sm:p-8 flex flex-col justify-center shadow-elegant border border-white/10 min-h-[280px]"
         >
           <Image
             src="/images/hero-bg.png"
@@ -49,10 +49,9 @@ export function PreventasClient({ activePresale, wholesaleProducts }: PreventasC
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="h-full"
         >
           {activePresale ? (
-            <div className="flex flex-col h-full gap-6">
+            <div className="flex flex-col gap-6">
               <CountdownTimer 
                 startDate={activePresale.presaleStartDate} 
                 endDate={activePresale.presaleEndDate} 

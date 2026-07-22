@@ -193,8 +193,10 @@ export default function AdminPage() {
               </div>
               
               <div className="space-y-2">
-                <label className="text-sm font-medium text-neutral-300">Precio (USD)</label>
-                <input required name="price" type="number" step="0.01" className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all" placeholder="Ej. 120.50" />
+                <label className="text-sm font-medium text-neutral-300">
+                  {productType === 'PRESALE' ? 'Precio Especial de Preventa ($ USD)' : 'Precio ($ USD)'}
+                </label>
+                <input required name="price" type="number" step="0.01" className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all" placeholder="Ej. 49.99" />
               </div>
 
               <div className="space-y-2">
@@ -219,13 +221,13 @@ export default function AdminPage() {
                 <AnimatePresence>
                   <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-4 md:col-span-2 bg-indigo-500/5 border border-indigo-500/20 p-5 rounded-2xl">
                     
-                    {/* Precios de Preventa */}
+                    {/* Precio Regular Detal */}
                     <div>
                       <label className="text-sm font-medium text-indigo-300 flex items-center gap-2">
-                        <Tag className="w-4 h-4" /> Precio Regular (Sin Descuento)
+                        <Tag className="w-4 h-4" /> Precio Regular / Detal por Unidad ($ USD)
                       </label>
                       <input required name="regularPrice" type="number" step="0.01" className="w-full bg-neutral-950/50 border border-indigo-500/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-neutral-200 mt-2" placeholder="Ej. 150.00" />
-                      <p className="text-xs text-indigo-400 mt-2">El sistema calculará el % de descuento automáticamente usando este precio y el Precio de Preventa ingresado arriba.</p>
+                      <p className="text-xs text-indigo-400/80 mt-1">Precio al detal en catálogo principal sin descuento.</p>
                     </div>
 
                     <hr className="border-indigo-500/20" />
@@ -252,17 +254,17 @@ export default function AdminPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="text-sm font-medium text-emerald-400 flex items-center gap-2">
-                          <Tag className="w-4 h-4" /> Precio al Mayor
+                          <Tag className="w-4 h-4" /> Precio al Mayor Post-Preventa ($ USD)
                         </label>
                         <input required name="wholesalePrice" type="number" step="0.01" className="w-full bg-neutral-950/50 border border-emerald-500/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all text-neutral-200 mt-2" placeholder="Ej. 90.00" />
-                        <p className="text-[11px] text-emerald-400/80 mt-1">Precio una vez termine la preventa.</p>
+                        <p className="text-[11px] text-emerald-400/80 mt-1">Precio al que pasará cuando termine la preventa.</p>
                       </div>
                       <div>
                         <label className="text-sm font-medium text-emerald-400 flex items-center gap-2">
                           <Tag className="w-4 h-4" /> Precio Regular al Mayor
                         </label>
                         <input name="wholesaleRegularPrice" type="number" step="0.01" className="w-full bg-neutral-950/50 border border-emerald-500/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all text-neutral-200 mt-2" placeholder="Ej. 120.00 (Opcional)" />
-                        <p className="text-[11px] text-emerald-400/80 mt-1">Para calcular el descuento al mayor.</p>
+                        <p className="text-[11px] text-emerald-400/80 mt-1">Para referencia de catálogo mayorista.</p>
                       </div>
                     </div>
 
