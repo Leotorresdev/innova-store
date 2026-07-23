@@ -43,30 +43,30 @@ export function ProductsShowcase() {
 
   return (
     <motion.section 
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.7 }}
+      transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
       id="tienda" 
       className="relative mx-auto max-w-7xl px-6 pt-28 pb-10"
     >
       <div className="text-center mb-16 relative z-10">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.92 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 rounded-full glass-dark border border-primary/20 text-primary-foreground px-5 py-2 text-sm font-semibold mb-6 shadow-glow"
+          transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+          className="inline-flex items-center gap-2 rounded-full glass-dark border border-primary/20 text-primary-foreground px-5 py-2 text-sm font-semibold mb-6 shadow-glow cursor-pointer"
         >
           <span className="size-2 rounded-full bg-primary animate-pulse" />
           Colección Oficial
         </motion.div>
         
         <motion.h2 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          transition={{ duration: 1.1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           className="font-display text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight leading-[1.1] text-ink"
         >
           Catálogo <span className="text-gradient">Premium</span>

@@ -164,6 +164,25 @@
   * {
     @apply border-border outline-ring/50;
   }
+  
+  button,
+  a,
+  select,
+  summary,
+  [role="button"],
+  input[type="submit"],
+  input[type="button"],
+  input[type="reset"],
+  input[type="checkbox"],
+  input[type="radio"],
+  label {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  input:disabled {
+    cursor: not-allowed;
+  }
 }
 
 @layer utilities {
@@ -197,7 +216,7 @@
   }
   
   .glass-card {
-    @apply relative overflow-hidden bg-white rounded-3xl border border-neutral-200/60 transition-all duration-500 hover:-translate-y-1;
+    @apply relative overflow-hidden bg-white rounded-3xl border border-neutral-200/60 transition-all duration-700 ease-out hover:-translate-y-2 cursor-pointer;
     box-shadow: var(--shadow-card);
   }
   .glass-card:hover {

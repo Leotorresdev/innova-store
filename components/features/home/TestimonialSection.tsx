@@ -52,12 +52,12 @@ export function TestimonialSection() {
           {TESTIMONIALS.map((t, i) => (
             <motion.div
               key={t.name}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.15, duration: 0.5 }}
-              whileHover={{ y: -5 }}
-              className="relative p-8 rounded-[2rem] glass-card flex flex-col h-full border border-neutral-200/50 hover:border-primary/20"
+              transition={{ delay: i * 0.25, duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ y: -6 }}
+              className="relative p-8 rounded-[2rem] glass-card flex flex-col h-full border border-neutral-200/50 hover:border-primary/20 cursor-pointer"
             >
               <div className="flex gap-1 mb-6">
                 {[...Array(5)].map((_, j) => (

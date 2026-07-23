@@ -49,7 +49,7 @@ export function ContactSection() {
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-2 space-y-8"
           >
             <div className="glass-dark p-8 rounded-[2rem] border border-white/10">

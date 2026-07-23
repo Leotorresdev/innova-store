@@ -32,10 +32,10 @@ export function AboutSection() {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           >
             <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight mb-6">
               Redefiniendo el <span className="text-gradient">estándar</span> de la industria.
@@ -48,11 +48,11 @@ export function AboutSection() {
               {VALUES.map((val, i) => (
                 <motion.div 
                   key={val.title}
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.15 }}
-                  className="flex items-start gap-5 group p-4 rounded-3xl hover:bg-white transition-all hover:shadow-card cursor-default"
+                  transition={{ delay: i * 0.2, duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+                  className="flex items-start gap-5 group p-4 rounded-3xl hover:bg-white transition-all duration-500 hover:shadow-card cursor-pointer"
                 >
                   <div className="size-14 rounded-2xl bg-primary/10 flex items-center justify-center shadow-sm border border-primary/20 group-hover:bg-primary group-hover:text-white transition-all duration-300">
                     <val.icon className="size-6 text-primary group-hover:text-white transition-colors" />

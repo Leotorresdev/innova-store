@@ -37,18 +37,19 @@ export function FeaturesSection() {
       <div className="relative mx-auto max-w-7xl px-6 py-20 sm:py-24 z-10">
         <div className="text-center mb-16">
           <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-ink"
           >
             Excelencia en cada <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-500">detalle</span>
           </motion.h2>
           <motion.p 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="mt-6 text-lg text-ink/60 max-w-2xl mx-auto font-medium"
           >
             Diseñado para los creadores más exigentes. No comprometemos el rendimiento ni la estética.
@@ -59,11 +60,11 @@ export function FeaturesSection() {
           {FEATURES.map((f, i) => (
             <motion.div
               key={f.title}
-              initial={{ opacity: 0, y: 30, scale: 0.98 }}
+              initial={{ opacity: 0, y: 40, scale: 0.96 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.15, duration: 0.5 }}
-              className={`group relative backdrop-blur-xl rounded-[2.5rem] p-6 sm:p-10 transition-all duration-500 border overflow-hidden flex flex-col items-center text-center ${f.className}`}
+              transition={{ delay: i * 0.25, duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+              className={`group relative backdrop-blur-xl rounded-[2.5rem] p-6 sm:p-10 transition-all duration-700 ease-out border overflow-hidden flex flex-col items-center text-center cursor-pointer ${f.className}`}
             >
               {/* Glass reflection */}
               <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />

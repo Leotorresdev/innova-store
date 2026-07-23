@@ -32,17 +32,17 @@ export function HeroSection() {
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-dark border-primary/30 mb-8 shadow-glow"
+          transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-dark border-primary/30 mb-8 shadow-glow cursor-pointer"
         >
           <span className="size-2 rounded-full bg-primary animate-pulse" />
           <span className="text-sm font-medium text-primary-foreground">Bienvenido a la revolución tecnológica</span>
         </motion.div>
 
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
+          transition={{ duration: 1.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           className="font-display text-6xl sm:text-7xl lg:text-8xl font-black leading-[1.05] tracking-tight text-white drop-shadow-2xl max-w-5xl"
         >
           Experimenta la <br />
@@ -53,25 +53,25 @@ export function HeroSection() {
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
+          transition={{ duration: 1.4, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
           className="mt-8 text-lg sm:text-2xl text-neutral-300 max-w-2xl leading-relaxed font-light drop-shadow-lg"
         >
           Tecnología premium de importación. Descubre equipos vanguardistas con los precios y márgenes más competitivos del mercado.
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6, ease: 'easeOut' }}
+          transition={{ duration: 1.4, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="mt-12 flex flex-col sm:flex-row gap-6 items-center justify-center"
         >
           <Link
             href="/#tienda"
-            className="group relative inline-flex items-center justify-center gap-2 bg-gradient-primary text-white font-bold px-10 py-5 rounded-2xl overflow-hidden transition-all hover:scale-[1.02] shadow-glow"
+            className="group relative inline-flex items-center justify-center gap-2 bg-gradient-primary text-white font-bold px-10 py-5 rounded-2xl overflow-hidden transition-all duration-500 hover:scale-[1.03] shadow-glow cursor-pointer"
           >
-            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
+            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
             <span className="relative z-10 flex items-center gap-2 text-lg">
               Explorar Catálogo
               <ArrowRight className="size-5 group-hover:translate-x-1 transition-transform" />
