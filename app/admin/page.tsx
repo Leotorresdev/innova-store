@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UploadCloud, CheckCircle, AlertCircle, Loader2, Package, Trash2, Tag, Power, Calendar, Clock } from 'lucide-react';
+import { UploadCloud, CheckCircle, AlertCircle, Loader2, Package, Trash2, Tag, Power, Calendar, Clock, LogOut } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getGlobalSettings, togglePreventas } from '@/app/actions/settings';
+import { logoutAction } from '@/app/actions/auth';
 
 export default function AdminPage() {
   const [loading, setLoading] = useState(false);
@@ -129,13 +130,24 @@ export default function AdminPage() {
         <h2 className="text-xl font-bold text-neutral-100 flex items-center gap-2">
           ⚙️ Gestión Central de Tienda
         </h2>
-        <Link 
-          href="/admin/orders" 
-          className="bg-indigo-500 hover:bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg hover:shadow-indigo-500/25 flex items-center gap-2"
-        >
-          <Package className="w-4 h-4" />
-          Ver Órdenes y Envíos
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link 
+            href="/admin/orders" 
+            className="bg-indigo-500 hover:bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg hover:shadow-indigo-500/25 flex items-center gap-2"
+          >
+            <Package className="w-4 h-4" />
+            Ver Órdenes y Envíos
+          </Link>
+          <form action={logoutAction}>
+            <button
+              type="submit"
+              className="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 px-4 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2"
+            >
+              <LogOut className="w-4 h-4" />
+              Cerrar Sesión
+            </button>
+          </form>
+        </div>
       </div>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
