@@ -28,17 +28,16 @@ export function Footer() {
           <p className="text-sm text-white/70 leading-relaxed">
             Redefiniendo el estándar de la tecnología personal mediante diseño puro y materiales excepcionales.
           </p>
-          <div className="flex gap-2 mt-6">
-            {SOCIAL.map((Icon, i) => (
-              <a
-                key={i}
-                href="#"
-                aria-label="Red social"
-                className="size-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition"
-              >
-                <Icon className="size-4" />
-              </a>
-            ))}
+          <div className="flex gap-3 mt-6">
+            <a
+              href="https://www.instagram.com/innova.ven?igsh=aGNxYzZsZHFyZHlo"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="size-9 rounded-full bg-white/5 hover:bg-primary/20 hover:text-primary border border-white/10 flex items-center justify-center transition-all cursor-pointer"
+            >
+              <Instagram className="size-4" />
+            </a>
           </div>
         </div>
 

@@ -8,9 +8,8 @@ export const siteConfig = {
   ogImage: '/assets/innova/hero.jpg',
   author: 'Innova Company',
   links: {
-    twitter: '#',
-    github: '#',
-    linkedin: '#',
+    instagram: 'https://www.instagram.com/innova.ven?igsh=aGNxYzZsZHFyZHlo',
+    whatsapp: 'https://wa.me/584262663234',
     mail: 'mailto:contacto@innova.store',
   },
 } as const;

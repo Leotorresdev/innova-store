@@ -136,7 +136,7 @@ export default function PayPage() {
           </p>
           <div className="mt-8 flex flex-col gap-4">
             <a 
-              href="https://wa.me/584141234567" 
+              href="https://wa.me/584262663234" 
               target="_blank" 
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 w-full h-12 rounded-xl bg-green-500 hover:bg-green-600 text-white font-semibold shadow-glow transition-all hover:scale-[1.02]"

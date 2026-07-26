@@ -59,7 +59,7 @@ export function HeroSection() {
           className="mt-8 max-w-2xl text-lg sm:text-2xl leading-relaxed font-medium tracking-[0.01em] text-white/90 drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]"
         >
           <span className="bg-gradient-to-r from-white via-cyan-100 to-cyan-300 bg-clip-text text-transparent">
-            Tecnología premium de importación.
+            Accesorios y equipos premium de Innovación.
           </span>{' '}
           Descubre equipos vanguardistas con los precios y márgenes más competitivos del mercado.
         </motion.p>

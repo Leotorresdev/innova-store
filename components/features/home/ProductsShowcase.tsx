@@ -79,7 +79,7 @@ export function ProductsShowcase() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mt-6 text-lg sm:text-xl text-ink/70 max-w-2xl mx-auto leading-relaxed"
         >
-          Diseño sin concesiones y rendimiento de vanguardia. Encuentra los dispositivos y herramientas profesionales que llevarán tu productividad al siguiente nivel.
+          Explora nuestra selección de productos de alta gama. 
         </motion.p>
       </div>
       

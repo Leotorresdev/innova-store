@@ -41,7 +41,7 @@ export function AboutSection() {
               Redefiniendo el <span className="text-gradient">estándar</span> de la industria.
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-              En Innova no nos conformamos con seguir tendencias; las creamos. Desde nuestros inicios, nuestra misión ha sido proporcionar herramientas de hardware y software que potencien la creatividad humana, eliminando la fricción entre la idea y la ejecución.
+              En Innova no nos conformamos con seguir tendencias; las creamos. Desde nuestros inicios, nuestra misión ha sido proporcionarles los articulos y equipos de la ultima era de la innovación tecnológica.
             </p>
             
             <div className="space-y-6">

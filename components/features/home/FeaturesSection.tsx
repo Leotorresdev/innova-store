@@ -6,7 +6,7 @@ import { Truck, Headphones, ShieldCheck } from 'lucide-react';
 const FEATURES = [
   {
     Icon: Truck,
-    title: 'Envío Global Ultra-Rápido',
+    title: 'Envíos Nacionales',
     description:
       'Logística premium para asegurar que tu equipo llegue en perfectas condiciones, donde sea que estés, en tiempo récord.',
     className: 'bg-gradient-to-br from-blue-100/90 to-blue-200/50 hover:from-blue-200/90 hover:to-blue-300/50 border-blue-200 shadow-sm',

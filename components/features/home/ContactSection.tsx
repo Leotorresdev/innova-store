@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { MessageCircle, Mail, MapPin, Phone } from 'lucide-react';
+import { MessageCircle, Mail, Phone, Instagram } from 'lucide-react';
 
 export function ContactSection() {
   return (
@@ -71,18 +71,18 @@ export function ContactSection() {
                     <Phone className="size-4 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">Atención Telefónica</p>
-                    <a href="tel:+1800INNOVA" className="text-sm text-white/60 hover:text-primary transition-colors">+1 (800) 123-4567</a>
+                    <p className="text-sm font-medium text-white">WhatsApp & Atención</p>
+                    <a href="https://wa.me/584262663234" target="_blank" rel="noopener noreferrer" className="text-sm text-white/60 hover:text-primary transition-colors">0426-2663234</a>
                   </div>
                 </div>
                 
                 <div className="flex items-start gap-4">
                   <div className="size-10 rounded-full bg-white/5 flex items-center justify-center shrink-0 border border-white/10">
-                    <MapPin className="size-4 text-primary" />
+                    <Instagram className="size-4 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">Oficinas Centrales</p>
-                    <p className="text-sm text-white/60">Silicon Valley, CA<br/>Estados Unidos</p>
+                    <p className="text-sm font-medium text-white">Síguenos en Instagram</p>
+                    <a href="https://www.instagram.com/innova.ven?igsh=aGNxYzZsZHFyZHlo" target="_blank" rel="noopener noreferrer" className="text-sm text-white/60 hover:text-primary transition-colors">@innova.ven</a>
                   </div>
                 </div>
               </div>
@@ -110,10 +110,10 @@ export function ContactSection() {
               </p>
               
               <a 
-                href="https://wa.me/1234567890"
+                href="https://wa.me/584262663234"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-white font-bold px-10 py-5 rounded-2xl overflow-hidden transition-all hover:scale-[1.02] active:scale-[0.98] shadow-[0_0_30px_rgba(16,185,129,0.3)] relative group/btn"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-white font-bold px-10 py-5 rounded-2xl overflow-hidden transition-all hover:scale-[1.02] active:scale-[0.98] shadow-[0_0_30px_rgba(16,185,129,0.3)] relative group/btn cursor-pointer"
               >
                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-in-out" />
                 <span className="relative z-10 flex items-center gap-2">
