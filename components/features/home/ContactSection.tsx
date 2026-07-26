@@ -62,7 +62,7 @@ export function ContactSection() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-white">Soporte y Ventas</p>
-                    <a href="mailto:contacto@innova.store" className="text-sm text-white/60 hover:text-primary transition-colors">contacto@innova.store</a>
+                    <a href="mailto:innovacompanyven@gmail.com" className="text-sm text-white/60 hover:text-primary transition-colors">innovacompanyven@gmail.com</a>
                   </div>
                 </div>
                 

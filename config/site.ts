@@ -10,7 +10,7 @@ export const siteConfig = {
   links: {
     instagram: 'https://www.instagram.com/innova.ven?igsh=aGNxYzZsZHFyZHlo',
     whatsapp: 'https://wa.me/584262663234',
-    mail: 'mailto:contacto@innova.store',
+    mail: 'mailto:innovacompanyven@gmail.com',
   },
 } as const;
 

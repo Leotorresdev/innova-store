@@ -1,4 +1,4 @@
-import { Instagram } from 'lucide-react';
+import { Instagram, Mail, MessageCircle } from 'lucide-react';
 import { Logo } from '@/components/shared/Logo';
 import { siteConfig } from '@/config/site';
 
@@ -37,6 +37,22 @@ export function Footer() {
               className="size-9 rounded-full bg-white/5 hover:bg-primary/20 hover:text-primary border border-white/10 flex items-center justify-center transition-all cursor-pointer"
             >
               <Instagram className="size-4" />
+            </a>
+            <a
+              href="https://wa.me/584262663234"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+              className="size-9 rounded-full bg-white/5 hover:bg-green-500/20 hover:text-green-400 border border-white/10 flex items-center justify-center transition-all cursor-pointer"
+            >
+              <MessageCircle className="size-4" />
+            </a>
+            <a
+              href="mailto:innovacompanyven@gmail.com"
+              aria-label="Email"
+              className="size-9 rounded-full bg-white/5 hover:bg-primary/20 hover:text-primary border border-white/10 flex items-center justify-center transition-all cursor-pointer"
+            >
+              <Mail className="size-4" />
             </a>
           </div>
         </div>
