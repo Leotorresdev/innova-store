@@ -32,6 +32,10 @@ export default function PayPage() {
   const [paymentMethod, setPaymentMethod] = useState<'binance' | 'pagomovil' | null>(null);
   const [shippingAgency, setShippingAgency] = useState<'zoom' | 'mrw' | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [customerNameInput, setCustomerNameInput] = useState('');
+  const [customerIdDocInput, setCustomerIdDocInput] = useState('');
+  const [customerPhoneInput, setCustomerPhoneInput] = useState('');
+  const [shippingAddressInput, setShippingAddressInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [exchangeRateVES, setExchangeRateVES] = useState<number | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -180,29 +184,33 @@ export default function PayPage() {
                 </div>
 
                 <div className="space-y-2 mb-5">
-                  <label className="text-sm font-medium text-muted-foreground">Nombre Completo</label>
+                  <label className="text-sm font-medium text-muted-foreground">Nombre Completo *</label>
                   <input 
                     required
                     name="customerName"
                     type="text" 
                     placeholder="Ej. Juan Pérez"
+                    value={customerNameInput}
+                    onChange={(e) => setCustomerNameInput(e.target.value)}
                     className="w-full bg-surface border border-border/60 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-muted-foreground">Cédula de Identidad (V/E)</label>
+                    <label className="text-sm font-medium text-muted-foreground">Cédula de Identidad (V/E) *</label>
                     <input 
                       required
                       name="customerIdDoc"
                       type="text" 
                       placeholder="Ej. V-12345678"
+                      value={customerIdDocInput}
+                      onChange={(e) => setCustomerIdDocInput(e.target.value)}
                       className="w-full bg-surface border border-border/60 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-muted-foreground">Teléfono Celular</label>
+                    <label className="text-sm font-medium text-muted-foreground">Teléfono Celular *</label>
                     <div className="relative">
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                       <input 
@@ -210,6 +218,8 @@ export default function PayPage() {
                         name="customerPhone"
                         type="tel" 
                         placeholder="Ej. 0414-1234567"
+                        value={customerPhoneInput}
+                        onChange={(e) => setCustomerPhoneInput(e.target.value)}
                         className="w-full bg-surface border border-border/60 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition"
                       />
                     </div>
@@ -247,12 +257,14 @@ export default function PayPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-muted-foreground">Ubicación exacta de la Sucursal</label>
+                  <label className="text-sm font-medium text-muted-foreground">Ubicación exacta de la Sucursal *</label>
                   <input 
                     required
                     name="shippingAddress"
                     type="text" 
                     placeholder="Estado, Ciudad, Nombre de la sucursal..."
+                    value={shippingAddressInput}
+                    onChange={(e) => setShippingAddressInput(e.target.value)}
                     className="w-full bg-surface border border-border/60 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition"
                   />
                 </div>
@@ -438,24 +450,53 @@ export default function PayPage() {
                 </div>
               </div>
 
-              <Button
-                type="submit"
-                form="checkout-form"
-                disabled={!paymentMethod || !fileName || items.length === 0 || isSubmitting}
-                className="w-full mt-8 rounded-xl py-4 h-auto text-base font-semibold shadow-glow disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? 'Procesando...' : 'Confirmar Pedido'}
-              </Button>
-              
-              {!paymentMethod ? (
-                <p className="text-xs text-center text-muted-foreground mt-3">
-                  Selecciona un método de pago para continuar
-                </p>
-              ) : !fileName ? (
-                <p className="text-xs text-center text-amber-600 dark:text-amber-400 font-medium mt-3">
-                  Sube el capture de tu pago para habilitar el botón
-                </p>
-              ) : null}
+              {(() => {
+                const isFormComplete = 
+                  customerNameInput.trim() !== '' &&
+                  customerIdDocInput.trim() !== '' &&
+                  customerPhoneInput.trim() !== '' &&
+                  shippingAddressInput.trim() !== '' &&
+                  shippingAgency !== null &&
+                  paymentMethod !== null &&
+                  fileName !== null;
+
+                const isMissingDetails = 
+                  customerNameInput.trim() === '' ||
+                  customerIdDocInput.trim() === '' ||
+                  customerPhoneInput.trim() === '' ||
+                  shippingAddressInput.trim() === '';
+
+                return (
+                  <>
+                    <Button
+                      type="submit"
+                      form="checkout-form"
+                      disabled={!isFormComplete || items.length === 0 || isSubmitting}
+                      className="w-full mt-8 rounded-xl py-4 h-auto text-base font-semibold shadow-glow disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isSubmitting ? 'Procesando...' : 'Confirmar Pedido'}
+                    </Button>
+                    
+                    {isMissingDetails ? (
+                      <p className="text-xs text-center text-muted-foreground mt-3">
+                        Completa todos tus datos de envío para continuar
+                      </p>
+                    ) : !shippingAgency ? (
+                      <p className="text-xs text-center text-muted-foreground mt-3">
+                        Selecciona una agencia de envío
+                      </p>
+                    ) : !paymentMethod ? (
+                      <p className="text-xs text-center text-muted-foreground mt-3">
+                        Selecciona un método de pago
+                      </p>
+                    ) : !fileName ? (
+                      <p className="text-xs text-center text-amber-600 dark:text-amber-400 font-medium mt-3">
+                        Sube tu pago
+                      </p>
+                    ) : null}
+                  </>
+                );
+              })()}
             </div>
           </div>
         </div>
