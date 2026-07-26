@@ -15,15 +15,15 @@ export function HeroSection() {
           loop
           muted
           playsInline
-          preload='auto'
-          className="absolute inset-0 w-full h-full object-cover object-center scale-105 opacity-110"
+          preload="auto"
+          className="absolute inset-0 w-full h-full object-cover object-center brightness-100 contrast-120"
         >
           <source src="/innova.mp4" type="video/mp4" />
         </video>
-        {/* Dark elegant overlay for deep contrast */}
-        <div className="absolute inset-0 bg-ink/50 mix-blend-multiply" />
-        {/* Glowing gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-transparent to-ink/80" />
+        {/* Light overlay to preserve contrast without making the scene too dark */}
+        <div className="absolute inset-0 bg-ink/20 mix-blend-normal" />
+        {/* Soft gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/10 via-transparent to-ink/20" />
       </div>
 
 
@@ -56,9 +56,12 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.4, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-8 text-lg sm:text-2xl text-neutral-300 max-w-2xl leading-relaxed font-light drop-shadow-lg"
+          className="mt-8 max-w-2xl text-lg sm:text-2xl leading-relaxed font-medium tracking-[0.01em] text-white/90 drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]"
         >
-          Tecnología premium de importación. Descubre equipos vanguardistas con los precios y márgenes más competitivos del mercado.
+          <span className="bg-gradient-to-r from-white via-cyan-100 to-cyan-300 bg-clip-text text-transparent">
+            Tecnología premium de importación.
+          </span>{' '}
+          Descubre equipos vanguardistas con los precios y márgenes más competitivos del mercado.
         </motion.p>
 
         <motion.div
