@@ -28,15 +28,16 @@ export default async function PreventasPage() {
 
   const now = new Date();
 
-  // Active or upcoming presale (latest one that hasn't ended)
-  const activePresaleDb = dbProducts.find(p => !p.presaleEndDate || p.presaleEndDate > now);
+  // Active featured presale (latest one that hasn't ended or has no end date)
+  const activePresaleDb = dbProducts.find(p => (!p.presaleEndDate || p.presaleEndDate > now) && p.stock > 0) || dbProducts[0] || null;
   
-  // Past presales with stock (wholesale)
-  const wholesaleDb = dbProducts.filter(p => p.presaleEndDate && p.presaleEndDate <= now && p.stock > 0);
+  // All other presale products with stock (displayed in the catalog below)
+  const wholesaleDb = dbProducts.filter(p => p.id !== activePresaleDb?.id && p.stock > 0);
 
-  const mapToWholesaleItem = (p: any, isWholesaleMode: boolean) => {
-    const currentPrice = isWholesaleMode && p.wholesalePrice ? p.wholesalePrice : p.price;
-    const currentRegular = isWholesaleMode && p.wholesaleRegularPrice 
+  const mapToWholesaleItem = (p: any) => {
+    const isEnded = Boolean(p.presaleEndDate && p.presaleEndDate <= now);
+    const currentPrice = isEnded && p.wholesalePrice ? p.wholesalePrice : p.price;
+    const currentRegular = isEnded && p.wholesaleRegularPrice 
         ? p.wholesaleRegularPrice 
         : (p.regularPrice ?? currentPrice);
     
@@ -61,8 +62,8 @@ export default async function PreventasPage() {
     };
   };
 
-  const activePresale = activePresaleDb ? mapToWholesaleItem(activePresaleDb, false) : null;
-  const wholesaleProducts = wholesaleDb.map(p => mapToWholesaleItem(p, true));
+  const activePresale = activePresaleDb ? mapToWholesaleItem(activePresaleDb) : null;
+  const wholesaleProducts = wholesaleDb.map(p => mapToWholesaleItem(p));
 
   return (
     <PreventasClient activePresale={activePresale} wholesaleProducts={wholesaleProducts} />
