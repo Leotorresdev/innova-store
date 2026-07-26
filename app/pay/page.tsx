@@ -55,6 +55,8 @@ export default function PayPage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFileName(e.target.files[0].name);
+    } else {
+      setFileName(null);
     }
   };
 
@@ -439,17 +441,21 @@ export default function PayPage() {
               <Button
                 type="submit"
                 form="checkout-form"
-                disabled={!paymentMethod || items.length === 0 || isSubmitting}
-                className="w-full mt-8 rounded-xl py-4 h-auto text-base font-semibold shadow-glow"
+                disabled={!paymentMethod || !fileName || items.length === 0 || isSubmitting}
+                className="w-full mt-8 rounded-xl py-4 h-auto text-base font-semibold shadow-glow disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Procesando...' : 'Confirmar Pedido'}
               </Button>
               
-              {!paymentMethod && (
+              {!paymentMethod ? (
                 <p className="text-xs text-center text-muted-foreground mt-3">
                   Selecciona un método de pago para continuar
                 </p>
-              )}
+              ) : !fileName ? (
+                <p className="text-xs text-center text-amber-600 dark:text-amber-400 font-medium mt-3">
+                  Sube el capture de tu pago para habilitar el botón
+                </p>
+              ) : null}
             </div>
           </div>
         </div>
