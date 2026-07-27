@@ -17,13 +17,17 @@ export interface Countdown {
 
 export function useCountdown(startDateStr: string | Date | null, endDateStr: string | Date | null): Countdown {
   const [timeLeft, setTimeLeft] = useState(0);
-  const [status, setStatus] = useState<'BEFORE' | 'DURING' | 'ENDED'>('BEFORE');
+  const [status, setStatus] = useState<'BEFORE' | 'DURING' | 'ENDED'>('DURING');
 
   useEffect(() => {
-    if (!startDateStr || !endDateStr) return;
+    if (!startDateStr && !endDateStr) {
+      setStatus('DURING');
+      setTimeLeft(0);
+      return;
+    }
 
-    const startDate = new Date(startDateStr).getTime();
-    const endDate = new Date(endDateStr).getTime();
+    const startDate = startDateStr ? new Date(startDateStr).getTime() : 0;
+    const endDate = endDateStr ? new Date(endDateStr).getTime() : Infinity;
 
     const calculateTime = () => {
       const now = new Date().getTime();
@@ -33,7 +37,7 @@ export function useCountdown(startDateStr: string | Date | null, endDateStr: str
         return Math.max(0, Math.floor((startDate - now) / 1000));
       } else if (now < endDate) {
         setStatus('DURING');
-        return Math.max(0, Math.floor((endDate - now) / 1000));
+        return endDate !== Infinity ? Math.max(0, Math.floor((endDate - now) / 1000)) : 0;
       } else {
         setStatus('ENDED');
         return 0;

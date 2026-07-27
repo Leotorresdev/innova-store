@@ -29,10 +29,10 @@ export default async function PreventasPage() {
   const now = new Date();
 
   // Active featured presale (latest one that hasn't ended or has no end date)
-  const activePresaleDb = dbProducts.find(p => (!p.presaleEndDate || p.presaleEndDate > now) && p.stock > 0) || dbProducts[0] || null;
+  const activePresaleDb = dbProducts.find(p => (!p.presaleEndDate || p.presaleEndDate > now) && p.stock > 0) || null;
   
-  // All other presale products with stock (displayed in the catalog below)
-  const wholesaleDb = dbProducts.filter(p => p.id !== activePresaleDb?.id && p.stock > 0);
+  // All other presale products (displayed in the catalog below)
+  const wholesaleDb = dbProducts.filter(p => p.id !== activePresaleDb?.id);
 
   const mapToWholesaleItem = (p: any) => {
     const isEnded = Boolean(p.presaleEndDate && p.presaleEndDate <= now);
