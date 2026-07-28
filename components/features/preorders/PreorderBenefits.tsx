@@ -2,12 +2,6 @@ import { ShieldCheck, Truck, Headset } from 'lucide-react';
 
 const BENEFITS = [
   {
-    Icon: ShieldCheck,
-    title: 'Garantía Certificada',
-    description:
-      'Todos los productos de preventa cuentan con garantía oficial de fábrica por 12 meses.',
-  },
-  {
     Icon: Truck,
     title: 'Envío Prioritario',
     description:
@@ -23,7 +17,7 @@ const BENEFITS = [
 
 export function PreorderBenefits() {
   return (
-    <div className="mt-12 rounded-3xl bg-muted/60 border border-border p-8 sm:p-10 grid md:grid-cols-3 gap-8">
+    <div className="mt-12 rounded-3xl bg-muted/60 border border-border p-8 sm:p-10 flex flex-col md:flex-row justify-center gap-8">
       {BENEFITS.map((b) => (
         <div key={b.title} className="text-center flex flex-col items-center">
           <div className="size-12 rounded-xl bg-ink text-ink-foreground flex items-center justify-center mb-4">
