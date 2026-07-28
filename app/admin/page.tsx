@@ -66,6 +66,18 @@ export default function AdminPage() {
     const isNew = formData.get('isNew') === 'on' ? 'true' : 'false';
     formData.set('isNew', isNew);
 
+    // Ajuste de zona horaria para Vercel:
+    // Convertir el valor local (ej: "2024-10-10T15:00") a un Date considerando la zona horaria del admin,
+    // y luego a un string ISO completo ("...T19:00:00.000Z") para que Vercel (UTC) lo guarde correctamente.
+    const startDateStr = formData.get('presaleStartDate') as string;
+    if (startDateStr) {
+      formData.set('presaleStartDate', new Date(startDateStr).toISOString());
+    }
+    const endDateStr = formData.get('presaleEndDate') as string;
+    if (endDateStr) {
+      formData.set('presaleEndDate', new Date(endDateStr).toISOString());
+    }
+
     try {
       const response = await fetch('/api/products', {
         method: 'POST',
