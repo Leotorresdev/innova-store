@@ -57,6 +57,12 @@ export async function POST(request: Request) {
       },
     });
 
+    // Revalidad páginas para actualizar la caché de Next.js
+    const { revalidatePath } = await import('next/cache');
+    revalidatePath('/preventas');
+    revalidatePath('/');
+    revalidatePath('/admin');
+
     return NextResponse.json(product, { status: 201 });
 
   } catch (error) {

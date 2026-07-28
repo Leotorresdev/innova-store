@@ -16,41 +16,39 @@ export interface Countdown {
 }
 
 export function useCountdown(startDateStr: string | Date | null, endDateStr: string | Date | null): Countdown {
-  const [timeLeft, setTimeLeft] = useState(0);
-  const [status, setStatus] = useState<'BEFORE' | 'DURING' | 'ENDED'>('DURING');
-
-  useEffect(() => {
+  const computeState = () => {
     if (!startDateStr && !endDateStr) {
-      setStatus('DURING');
-      setTimeLeft(0);
-      return;
+      return { currentStatus: 'DURING' as const, currentLeft: 0 };
     }
 
     const startDate = startDateStr ? new Date(startDateStr).getTime() : 0;
     const endDate = endDateStr ? new Date(endDateStr).getTime() : Infinity;
+    const now = new Date().getTime();
+    
+    if (now < startDate) {
+      return { currentStatus: 'BEFORE' as const, currentLeft: Math.max(0, Math.floor((startDate - now) / 1000)) };
+    } else if (now < endDate) {
+      return { 
+        currentStatus: 'DURING' as const, 
+        currentLeft: endDate !== Infinity ? Math.max(0, Math.floor((endDate - now) / 1000)) : 0 
+      };
+    } else {
+      return { currentStatus: 'ENDED' as const, currentLeft: 0 };
+    }
+  };
 
-    const calculateTime = () => {
-      const now = new Date().getTime();
-      
-      if (now < startDate) {
-        setStatus('BEFORE');
-        return Math.max(0, Math.floor((startDate - now) / 1000));
-      } else if (now < endDate) {
-        setStatus('DURING');
-        return endDate !== Infinity ? Math.max(0, Math.floor((endDate - now) / 1000)) : 0;
-      } else {
-        setStatus('ENDED');
-        return 0;
-      }
+  const [timeLeft, setTimeLeft] = useState<number>(() => computeState().currentLeft);
+  const [status, setStatus] = useState<'BEFORE' | 'DURING' | 'ENDED'>(() => computeState().currentStatus);
+
+  useEffect(() => {
+    const update = () => {
+      const { currentStatus, currentLeft } = computeState();
+      setStatus(currentStatus);
+      setTimeLeft(currentLeft);
     };
 
-    // Inicializar
-    setTimeLeft(calculateTime());
-
-    const id = setInterval(() => {
-      setTimeLeft(calculateTime());
-    }, 1000);
-    
+    update();
+    const id = setInterval(update, 1000);
     return () => clearInterval(id);
   }, [startDateStr, endDateStr]);
 

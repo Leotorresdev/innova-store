@@ -32,18 +32,36 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       imageUrl = data.publicUrl;
     }
 
+    const regularPriceStr = formData.get('regularPrice') as string | null;
+    const stockStr = formData.get('stock') as string | null;
+    const presaleStartDateStr = formData.get('presaleStartDate') as string | null;
+    const presaleEndDateStr = formData.get('presaleEndDate') as string | null;
+    const wholesalePriceStr = formData.get('wholesalePrice') as string | null;
+    const wholesaleRegularPriceStr = formData.get('wholesaleRegularPrice') as string | null;
+
     const updateData: any = {};
     if (name) updateData.name = name;
     if (description) updateData.description = description;
     if (price) updateData.price = parseFloat(price);
+    if (regularPriceStr !== null) updateData.regularPrice = regularPriceStr ? parseFloat(regularPriceStr) : null;
+    if (stockStr !== null) updateData.stock = parseInt(stockStr) || 0;
     if (isNew !== null) updateData.isNew = isNew === 'true';
     if (type) updateData.type = type;
     if (imageUrl) updateData.imageUrl = imageUrl;
+    if (presaleStartDateStr !== null) updateData.presaleStartDate = presaleStartDateStr ? new Date(presaleStartDateStr) : null;
+    if (presaleEndDateStr !== null) updateData.presaleEndDate = presaleEndDateStr ? new Date(presaleEndDateStr) : null;
+    if (wholesalePriceStr !== null) updateData.wholesalePrice = wholesalePriceStr ? parseFloat(wholesalePriceStr) : null;
+    if (wholesaleRegularPriceStr !== null) updateData.wholesaleRegularPrice = wholesaleRegularPriceStr ? parseFloat(wholesaleRegularPriceStr) : null;
 
     const product = await prisma.product.update({
       where: { id },
       data: updateData,
     });
+
+    const { revalidatePath } = await import('next/cache');
+    revalidatePath('/preventas');
+    revalidatePath('/');
+    revalidatePath('/admin');
 
     return NextResponse.json(product, { status: 200 });
 
