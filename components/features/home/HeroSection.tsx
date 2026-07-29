@@ -12,12 +12,12 @@ export function HeroSection() {
       <motion.div
         animate={{ scale: [1, 1.2, 1], opacity: [0.12, 0.22, 0.12] }}
         transition={{ repeat: Infinity, duration: 14, ease: 'easeInOut' }}
-        className="absolute -top-20 -left-20 w-[40rem] h-[40rem] rounded-full bg-blue-300/20 blur-[120px] pointer-events-none"
+        className="hidden md:block absolute -top-20 -left-20 w-[40rem] h-[40rem] rounded-full bg-blue-300/20 blur-[120px] pointer-events-none"
       />
       <motion.div
         animate={{ scale: [1, 1.25, 1], opacity: [0.08, 0.18, 0.08] }}
         transition={{ repeat: Infinity, duration: 18, ease: 'easeInOut', delay: 4 }}
-        className="absolute bottom-0 right-0 w-[45rem] h-[35rem] rounded-full bg-blue-200/30 blur-[150px] pointer-events-none"
+        className="hidden md:block absolute bottom-0 right-0 w-[45rem] h-[35rem] rounded-full bg-blue-200/30 blur-[150px] pointer-events-none"
       />
 
       {/* ════════════════════════════════════════

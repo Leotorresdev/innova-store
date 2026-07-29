@@ -7,8 +7,8 @@ export function ContactSection() {
   return (
     <section id="contacto" className="relative py-24 sm:py-32 overflow-hidden bg-ink text-ink-foreground rounded-[3rem] mx-4 sm:mx-6 my-12 shadow-elegant border border-white/5">
       {/* Background elements */}
-      <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-primary/20 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/3 pointer-events-none mix-blend-screen" />
-      <div className="absolute bottom-0 left-0 w-[40rem] h-[40rem] bg-cyan-500/10 rounded-full blur-[150px] translate-y-1/3 -translate-x-1/3 pointer-events-none mix-blend-screen" />
+      <div className="hidden lg:block absolute top-0 right-0 w-[40rem] h-[40rem] bg-primary/20 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/3 pointer-events-none mix-blend-screen" />
+      <div className="hidden lg:block absolute bottom-0 left-0 w-[40rem] h-[40rem] bg-cyan-500/10 rounded-full blur-[150px] translate-y-1/3 -translate-x-1/3 pointer-events-none mix-blend-screen" />
       
       <div className="mx-auto max-w-7xl px-6 relative z-10">
         <div className="text-center max-w-2xl mx-auto mb-16">

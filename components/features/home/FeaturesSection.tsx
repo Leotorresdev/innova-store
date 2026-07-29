@@ -47,8 +47,8 @@ export function FeaturesSection() {
   return (
     <section id="features" className="relative bg-gradient-to-b from-blue-50/50 via-white to-blue-50/30 rounded-[3rem] mx-4 sm:mx-6 mt-4 mb-12 overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-blue-100/50">
       {/* Subtle background glow */}
-      <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-primary/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[40rem] h-[40rem] bg-cyan-400/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+      <div className="hidden lg:block absolute top-0 right-0 w-[40rem] h-[40rem] bg-primary/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+      <div className="hidden lg:block absolute bottom-0 left-0 w-[40rem] h-[40rem] bg-cyan-400/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2 pointer-events-none" />
       
       <div className="relative mx-auto max-w-7xl px-6 py-20 sm:py-24 z-10">
         <div className="text-center mb-16">
@@ -132,7 +132,7 @@ export function FeaturesSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="relative group bg-white/60 backdrop-blur-xl border border-blue-100 hover:border-blue-300 rounded-[2rem] p-6 sm:p-8 transition-all hover:shadow-xl hover:-translate-y-1"
+                className="relative group bg-white lg:bg-white/60 lg:backdrop-blur-xl border border-blue-100 hover:border-blue-300 rounded-[2rem] p-6 sm:p-8 transition-all hover:shadow-xl hover:-translate-y-1"
               >
                 <div className="flex items-start gap-6">
                   <div className="shrink-0 size-14 rounded-2xl bg-blue-50 flex items-center justify-center border border-blue-100 group-hover:bg-primary group-hover:text-white transition-colors duration-500 shadow-sm text-primary">
