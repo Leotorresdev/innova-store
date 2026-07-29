@@ -27,11 +27,11 @@ const FEATURES = [
 ];
 
 const IMAGES = [
-  '/assets/features/envios-1.jpg',
-  '/assets/features/envios-2.jpg',
-  '/assets/features/envios-3.jpg',
-  '/assets/features/envios-4.jpg',
-  '/assets/features/envios-5.jpg',
+  '/images/beneficios1.jpg',
+  '/images/beneficios2.jpg',
+  '/images/beneficios3.jpg',
+  '/images/beneficios4.jpg',
+  '/images/beneficios5.jpg',
 ];
 
 export function FeaturesSection() {
