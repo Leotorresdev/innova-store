@@ -182,11 +182,11 @@ export function CartDrawer() {
                           {/* Line total */}
                           <div className="text-right">
                             <p className="font-display font-bold text-base">
-                              ${(item.precio * item.cantidad).toLocaleString()}
+                              ${(item.precio * item.cantidad).toLocaleString('en-US')}
                             </p>
                             {item.cantidad > 1 && (
                               <p className="text-[10px] text-muted-foreground">
-                                ${item.precio.toLocaleString()} c/u
+                                ${item.precio.toLocaleString('en-US')} c/u
                               </p>
                             )}
                           </div>
@@ -206,7 +206,7 @@ export function CartDrawer() {
                   <div className="flex justify-between font-display text-lg font-bold">
                     <span>Total</span>
                     <span className="text-gradient">
-                      ${total.toLocaleString()}
+                      ${total.toLocaleString('en-US')}
                     </span>
                   </div>
                 </div>

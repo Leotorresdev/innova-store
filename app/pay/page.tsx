@@ -420,10 +420,10 @@ export default function PayPage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium truncate">{item.nombre}</p>
-                        <p className="text-xs text-muted-foreground mt-0.5">${item.precio.toLocaleString()}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">${item.precio.toLocaleString('en-US')}</p>
                       </div>
                       <p className="text-sm font-semibold">
-                        ${(item.precio * item.cantidad).toLocaleString()}
+                        ${(item.precio * item.cantidad).toLocaleString('en-US')}
                       </p>
                     </div>
                   ))
@@ -439,7 +439,7 @@ export default function PayPage() {
                   <span className="text-base font-semibold">Total a Pagar</span>
                   <div className="text-right">
                     <span className="text-2xl font-display font-bold text-gradient block">
-                      ${finalTotal.toLocaleString()}
+                      ${finalTotal.toLocaleString('en-US')}
                     </span>
                     <span className="text-sm font-medium text-muted-foreground mt-1 block">
                       {exchangeRateVES 

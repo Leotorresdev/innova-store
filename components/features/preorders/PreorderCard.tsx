@@ -70,10 +70,10 @@ export function PreorderCard({ item, index = 0 }: PreorderCardProps) {
         <div className="mt-5 flex items-end justify-between">
           <div>
             <p className="text-sm text-muted-foreground line-through font-medium">
-              Regular: ${item.regular.toLocaleString()}.00
+              Regular: ${item.regular.toLocaleString('en-US')}
             </p>
             <p className="font-display text-3xl sm:text-4xl font-black mt-0.5 text-primary tracking-tight">
-              ${item.price.toLocaleString()}.00
+              ${item.price.toLocaleString('en-US')}
             </p>
           </div>
           <div className="text-right">

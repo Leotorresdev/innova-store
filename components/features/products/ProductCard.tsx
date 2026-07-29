@@ -149,7 +149,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
         <div className="flex items-end justify-between gap-3 pt-0.5">
           <div className="flex flex-col gap-0.5">
             <span className="font-display text-[1.6rem] font-bold leading-none tracking-tight">
-              ${product.precio.toLocaleString()}
+              ${product.precio.toLocaleString('en-US')}
             </span>
           </div>
 
