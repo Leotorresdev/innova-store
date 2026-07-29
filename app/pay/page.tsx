@@ -15,6 +15,7 @@ import {
   MessageCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import imageCompression from 'browser-image-compression';
 import { processCheckout } from '@/app/actions/checkout';
 import {
   useCartStore,
@@ -80,10 +81,26 @@ export default function PayPage() {
     }
 
     const formData = new FormData(e.currentTarget);
-    const file = formData.get('paymentProof') as File;
+    let file = formData.get('paymentProof') as File;
     if (!file || file.size === 0) {
       alert('Por favor sube el capture de tu pago.');
       return;
+    }
+
+    setIsSubmitting(true);
+
+    // Comprimir la imagen antes de subirla para no exceder el límite de 4.5MB de Vercel
+    try {
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1200,
+        useWebWorker: true
+      };
+      const compressedBlob = await imageCompression(file, options);
+      // Reemplazamos el archivo original por el comprimido
+      formData.set('paymentProof', new File([compressedBlob], file.name, { type: file.type }));
+    } catch (error) {
+      console.warn('Error comprimiendo la imagen, se enviará original', error);
     }
 
     // Agregar datos adicionales que no son inputs directos
@@ -96,8 +113,6 @@ export default function PayPage() {
     formData.append('items', JSON.stringify(
       items.map(i => ({ id: i.id, cantidad: i.cantidad, nombre: i.nombre, precio: i.precio }))
     ));
-
-    setIsSubmitting(true);
     
     try {
       const result = await processCheckout(formData);

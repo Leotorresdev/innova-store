@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getGlobalSettings, togglePreventas } from '@/app/actions/settings';
 import { logoutAction } from '@/app/actions/auth';
+import imageCompression from 'browser-image-compression';
 
 export default function AdminPage() {
   const [loading, setLoading] = useState(false);
@@ -67,8 +68,6 @@ export default function AdminPage() {
     formData.set('isNew', isNew);
 
     // Ajuste de zona horaria para Vercel:
-    // Convertir el valor local (ej: "2024-10-10T15:00") a un Date considerando la zona horaria del admin,
-    // y luego a un string ISO completo ("...T19:00:00.000Z") para que Vercel (UTC) lo guarde correctamente.
     const startDateStr = formData.get('presaleStartDate') as string;
     if (startDateStr) {
       formData.set('presaleStartDate', new Date(startDateStr).toISOString());
@@ -76,6 +75,18 @@ export default function AdminPage() {
     const endDateStr = formData.get('presaleEndDate') as string;
     if (endDateStr) {
       formData.set('presaleEndDate', new Date(endDateStr).toISOString());
+    }
+
+    // Comprimir la imagen antes de subirla
+    let file = formData.get('image') as File;
+    if (file && file.size > 0) {
+      try {
+        const options = { maxSizeMB: 1, maxWidthOrHeight: 1200, useWebWorker: true };
+        const compressedBlob = await imageCompression(file, options);
+        formData.set('image', new File([compressedBlob], file.name, { type: file.type }));
+      } catch (error) {
+        console.warn('Error comprimiendo la imagen', error);
+      }
     }
 
     try {
