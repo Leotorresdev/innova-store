@@ -60,9 +60,9 @@ export function ContactSection() {
                   <div className="size-10 rounded-full bg-white/5 flex items-center justify-center shrink-0 border border-white/10">
                     <Mail className="size-4 text-primary" />
                   </div>
-                  <div>
+                  <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-white">Soporte y Ventas</p>
-                    <a href="mailto:innovacompanyven@gmail.com" className="text-sm text-white/60 hover:text-primary transition-colors">innovacompanyven@gmail.com</a>
+                    <a href="mailto:innovacompanyven@gmail.com" className="text-sm text-white/60 hover:text-primary transition-colors break-all block">innovacompanyven@gmail.com</a>
                   </div>
                 </div>
                 
@@ -70,9 +70,9 @@ export function ContactSection() {
                   <div className="size-10 rounded-full bg-white/5 flex items-center justify-center shrink-0 border border-white/10">
                     <Phone className="size-4 text-primary" />
                   </div>
-                  <div>
+                  <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-white">WhatsApp & Atención</p>
-                    <a href="https://wa.me/584262663234" target="_blank" rel="noopener noreferrer" className="text-sm text-white/60 hover:text-primary transition-colors">0426-2663234</a>
+                    <a href="https://wa.me/584262663234" target="_blank" rel="noopener noreferrer" className="text-sm text-white/60 hover:text-primary transition-colors block">0426-2663234</a>
                   </div>
                 </div>
                 
@@ -80,9 +80,9 @@ export function ContactSection() {
                   <div className="size-10 rounded-full bg-white/5 flex items-center justify-center shrink-0 border border-white/10">
                     <Instagram className="size-4 text-primary" />
                   </div>
-                  <div>
+                  <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-white">Síguenos en Instagram</p>
-                    <a href="https://www.instagram.com/innova.ven?igsh=aGNxYzZsZHFyZHlo" target="_blank" rel="noopener noreferrer" className="text-sm text-white/60 hover:text-primary transition-colors">@innova.ven</a>
+                    <a href="https://www.instagram.com/innova.ven?igsh=aGNxYzZsZHFyZHlo" target="_blank" rel="noopener noreferrer" className="text-sm text-white/60 hover:text-primary transition-colors block truncate">@innova.ven</a>
                   </div>
                 </div>
               </div>
