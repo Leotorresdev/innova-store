@@ -335,11 +335,11 @@ export default function PayPage() {
                         <p className="font-medium">Datos de Binance Pay:</p>
                         <p className="text-muted-foreground flex justify-between">
                           <span>Pay ID:</span>
-                          <span className="font-mono text-foreground font-semibold">123456789</span>
+                          <span className="font-mono text-foreground font-semibold">549852461</span>
                         </p>
                         <p className="text-muted-foreground flex justify-between">
                           <span>Correo:</span>
-                          <span className="font-mono text-foreground font-semibold">pagos@innova.com</span>
+                          <span className="font-mono text-foreground font-semibold">chacaomuralla1972@gmail.com</span>
                         </p>
                       </div>
                     </motion.div>
@@ -360,11 +360,11 @@ export default function PayPage() {
                         </p>
                         <p className="text-muted-foreground flex justify-between">
                           <span>Teléfono:</span>
-                          <span className="font-mono text-foreground font-semibold">0414-1234567</span>
+                          <span className="font-mono text-foreground font-semibold">0426-2663234</span>
                         </p>
                         <p className="text-muted-foreground flex justify-between">
                           <span>Cédula:</span>
-                          <span className="font-mono text-foreground font-semibold">V-12345678</span>
+                          <span className="font-mono text-foreground font-semibold">V-11134482</span>
                         </p>
                       </div>
                     </motion.div>
