@@ -32,11 +32,7 @@ export function HeroSection() {
           transition={{ duration: 1.4, delay: 0.3 }}
           className="w-full h-full"
         >
-          <motion.div
-            animate={{ y: [0, -7, 0] }}
-            transition={{ repeat: Infinity, duration: 9, ease: 'easeInOut' }}
-            className="w-full h-full"
-          >
+          <motion.div className="w-full h-full">
             <video
               autoPlay
               loop
@@ -190,7 +186,7 @@ export function HeroSection() {
             muted
             playsInline
             preload="auto"
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover scale-[1.20]"
             style={{
               maskImage:
                 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 22%, black 42%), ' +
