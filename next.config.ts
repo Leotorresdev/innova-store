@@ -31,18 +31,20 @@ const nextConfig: NextConfig = {
     ];
   },
   async rewrites() {
-    return [
-      {
-        source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'admin.innovacompanyven.com',
-          },
-        ],
-        destination: '/admin/:path*',
-      },
-    ];
+    return {
+      beforeFiles: [
+        {
+          source: '/:path*',
+          has: [
+            {
+              type: 'host',
+              value: 'admin.innovacompanyven.com',
+            },
+          ],
+          destination: '/admin/:path*',
+        },
+      ],
+    };
   },
 };
 
