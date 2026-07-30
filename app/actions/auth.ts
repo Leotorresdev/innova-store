@@ -13,11 +13,13 @@ export async function loginAction(formData: FormData) {
   if (user === validUser && password === validPassword) {
     // Establecer cookie con duración de 24 horas
     const cookieStore = await cookies();
+    const isProduction = process.env.NODE_ENV === 'production';
     cookieStore.set('innova_admin_session', 'authenticated', {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isProduction,
       sameSite: 'lax',
       path: '/',
+      ...(isProduction ? { domain: '.innovacompanyven.com' } : {}),
       maxAge: 60 * 60 * 24 // 1 día
     });
     
@@ -29,6 +31,10 @@ export async function loginAction(formData: FormData) {
 
 export async function logoutAction() {
   const cookieStore = await cookies();
-  cookieStore.delete('innova_admin_session');
+  const isProduction = process.env.NODE_ENV === 'production';
+  cookieStore.delete({
+    name: 'innova_admin_session',
+    ...(isProduction ? { domain: '.innovacompanyven.com' } : {})
+  });
   redirect('/login');
 }
