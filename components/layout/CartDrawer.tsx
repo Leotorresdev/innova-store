@@ -32,6 +32,22 @@ export function CartDrawer() {
   const clear = useCartStore((s) => s.clear);
   const router = useRouter();
 
+    // 👇 NUEVA FUNCIÓN GUARDIÁN 👇
+  const handleCheckout = () => {
+    // 1. Buscamos si hay ALGÚN producto en el carrito que exceda el stock
+    const productoExcedido = items.find(item => item.cantidad > item.stock);
+    
+    // 2. Si encontramos uno, lanzamos una alerta y detenemos la función
+    if (productoExcedido) {
+      alert(`⚠️ Lo sentimos, no puedes llevar ${productoExcedido.cantidad} unidades de "${productoExcedido.nombre}". Solo quedan ${productoExcedido.stock} en el inventario.`);
+      return; // El "return" mágico que evita que el código siga avanzando
+    }
+    
+    // 3. Si ningún producto excedió el stock, el código llega aquí y lo dejamos pasar
+    setOpen(false);
+    router.push('/pay');
+  };
+
   const count = items.reduce((acc, i) => acc + i.cantidad, 0);
   const SHIPPING_COST = 5; // Costo de envío configurable
 
@@ -224,17 +240,14 @@ export function CartDrawer() {
                 </div>
 
                 {/* CTA */}
-                <Button
-                  id="checkout-btn"
-                  onClick={() => {
-                    setOpen(false);
-                    router.push('/pay');
-                  }}
-                  className="w-full rounded-xl py-3.5 h-auto text-sm font-semibold gap-2 shadow-glow"
+               <Button
+               id="checkout-btn"
+               onClick={handleCheckout} // 👈 Cambiamos el código por nuestra función guardián
+                className="w-full..."
                 >
-                  Comprar
+                 Comprar
                   <ArrowRight className="size-4" />
-                </Button>
+                  </Button>
 
                 <button
                   type="button"
