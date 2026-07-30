@@ -15,6 +15,35 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/admin/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'innovacompanyven.com',
+          },
+        ],
+        destination: 'https://admin.innovacompanyven.com/:path*',
+        permanent: true,
+      },
+    ];
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'admin.innovacompanyven.com',
+          },
+        ],
+        destination: '/admin/:path*',
+      },
+    ];
+  },
 };
 
 export default nextConfig;
