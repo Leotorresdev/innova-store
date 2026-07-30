@@ -240,14 +240,14 @@ export function CartDrawer() {
                 </div>
 
                 {/* CTA */}
-               <Button
-               id="checkout-btn"
-               onClick={handleCheckout} // 👈 Cambiamos el código por nuestra función guardián
-                className="w-full..."
+                <Button
+                  id="checkout-btn"
+                  onClick={handleCheckout}
+                  className="w-full rounded-xl py-3.5 h-auto text-sm font-semibold gap-2 shadow-glow"
                 >
-                 Comprar
+                  Comprar
                   <ArrowRight className="size-4" />
-                  </Button>
+                </Button>
 
                 <button
                   type="button"
