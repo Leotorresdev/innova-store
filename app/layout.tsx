@@ -95,6 +95,7 @@ export default async function RootLayout({
         <main className="pt-24">{children}</main>
         <Footer />
         <CartDrawer />
+        <Analytics />
       </body>
     </html>
   );
