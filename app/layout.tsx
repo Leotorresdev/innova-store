@@ -6,6 +6,7 @@ import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/layout/CartDrawer';
 import { NoiseBackground } from '@/components/ui/NoiseBackground';
 import { getGlobalSettings } from '@/app/actions/settings';
+import { Analytics } from "@vercel/analytics/next"
 import './globals.css';
 
 const inter = Inter({
