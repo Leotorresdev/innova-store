@@ -34,6 +34,9 @@ export const useCartStore = create<CartStore>((set, get) => ({
 
   add: (product) =>
     set((state) => {
+      const isWholesale = product.categoria === 'Mayorista';
+      const initialQty = isWholesale ? 5 : 1;
+
       const existing = state.items.find((i) => i.id === product.id);
       if (existing) {
         return {
@@ -44,7 +47,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
         };
       }
       return {
-        items: [...state.items, { ...product, cantidad: 1 }],
+        items: [...state.items, { ...product, cantidad: initialQty }],
         isOpen: true,
       };
     }),
@@ -55,12 +58,22 @@ export const useCartStore = create<CartStore>((set, get) => ({
     })),
 
   setQty: (id, cantidad) =>
-    set((state) => ({
-      items:
-        cantidad <= 0
-          ? state.items.filter((i) => i.id !== id)
-          : state.items.map((i) => (i.id === id ? { ...i, cantidad } : i)),
-    })),
+    set((state) => {
+      const item = state.items.find((i) => i.id === id);
+      if (!item) return state;
+
+      const isWholesale = item.categoria === 'Mayorista';
+      const minQty = isWholesale ? 5 : 1;
+
+      // Si baja de 1 o si es mayorista y baja de 5, lo eliminamos
+      if (cantidad <= 0 || (isWholesale && cantidad < minQty)) {
+        return { items: state.items.filter((i) => i.id !== id) };
+      }
+
+      return {
+        items: state.items.map((i) => (i.id === id ? { ...i, cantidad } : i)),
+      };
+    }),
 
   clear: () => set({ items: [] }),
 
