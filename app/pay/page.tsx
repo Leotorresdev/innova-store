@@ -63,6 +63,17 @@ export default function PayPage() {
     e.target.value = e.target.value.replace(/\D/g, '');
   };
 
+  // Advertencia al intentar recargar o cerrar la pestaña
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isSuccess || items.length === 0) return;
+      e.preventDefault();
+      e.returnValue = ''; // Necesario para que navegadores modernos muestren su alerta nativa
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isSuccess, items.length]);
+
   useEffect(() => {
     async function fetchRate() {
       try {
@@ -204,7 +215,11 @@ export default function PayPage() {
       <div className="max-w-6xl mx-auto px-6">
         {/* Header */}
         <button 
-          onClick={() => router.back()}
+          onClick={() => {
+            if (window.confirm('¿Estás seguro que deseas cancelar tu proceso de pago? Se perderán los datos que has ingresado.')) {
+              router.back();
+            }
+          }}
           className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition mb-8"
         >
           <ArrowLeft className="size-4" />
