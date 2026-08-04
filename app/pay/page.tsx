@@ -12,7 +12,8 @@ import {
   Wallet,
   CheckCircle2,
   Building2,
-  MessageCircle
+  MessageCircle,
+  Copy
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import imageCompression from 'browser-image-compression';
@@ -36,11 +37,31 @@ export default function PayPage() {
   const [customerNameInput, setCustomerNameInput] = useState('');
   const [customerIdDocInput, setCustomerIdDocInput] = useState('');
   const [customerPhoneInput, setCustomerPhoneInput] = useState('');
-  const [shippingAddressInput, setShippingAddressInput] = useState('');
+  const [shippingStateInput, setShippingStateInput] = useState('');
+  const [shippingCityInput, setShippingCityInput] = useState('');
+  const [shippingBranchInput, setShippingBranchInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [exchangeRateVES, setExchangeRateVES] = useState<number | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [customerName, setCustomerName] = useState('');
+
+  const [copiedType, setCopiedType] = useState<string | null>(null);
+  const [docType, setDocType] = useState('V');
+  const [phonePrefix, setPhonePrefix] = useState('0414');
+
+  const handleCopy = async (text: string, type: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedType(type);
+      setTimeout(() => setCopiedType(null), 2000);
+    } catch (err) {
+      console.error('Error al copiar', err);
+    }
+  };
+
+  const handleNumberInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.target.value = e.target.value.replace(/\D/g, '');
+  };
 
   useEffect(() => {
     async function fetchRate() {
@@ -104,6 +125,16 @@ export default function PayPage() {
     }
 
     // Agregar datos adicionales que no son inputs directos
+    const docNumber = formData.get('customerIdDocNumber');
+    const phoneNumber = formData.get('customerPhoneNumber');
+    const state = formData.get('shippingState') || '';
+    const city = formData.get('shippingCity') || '';
+    const branch = formData.get('shippingBranch') || '';
+
+    formData.append('customerIdDoc', `${docType}-${docNumber}`);
+    formData.append('customerPhone', `${phonePrefix}-${phoneNumber}`);
+    formData.append('shippingAddress', [state, city, branch].filter(Boolean).join(', '));
+
     formData.append('shippingAgency', shippingAgency);
     formData.append('paymentMethod', paymentMethod);
     formData.append('total', finalTotal.toString());
@@ -213,30 +244,63 @@ export default function PayPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-muted-foreground">Cédula de Identidad (V/E) *</label>
-                    <input 
-                      required
-                      name="customerIdDoc"
-                      type="text" 
-                      placeholder="Ej. V-12345678"
-                      value={customerIdDocInput}
-                      onChange={(e) => setCustomerIdDocInput(e.target.value)}
-                      className="w-full bg-surface border border-border/60 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition"
-                    />
+                    <label className="text-sm font-medium text-muted-foreground">Cédula de Identidad *</label>
+                    <div className="flex gap-2">
+                      <select 
+                        value={docType} 
+                        onChange={(e) => setDocType(e.target.value)}
+                        className="bg-surface border border-border/60 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition cursor-pointer"
+                      >
+                        <option value="V">V</option>
+                        <option value="E">E</option>
+                        <option value="J">J</option>
+                        <option value="G">G</option>
+                      </select>
+                      <input 
+                        required
+                        name="customerIdDocNumber"
+                        type="text" 
+                        maxLength={8}
+                        value={customerIdDocInput}
+                        onChange={(e) => {
+                          handleNumberInput(e);
+                          setCustomerIdDocInput(e.target.value);
+                        }}
+                        placeholder="Ej. 12345678"
+                        className="w-full bg-surface border border-border/60 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition"
+                      />
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-muted-foreground">Teléfono Celular *</label>
-                    <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-                      <input 
-                        required
-                        name="customerPhone"
-                        type="tel" 
-                        placeholder="Ej. 0414-1234567"
-                        value={customerPhoneInput}
-                        onChange={(e) => setCustomerPhoneInput(e.target.value)}
-                        className="w-full bg-surface border border-border/60 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition"
-                      />
+                    <div className="flex gap-2">
+                      <select 
+                        value={phonePrefix} 
+                        onChange={(e) => setPhonePrefix(e.target.value)}
+                        className="bg-surface border border-border/60 rounded-xl px-2 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition cursor-pointer"
+                      >
+                        <option value="0414">0414</option>
+                        <option value="0424">0424</option>
+                        <option value="0412">0412</option>
+                        <option value="0416">0416</option>
+                        <option value="0426">0426</option>
+                      </select>
+                      <div className="relative w-full">
+                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                        <input 
+                          required
+                          name="customerPhoneNumber"
+                          type="text" 
+                          maxLength={7}
+                          value={customerPhoneInput}
+                          onChange={(e) => {
+                            handleNumberInput(e);
+                            setCustomerPhoneInput(e.target.value);
+                          }}
+                          placeholder="1234567"
+                          className="w-full bg-surface border border-border/60 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -271,17 +335,44 @@ export default function PayPage() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-muted-foreground">Ubicación exacta de la Sucursal *</label>
-                  <input 
-                    required
-                    name="shippingAddress"
-                    type="text" 
-                    placeholder="Estado, Ciudad, Nombre de la sucursal..."
-                    value={shippingAddressInput}
-                    onChange={(e) => setShippingAddressInput(e.target.value)}
-                    className="w-full bg-surface border border-border/60 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition"
-                  />
+                <div className="space-y-4 pt-6 border-t border-border/40 mt-6">
+                  <label className="text-sm font-medium text-muted-foreground block mb-2">Ubicación de la Sucursal</label>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-xs text-muted-foreground">Estado</label>
+                      <input 
+                        name="shippingState"
+                        type="text" 
+                        value={shippingStateInput}
+                        onChange={(e) => setShippingStateInput(e.target.value)}
+                        placeholder="Ej. Miranda"
+                        className="w-full bg-surface border border-border/60 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs text-muted-foreground flex gap-1">Ciudad <span className="text-red-500">*</span></label>
+                      <input 
+                        required
+                        name="shippingCity"
+                        type="text" 
+                        value={shippingCityInput}
+                        onChange={(e) => setShippingCityInput(e.target.value)}
+                        placeholder="Ej. Caracas"
+                        className="w-full bg-surface border border-border/60 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs text-muted-foreground">Sucursal</label>
+                      <input 
+                        name="shippingBranch"
+                        type="text" 
+                        value={shippingBranchInput}
+                        onChange={(e) => setShippingBranchInput(e.target.value)}
+                        placeholder="Ej. Las Mercedes"
+                        className="w-full bg-surface border border-border/60 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition"
+                      />
+                    </div>
+                  </div>
                 </div>
               </section>
 
@@ -332,7 +423,17 @@ export default function PayPage() {
                       className="overflow-hidden"
                     >
                       <div className="p-5 bg-surface border border-border/60 rounded-2xl text-sm space-y-3 mt-4">
-                        <p className="font-medium">Datos de Binance Pay:</p>
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="font-medium">Datos de Binance Pay:</p>
+                          <button 
+                            type="button" 
+                            onClick={() => handleCopy('Binance Pay ID: 549852461\nCorreo: chacaomuralla1972@gmail.com', 'binance')}
+                            className="text-xs flex items-center gap-1 text-primary hover:text-primary/80 transition font-medium bg-primary/10 px-2 py-1 rounded-md"
+                          >
+                            {copiedType === 'binance' ? <CheckCircle2 className="size-3" /> : <Copy className="size-3" />}
+                            {copiedType === 'binance' ? 'Copiado' : 'Copiar todo'}
+                          </button>
+                        </div>
                         <p className="text-muted-foreground flex justify-between">
                           <span>Pay ID:</span>
                           <span className="font-mono text-foreground font-semibold">549852461</span>
@@ -353,7 +454,17 @@ export default function PayPage() {
                       className="overflow-hidden"
                     >
                       <div className="p-5 bg-surface border border-border/60 rounded-2xl text-sm space-y-3 mt-4">
-                        <p className="font-medium">Datos de Pago Móvil:</p>
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="font-medium">Datos de Pago Móvil:</p>
+                          <button 
+                            type="button" 
+                            onClick={() => handleCopy('Banco: Banesco (0134)\nTeléfono: 0426-2663234\nCédula: V-11134482', 'pagomovil')}
+                            className="text-xs flex items-center gap-1 text-primary hover:text-primary/80 transition font-medium bg-primary/10 px-2 py-1 rounded-md"
+                          >
+                            {copiedType === 'pagomovil' ? <CheckCircle2 className="size-3" /> : <Copy className="size-3" />}
+                            {copiedType === 'pagomovil' ? 'Copiado' : 'Copiar todo'}
+                          </button>
+                        </div>
                         <p className="text-muted-foreground flex justify-between">
                           <span>Banco:</span>
                           <span className="font-semibold text-foreground">Banesco (0134)</span>
@@ -470,7 +581,7 @@ export default function PayPage() {
                   customerNameInput.trim() !== '' &&
                   customerIdDocInput.trim() !== '' &&
                   customerPhoneInput.trim() !== '' &&
-                  shippingAddressInput.trim() !== '' &&
+                  shippingCityInput.trim() !== '' &&
                   shippingAgency !== null &&
                   paymentMethod !== null &&
                   fileName !== null;
@@ -479,7 +590,7 @@ export default function PayPage() {
                   customerNameInput.trim() === '' ||
                   customerIdDocInput.trim() === '' ||
                   customerPhoneInput.trim() === '' ||
-                  shippingAddressInput.trim() === '';
+                  shippingCityInput.trim() === '';
 
                 return (
                   <>
