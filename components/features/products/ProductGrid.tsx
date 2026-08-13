@@ -21,10 +21,10 @@ export function ProductGrid({ products, cols = 3, emptyMessage = 'Sin resultados
 
   const colClass =
     cols === 4
-      ? 'sm:grid-cols-2 lg:grid-cols-4'
+      ? 'sm:grid-cols-2 lg:grid-cols-4 auto-rows-fr'
       : cols === 2
-        ? 'sm:grid-cols-2'
-        : 'sm:grid-cols-2 lg:grid-cols-3';
+        ? 'sm:grid-cols-2 auto-rows-fr'
+        : 'sm:grid-cols-2 lg:grid-cols-3 auto-rows-[minmax(350px,auto)]';
 
   return (
     <div className={`grid gap-5 ${colClass}`}>

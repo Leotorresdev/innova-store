@@ -10,9 +10,10 @@ import type { Product } from '@/types';
 interface ProductCardProps {
   product: Product;
   index?: number;
+  className?: string;
 }
 
-export function ProductCard({ product, index = 0 }: ProductCardProps) {
+export function ProductCard({ product, index = 0, className = '' }: ProductCardProps) {
   const add = useCartStore((s) => s.add);
   const [added, setAdded] = useState(false);
 
@@ -31,13 +32,21 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 50, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 1.0, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ y: -8, scale: 1.015 }}
+      transition={{ 
+        duration: 0.8, 
+        delay: index * 0.1, 
+        ease: [0.16, 1, 0.3, 1],
+        scale: { type: 'spring', stiffness: 300, damping: 20 },
+        y: { type: 'spring', stiffness: 300, damping: 20 }
+      }}
       className={`
         group relative flex flex-col
         glass-card cursor-pointer
+        ${className}
       `}
     >
       {/* ── Glow ring on hover ── */}
@@ -46,20 +55,20 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
       />
 
     
-      <div className="relative aspect-square overflow-hidden bg-surface">
+      <div className={`relative aspect-[4/3] overflow-hidden bg-surface rounded-t-3xl`}>
         {product.imagen && (
           <Image
             src={product.imagen}
             alt={product.nombre}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08]"
+            className="object-cover transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.08]"
           />
         )}
 
         {/* Dark scrim — only visible on hover for the CTA */}
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent
-          opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/20 to-transparent
+          opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
         {/* Quick-add CTA that slides up */}
         <div className="absolute inset-x-4 bottom-4
@@ -112,9 +121,10 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
 
         {/* Title + Description */}
         <div>
-          <h3 className="font-display text-[1.05rem] font-bold leading-tight
-            group-hover:text-primary transition-colors duration-200"
-          >
+          <h3 className={`font-display font-bold leading-tight
+            group-hover:text-primary transition-colors duration-200
+            text-lg sm:text-[1.1rem]
+          `}>
             {product.nombre}
           </h3>
           <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed line-clamp-2">
@@ -154,22 +164,23 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
           </div>
 
           {/* Add-to-cart button with confirmation state */}
-          <button
+          <motion.button
             type="button"
             id={`add-cart-${product.id}`}
-            onClick={handleAdd}
+            onClick={(e) => { e.stopPropagation(); handleAdd(); }}
             disabled={isOutOfStock}
             aria-label={`Añadir ${product.nombre} al carrito`}
+            whileTap={!isOutOfStock ? { scale: 0.85 } : {}}
             className={`
               shrink-0 size-12 rounded-2xl flex items-center justify-center
               font-semibold text-sm
-              transition-all duration-300
+              transition-colors duration-300
               shadow-sm
               ${isOutOfStock
-                ? 'bg-neutral-200/50 text-neutral-400 cursor-not-allowed'
+                ? 'bg-neutral-800/50 text-neutral-400 cursor-not-allowed'
                 : added
-                  ? 'bg-emerald-500 text-white scale-110 active:scale-95'
-                  : 'bg-primary text-primary-foreground shadow-[0_0_15px_rgba(var(--primary),0.3)] hover:bg-primary/90 hover:scale-105 active:scale-95'
+                  ? 'bg-emerald-500 text-white'
+                  : 'bg-primary text-primary-foreground shadow-[0_0_20px_rgba(var(--primary),0.4)] hover:bg-primary/90'
               }
             `}
           >
@@ -196,7 +207,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
                 </motion.span>
               )}
             </AnimatePresence>
-          </button>
+          </motion.button>
         </div>
       </div>
     </motion.article>
