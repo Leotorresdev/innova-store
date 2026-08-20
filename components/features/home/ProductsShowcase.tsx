@@ -39,7 +39,14 @@ export function ProductsShowcase() {
     fetchProducts();
   }, []);
 
-  const featured = dbProducts.slice(0, 6);
+  type FilterType = 'ALL' | 'AVAILABLE' | 'OUT_OF_STOCK';
+  const [filter, setFilter] = useState<FilterType>('AVAILABLE');
+
+  const filteredProducts = dbProducts.filter((p) => {
+    if (filter === 'AVAILABLE') return p.stock > 0;
+    if (filter === 'OUT_OF_STOCK') return p.stock === 0;
+    return true;
+  });
 
   return (
     <motion.section 
@@ -50,7 +57,7 @@ export function ProductsShowcase() {
       id="tienda" 
       className="relative mx-auto max-w-7xl px-6 pt-28 pb-10"
     >
-      <div className="text-center mb-16 relative z-10">
+      <div className="text-center mb-10 relative z-10">
         <motion.div
           initial={{ opacity: 0, scale: 0.92 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -82,10 +89,30 @@ export function ProductsShowcase() {
           Explora nuestra selección de productos de alta gama. 
         </motion.p>
       </div>
+      <div className="flex flex-wrap justify-center gap-3 mb-10 relative z-10">
+        <button 
+          onClick={() => setFilter('AVAILABLE')}
+          className={`px-6 py-2.5 rounded-full border text-sm font-medium transition-all duration-300 ${filter === 'AVAILABLE' ? 'bg-primary text-primary-foreground border-primary shadow-glow' : 'bg-transparent border-primary/20 text-ink/70 hover:border-primary/50 hover:text-ink'}`}
+        >
+          Disponibles
+        </button>
+        <button 
+          onClick={() => setFilter('OUT_OF_STOCK')}
+          className={`px-6 py-2.5 rounded-full border text-sm font-medium transition-all duration-300 ${filter === 'OUT_OF_STOCK' ? 'bg-primary text-primary-foreground border-primary shadow-glow' : 'bg-transparent border-primary/20 text-ink/70 hover:border-primary/50 hover:text-ink'}`}
+        >
+          Agotados
+        </button>
+        <button 
+          onClick={() => setFilter('ALL')}
+          className={`px-6 py-2.5 rounded-full border text-sm font-medium transition-all duration-300 ${filter === 'ALL' ? 'bg-primary text-primary-foreground border-primary shadow-glow' : 'bg-transparent border-primary/20 text-ink/70 hover:border-primary/50 hover:text-ink'}`}
+        >
+          Todos
+        </button>
+      </div>
       
       <div className="relative">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[120%] bg-gradient-innova rounded-full blur-[150px] pointer-events-none opacity-10" />       
-        <ProductGrid products={featured} cols={3} />
+        <ProductGrid products={filteredProducts} cols={3} />
       </div>
     </motion.section>
   );
