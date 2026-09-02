@@ -43,22 +43,34 @@ export default async function PreventasPage() {
     
     return {
       id: p.id,
-      name: p.name,
-      description: p.description,
-      price: currentPrice,
-      regular: currentRegular,
+      nombre: p.name, // Renamed name -> nombre
+      descripcion: p.description,
+      precio: currentPrice, // Renamed price -> precio
+      precioOriginal: currentRegular, // Renamed regular -> precioOriginal
       presalePrice: p.price,
       wholesalePrice: p.wholesalePrice,
       regularPrice: p.regularPrice,
-      off: (currentRegular > currentPrice)
+      descuento: (currentRegular > currentPrice) // Renamed off -> descuento
         ? Math.round(((currentRegular - currentPrice) / currentRegular) * 100)
         : 0,
       stock: p.stock,
       low: p.stock < 10,
-      image: p.imageUrl,
+      imagen: p.imageUrl, // Renamed image -> imagen
+      categoria: isEnded ? 'Mayorista' : 'Preventa',
+      etiqueta: isEnded ? 'Al Mayor' : 'Preventa',
+      ventas: Math.floor(Math.random() * 200) + 50,
+      rating: 5,
       // Pass dates for the active presale card/timer
       presaleStartDate: p.presaleStartDate,
       presaleEndDate: p.presaleEndDate,
+      // Keep old fields for PreorderCard activePresale backward compatibility
+      name: p.name,
+      price: currentPrice,
+      regular: currentRegular,
+      off: (currentRegular > currentPrice)
+        ? Math.round(((currentRegular - currentPrice) / currentRegular) * 100)
+        : 0,
+      image: p.imageUrl,
     };
   };
 

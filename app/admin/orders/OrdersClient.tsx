@@ -22,7 +22,7 @@ type Order = {
   paymentMethod: string;
   paymentProofUrl: string;
   total: number;
-  status: 'PROCESSING' | 'COMPLETED';
+  status: 'PROCESSING' | 'COMPLETED' | 'REJECTED';
   createdAt: Date;
   items: OrderItem[];
 };

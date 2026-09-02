@@ -22,6 +22,7 @@ export const products: Product[] = [
     descuento: 22,
     stock: 24,
     descripcion: 'Acústica de grado profesional',
+    descripcionLarga: 'Los audífonos Audio Studio Pro están diseñados para los verdaderos audiófilos. Cuentan con cancelación activa de ruido adaptativa, transductores de 40mm de grafeno para una claridad sin precedentes, y una batería de hasta 40 horas de reproducción continua. Su diseño ergonómico con almohadillas de espuma viscoelástica garantiza comodidad durante todo el día, ya sea en el estudio, en la calle o en casa.',
     tagline: 'Acústica de grado profesional',
     badge: 'Nuevo',
   },
@@ -38,6 +39,7 @@ export const products: Product[] = [
     descuento: 21,
     stock: 12,
     descripcion: 'Cristal de zafiro curvo',
+    descripcionLarga: 'El smartwatch Innova Time V2 redefine lo que significa la tecnología vestible. Protegido por un cristal de zafiro curvo ultrarresistente, ofrece monitorización de salud 24/7 (ritmo cardíaco, oxígeno en sangre, estrés), GPS integrado de doble banda y una pantalla AMOLED de 1.4 pulgadas siempre visible. Fabricado con titanio de grado aeroespacial, es resistente al agua hasta 50 metros y te mantiene conectado sin necesidad de sacar el teléfono.',
     tagline: 'Cristal de zafiro curvo',
     badge: 'Destacado',
   },
@@ -54,6 +56,7 @@ export const products: Product[] = [
     descuento: 21,
     stock: 38,
     descripcion: 'Aluminio fresado CNC',
+    descripcionLarga: 'El Tactile Grid 65 es un teclado mecánico premium compacto. Su chasis de aluminio fresado CNC pesa más de 1.5kg, ofreciendo una experiencia de escritura estable y resonante. Cuenta con switches mecánicos lubricados de fábrica, keycaps de PBT de doble inyección que nunca perderán sus leyendas, e iluminación RGB per-key personalizable.',
     tagline: 'Aluminio fresado CNC',
     badge: 'Nuevo',
   },
@@ -69,6 +72,7 @@ export const products: Product[] = [
     descuento: 25,
     stock: 56,
     descripcion: 'Ergonomía invisible',
+    descripcionLarga: 'La Base Elevate es el compañero perfecto para tu laptop. Eleva la pantalla a la altura ideal de los ojos para corregir tu postura y evitar la fatiga del cuello, mientras que su diseño minimalista permite una excelente disipación de calor. Fabricada de una sola pieza de aluminio reciclado, es compatible con laptops de hasta 16 pulgadas y se pliega de manera plana para viajar contigo a cualquier lugar.',
     tagline: 'Ergonomía invisible',
   },
   {
@@ -83,6 +87,7 @@ export const products: Product[] = [
     descuento: 21,
     stock: 18,
     descripcion: 'Sonido 360° con luz ambiente',
+    descripcionLarga: 'Lumen Speaker combina un diseño de vanguardia con una ingeniería acústica excepcional. Su matriz de altavoces emite sonido rico y profundo en 360 grados, llenando cualquier habitación de manera uniforme. Además de ser un potente altavoz Bluetooth 5.3, integra iluminación LED ambiental que se sincroniza con tu música o crea la atmósfera perfecta con tonos cálidos.',
     tagline: 'Sonido 360° con luz ambiente',
   },
   {
@@ -97,6 +102,7 @@ export const products: Product[] = [
     descuento: 20,
     stock: 42,
     descripcion: 'Sensor óptico de 26K DPI',
+    descripcionLarga: 'El ratón Precision Glide ofrece un rendimiento sin compromisos para los usuarios más exigentes. Cuenta con un sensor óptico de 26,000 DPI con precisión de rastreo 1:1, switches mecánicos táctiles de respuesta ultrarrápida y patas 100% PTFE para un deslizamiento suave sobre cualquier superficie. Su batería dura hasta 80 horas de uso continuo.',
     tagline: 'Sensor óptico de 26K DPI',
   },
 ];

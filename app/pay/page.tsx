@@ -51,6 +51,18 @@ export default function PayPage() {
   };
 
   useEffect(() => {
+    // 6. Analítica del Embudo: Trackear inicio del checkout
+    if (typeof window !== 'undefined' && items.length > 0) {
+      import('@vercel/analytics').then(({ track }) => {
+        track('checkout_started', { 
+          value: total,
+          item_count: items.length
+        });
+      });
+    }
+  }, []);
+
+  useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (isSuccess || items.length === 0) return;
       e.preventDefault();
@@ -125,6 +137,18 @@ export default function PayPage() {
     try {
       const result = await processCheckout(formData);
       if (result.success) {
+        
+        // 6. Analítica del Embudo: Trackear compra completada
+        if (typeof window !== 'undefined') {
+          import('@vercel/analytics').then(({ track }) => {
+            track('purchase', { 
+              value: total, 
+              currency: 'USD',
+              payment_method: paymentMethod
+            });
+          });
+        }
+
         setCustomerName(formData.get('customerName') as string);
         setIsSuccess(true);
         clearCart();

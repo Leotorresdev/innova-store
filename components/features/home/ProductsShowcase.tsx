@@ -7,10 +7,12 @@ import type { Product } from '@/types';
 
 export function ProductsShowcase() {
   const [dbProducts, setDbProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchProducts() {
       try {
+        setIsLoading(true);
         const response = await fetch('/api/products');
         if (!response.ok) throw new Error('Error al cargar productos');
         const data = await response.json();
@@ -34,6 +36,8 @@ export function ProductsShowcase() {
         setDbProducts(mappedProducts);
       } catch (error) {
         console.error('Error fetching products:', error);
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchProducts();
@@ -112,7 +116,7 @@ export function ProductsShowcase() {
       
       <div className="relative">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[120%] bg-gradient-innova rounded-full blur-[150px] pointer-events-none opacity-10" />       
-        <ProductGrid products={filteredProducts} cols={3} />
+        <ProductGrid products={filteredProducts} cols={3} isLoading={isLoading} />
       </div>
     </motion.section>
   );

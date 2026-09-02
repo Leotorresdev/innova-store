@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { PreorderCard } from '@/components/features/preorders/PreorderCard';
 import { CountdownTimer } from '@/components/features/preorders/CountdownTimer';
 import { PreorderBenefits } from '@/components/features/preorders/PreorderBenefits';
+import { ProductGrid } from '@/components/features/products/ProductGrid';
 
 interface PreventasClientProps {
   activePresale: any | null;
@@ -79,16 +80,8 @@ export function PreventasClient({ activePresale, wholesaleProducts }: PreventasC
       </div>
 
       {/* Cards Wholesale */}
-      <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {wholesaleProducts.length > 0 ? (
-          wholesaleProducts.map((item, i) => (
-            <PreorderCard key={item.id} item={item} index={i} />
-          ))
-        ) : (
-          <div className="col-span-full py-20 text-center text-neutral-500 border border-dashed border-neutral-800 rounded-3xl">
-            No hay productos disponibles al mayor en este momento.
-          </div>
-        )}
+      <div className="mt-10">
+        <ProductGrid products={wholesaleProducts} cols={3} emptyMessage="No hay productos disponibles al mayor en este momento." />
       </div>
 
       <div className="mt-24">

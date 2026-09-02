@@ -11,6 +11,7 @@ export interface Product {
   descuento?: number;
   stock: number;
   descripcion: string;
+  descripcionLarga?: string;
   tagline?: string;
   fechaLanzamiento?: string;
   badge?: string;
