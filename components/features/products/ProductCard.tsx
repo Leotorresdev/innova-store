@@ -155,15 +155,28 @@ export function ProductCard({ product, index = 0, className = '' }: ProductCardP
             >
               Agotado
             </span>
-          ) : isNewProduct ? (
-            <span className="inline-flex items-center gap-1
-              text-[10px] font-semibold uppercase tracking-widest
-              px-2.5 py-1 rounded-lg
-              bg-ink/85 text-ink-foreground backdrop-blur-md"
-            >
-              Nuevo
-            </span>
-          ) : null}
+          ) : (
+            <>
+              {isNewProduct && (
+                <span className="inline-flex items-center gap-1
+                  text-[10px] font-semibold uppercase tracking-widest
+                  px-2.5 py-1 rounded-lg
+                  bg-ink/85 text-ink-foreground backdrop-blur-md"
+                >
+                  Nuevo
+                </span>
+              )}
+              {product.precioOriginal && product.precioOriginal > product.precio && (
+                <span className="inline-flex items-center gap-1
+                  text-[10px] font-semibold uppercase tracking-widest
+                  px-2.5 py-1 rounded-lg
+                  bg-red-500/90 text-white backdrop-blur-md shadow-lg"
+                >
+                  Oferta
+                </span>
+              )}
+            </>
+          )}
         </div>
       </div>
 
@@ -208,6 +221,11 @@ export function ProductCard({ product, index = 0, className = '' }: ProductCardP
         {/* Price row + Add button */}
         <div className="flex items-end justify-between gap-3 pt-0.5">
           <div className="flex flex-col gap-0.5">
+            {product.precioOriginal && product.precioOriginal > product.precio && (
+              <span className="text-sm text-muted-foreground line-through decoration-red-500/50 decoration-2 -mb-1">
+                ${product.precioOriginal.toLocaleString('en-US')}
+              </span>
+            )}
             <span className="font-display text-[1.6rem] font-bold leading-none tracking-tight">
               ${product.precio.toLocaleString('en-US')}
             </span>

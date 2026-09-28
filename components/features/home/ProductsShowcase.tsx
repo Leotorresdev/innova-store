@@ -23,7 +23,7 @@ export function ProductsShowcase() {
             id: p.id,
             nombre: p.name,
             precio: p.price,
-            precioOriginal: p.regularPrice || Math.round(p.price * 1.25),
+            precioOriginal: p.regularPrice || p.price,
             categoria: p.isNew ? 'Novedad' : 'Tecnología',
             imagen: p.imageUrl,
             rating: 5,
