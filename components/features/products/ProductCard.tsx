@@ -5,8 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ShoppingBag, Check } from 'lucide-react';
+import { ShoppingBag, Check, MessageCircle } from 'lucide-react';
 import { useCartStore } from '@/store/useCartStore';
+import { useBCV } from '@/hooks/useBCV';
 import type { Product } from '@/types';
 
 interface ProductCardProps {
@@ -43,7 +44,12 @@ export function ProductCard({ product, index = 0, className = '' }: ProductCardP
     setTimeout(() => setAdded(false), 1800);
   }
 
+  const { formatBs } = useBCV();
+
   const isOutOfStock = product.stock !== undefined && product.stock <= 0;
+  const whatsappPreorderUrl = `https://wa.me/584262663234?text=${encodeURIComponent(
+    `¡Hola INNOVA! Me interesa consultar preventa o encargar el producto: ${product.nombre} ($${product.precio})`
+  )}`;
 
   return (
     <>
@@ -124,25 +130,37 @@ export function ProductCard({ product, index = 0, className = '' }: ProductCardP
         <div className="absolute inset-x-4 bottom-4
           translate-y-3 opacity-0
           group-hover:translate-y-0 group-hover:opacity-100
-          transition-all duration-350 ease-out"
+          transition-all duration-350 ease-out z-20"
         >
-          <button
-            type="button"
-            id={`quick-add-${product.id}`}
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleAdd(); }}
-            disabled={isOutOfStock}
-            className={`w-full flex items-center justify-center gap-2
-              bg-white/95 backdrop-blur-sm text-ink
-              text-sm font-semibold py-3 rounded-2xl
-              transition-all duration-200 shadow-lg
-              ${isOutOfStock 
-                ? 'opacity-70 cursor-not-allowed bg-neutral-200 text-neutral-500' 
-                : 'hover:bg-primary hover:text-primary-foreground active:scale-[0.97]'
-              }`}
-          >
-            <ShoppingBag className="size-4" />
-            {isOutOfStock ? 'Agotado' : 'Comprar ahora'}
-          </button>
+          {isOutOfStock ? (
+            <a
+              href={whatsappPreorderUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="w-full flex items-center justify-center gap-2
+                bg-emerald-600 hover:bg-emerald-700 text-white
+                text-xs font-semibold py-3 rounded-2xl
+                transition-all duration-200 shadow-lg"
+            >
+              <MessageCircle className="size-4" />
+              Encargar por WhatsApp
+            </a>
+          ) : (
+            <button
+              type="button"
+              id={`quick-add-${product.id}`}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleAdd(); }}
+              className="w-full flex items-center justify-center gap-2
+                bg-white/95 backdrop-blur-sm text-ink
+                text-sm font-semibold py-3 rounded-2xl
+                hover:bg-primary hover:text-primary-foreground active:scale-[0.97]
+                transition-all duration-200 shadow-lg"
+            >
+              <ShoppingBag className="size-4" />
+              Comprar ahora
+            </button>
+          )}
         </div>
 
         {/* ── Top-left badge ── */}
@@ -222,36 +240,50 @@ export function ProductCard({ product, index = 0, className = '' }: ProductCardP
         <div className="flex items-end justify-between gap-3 pt-0.5">
           <div className="flex flex-col gap-0.5">
             {product.precioOriginal && product.precioOriginal > product.precio && (
-              <span className="text-sm text-muted-foreground line-through decoration-red-500/50 decoration-2 -mb-1">
+              <span className="text-xs text-muted-foreground line-through decoration-red-500/50 decoration-2 -mb-0.5">
                 ${product.precioOriginal.toLocaleString('en-US')}
               </span>
             )}
-            <span className="font-display text-[1.6rem] font-bold leading-none tracking-tight">
+            <span className="font-display text-[1.5rem] sm:text-[1.6rem] font-bold leading-none tracking-tight">
               ${product.precio.toLocaleString('en-US')}
+            </span>
+            <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400 mt-1">
+              ~ {formatBs(product.precio)}{' '}
+              <span className="text-[10px] text-zinc-400 font-normal">(BCV)</span>
             </span>
           </div>
 
-          {/* Add-to-cart button with confirmation state */}
-          <motion.button
-            type="button"
-            id={`add-cart-${product.id}`}
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleAdd(); }}
-            disabled={isOutOfStock}
-            aria-label={`Añadir ${product.nombre} al carrito`}
-            whileTap={!isOutOfStock ? { scale: 0.85 } : {}}
-            className={`
-              shrink-0 size-12 rounded-2xl flex items-center justify-center
-              font-semibold text-sm
-              transition-colors duration-300
-              shadow-sm
-              ${isOutOfStock
-                ? 'bg-neutral-800/50 text-neutral-400 cursor-not-allowed'
-                : added
+          {/* Add-to-cart or WhatsApp Preorder button */}
+          {isOutOfStock ? (
+            <a
+              href={whatsappPreorderUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              title="Encargar por WhatsApp"
+              aria-label={`Encargar ${product.nombre} por WhatsApp`}
+              className="shrink-0 size-12 rounded-2xl flex items-center justify-center font-semibold text-sm bg-emerald-600 hover:bg-emerald-700 text-white transition-colors duration-300 shadow-sm"
+            >
+              <MessageCircle className="size-5" />
+            </a>
+          ) : (
+            <motion.button
+              type="button"
+              id={`add-cart-${product.id}`}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleAdd(); }}
+              aria-label={`Añadir ${product.nombre} al carrito`}
+              whileTap={{ scale: 0.85 }}
+              className={`
+                shrink-0 size-12 rounded-2xl flex items-center justify-center
+                font-semibold text-sm
+                transition-colors duration-300
+                shadow-sm
+                ${added
                   ? 'bg-emerald-500 text-white'
                   : 'bg-primary text-primary-foreground shadow-[0_0_20px_rgba(var(--primary),0.4)] hover:bg-primary/90'
-              }
-            `}
-          >
+                }
+              `}
+            >
             <AnimatePresence mode="wait" initial={false}>
               {added ? (
                 <motion.span
@@ -276,6 +308,7 @@ export function ProductCard({ product, index = 0, className = '' }: ProductCardP
               )}
             </AnimatePresence>
           </motion.button>
+          )}
         </div>
       </div>
     </motion.article>

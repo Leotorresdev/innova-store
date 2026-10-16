@@ -11,6 +11,7 @@ import {
   ArrowRight,
   Truck,
   ShieldCheck,
+  MessageCircle,
 } from 'lucide-react';
 import {
   useCartStore,
@@ -18,6 +19,7 @@ import {
   selectCartIsOpen,
   selectCartTotal,
 } from '@/store/useCartStore';
+import { useBCV } from '@/hooks/useBCV';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 
@@ -30,6 +32,14 @@ export function CartDrawer() {
   const remove = useCartStore((s) => s.remove);
   const clear = useCartStore((s) => s.clear);
   const router = useRouter();
+
+  const { formatBs } = useBCV();
+
+  const whatsappCartUrl = `https://wa.me/584262663234?text=${encodeURIComponent(
+    `¡Hola INNOVA! Tengo estos productos en mi carrito y me gustaría concretar mi pedido:\n${items
+      .map((i) => `• ${i.nombre} (x${i.cantidad}) - $${i.precio * i.cantidad}`)
+      .join('\n')}\n\nTotal: $${total} USD (~ ${formatBs(total)} a tasa BCV)`
+  )}`;
 
   const handleCheckout = () => {
     const productoExcedido = items.find(item => item.cantidad > item.stock);
@@ -211,9 +221,15 @@ export function CartDrawer() {
                 {/* Summary */}
                 <div className="flex justify-between items-end">
                   <span className="text-sm font-semibold text-zinc-500 uppercase tracking-wider">Subtotal</span>
-                  <span className="font-display text-2xl font-bold text-zinc-900 dark:text-white leading-none">
-                    ${total.toLocaleString('en-US')}
-                  </span>
+                  <div className="text-right">
+                    <span className="font-display text-2xl font-bold text-zinc-900 dark:text-white leading-none block">
+                      ${total.toLocaleString('en-US')}
+                    </span>
+                    <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-1 block">
+                      ~ {formatBs(total)}{' '}
+                      <span className="text-[10px] text-zinc-400 font-normal">(BCV)</span>
+                    </span>
+                  </div>
                 </div>
 
                 {/* Trust badges */}
@@ -224,12 +240,12 @@ export function CartDrawer() {
                   </span>
                   <span className="flex items-center gap-1.5">
                     <Truck className="size-4 text-zinc-900 dark:text-white" />
-                    Envío nacional
+                    MRW / Zoom
                   </span>
                 </div>
 
                 {/* CTA */}
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   <Button
                     id="checkout-btn"
                     onClick={handleCheckout}
@@ -239,10 +255,20 @@ export function CartDrawer() {
                     <ArrowRight className="size-4" />
                   </Button>
 
+                  <a
+                    href={whatsappCartUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-semibold transition-all border border-emerald-500/20"
+                  >
+                    <MessageCircle className="size-4" />
+                    ¿Dudas con tu compra? Pedir por WhatsApp
+                  </a>
+
                   <button
                     type="button"
                     onClick={clear}
-                    className="w-full text-xs font-medium text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors py-2"
+                    className="w-full text-xs font-medium text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors py-1.5"
                   >
                     Vaciar carrito
                   </button>

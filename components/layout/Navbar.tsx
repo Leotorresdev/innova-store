@@ -7,6 +7,7 @@ import { useCartStore, selectCartCount } from '@/store/useCartStore';
 import { useUIStore } from '@/store/useUIStore';
 import { Logo } from '@/components/shared/Logo';
 import { NAV_LINKS, BRAND } from '@/lib/constants';
+import { TopBar } from '@/components/layout/TopBar';
 
 export function Navbar({ preventasEnabled = true }: { preventasEnabled?: boolean }) {
   const count = useCartStore(selectCartCount);
@@ -15,17 +16,15 @@ export function Navbar({ preventasEnabled = true }: { preventasEnabled?: boolean
   const setMobileMenuOpen = useUIStore((s) => s.setIsMobileMenuOpen);
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 mt-4">
+    <header className="fixed top-0 inset-x-0 z-50 flex flex-col">
+      <TopBar />
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 mt-2.5">
         {/* Transparent dark blue ink capsule navbar */}
         <nav className="glass-dark rounded-full pl-4 pr-2 sm:pl-6 sm:pr-3 py-2 flex items-center justify-between shadow-elegant border border-white/10">
           
           <Link href="/" className="flex items-center gap-2.5 group" aria-label={BRAND.name}>
             {/* White-themed or matching logo */}
             <Logo size="sm" textClassName="text-primary" />
-            <span className="hidden sm:inline text-[10px] font-mono uppercase text-white/50 border border-white/10 rounded-full px-2 py-0.5">
-              {BRAND.version}
-            </span>
           </Link>
 
           {/* Links for desktop */}

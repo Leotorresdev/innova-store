@@ -80,12 +80,12 @@ export function HeroSection() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-200 shadow-sm"
           >
             <Sparkles className="size-4 text-blue-500" />
-            <span className="text-sm font-medium text-blue-700 tracking-wide">
-              Revolución tecnológica
+            <span className="text-xs sm:text-sm font-semibold text-blue-700 tracking-wide">
+              Tecnología y equipos originales en Venezuela
             </span>
           </motion.div>
 
-          {/* Headline */}
+          {/* Headline - Single DOM node without text duplication */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -94,16 +94,8 @@ export function HeroSection() {
           >
             Experimenta
             <br />
-            <span className="relative inline-block mt-1">
-              <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500">
-                la Innovación
-              </span>
-              <span
-                aria-hidden
-                className="absolute inset-0 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 blur-[14px] opacity-30 select-none"
-              >
-                la Innovación
-              </span>
+            <span className="relative inline-block mt-1 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 drop-shadow-[0_2px_14px_rgba(59,130,246,0.35)]">
+              la Innovación
             </span>
           </motion.h1>
 
@@ -115,16 +107,18 @@ export function HeroSection() {
             className="h-px w-16 bg-gradient-to-r from-transparent via-blue-500 to-transparent"
           />
 
-          {/* Descripción */}
+          {/* Descripción con foco local */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="text-slate-500 text-base leading-relaxed max-w-xs"
+            className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-sm"
           >
-            Accesorios y equipos premium.{' '}
-            <span className="text-slate-800 font-semibold">Descubre equipos vanguardistas</span>{' '}
-            con los precios más competitivos.
+            Tecnología y equipos originales con garantía.{' '}
+            <span className="text-slate-900 font-semibold">
+              Envíos seguros a toda Venezuela por MRW y Zoom.
+            </span>{' '}
+            Paga en Bs (Tasa BCV), Zelle o Binance.
           </motion.p>
 
           {/* CTAs */}
@@ -153,20 +147,21 @@ export function HeroSection() {
             </Link>
           </motion.div>
 
-          {/* Stats */}
+          {/* Stats locales */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.4 }}
-            className="flex gap-8 justify-center pb-2"
+            className="flex gap-6 sm:gap-8 justify-center pb-2 pt-1"
           >
             {[
-              { value: '99%', label: 'Satisfacción' },
-              { value: '24/7', label: 'Soporte' },
+              { value: 'MRW / Zoom', label: 'Envíos Nacionales' },
+              { value: 'Tasa BCV', label: 'Pago en Bolívares' },
+              { value: '100% Original', label: 'Con Garantía' },
             ].map((stat) => (
               <div key={stat.label} className="flex flex-col items-center gap-0.5">
-                <span className="text-xl font-black text-slate-900 font-display">{stat.value}</span>
-                <span className="text-[10px] text-slate-400 uppercase tracking-widest">{stat.label}</span>
+                <span className="text-base sm:text-lg font-black text-slate-900 font-display">{stat.value}</span>
+                <span className="text-[10px] text-slate-400 uppercase tracking-wider">{stat.label}</span>
               </div>
             ))}
           </motion.div>
@@ -227,8 +222,8 @@ function TextContent() {
         className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-200 shadow-sm"
       >
         <Sparkles className="size-4 text-blue-500" />
-        <span className="text-sm font-medium text-blue-700 tracking-wide">
-          Revolución tecnológica
+        <span className="text-sm font-semibold text-blue-700 tracking-wide">
+          Tecnología y equipos originales en Venezuela
         </span>
       </motion.div>
 
@@ -240,16 +235,8 @@ function TextContent() {
       >
         Experimenta
         <br />
-        <span className="relative inline-block mt-1">
-          <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500">
-            la Innovación
-          </span>
-          <span
-            aria-hidden
-            className="absolute inset-0 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 blur-[18px] opacity-30 select-none"
-          >
-            la Innovación
-          </span>
+        <span className="relative inline-block mt-1 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 drop-shadow-[0_2px_16px_rgba(59,130,246,0.35)]">
+          la Innovación
         </span>
       </motion.h1>
 
@@ -264,13 +251,13 @@ function TextContent() {
         initial={{ opacity: 0, x: -40 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        className="text-slate-500 text-base sm:text-lg leading-relaxed max-w-sm"
+        className="text-slate-600 text-base sm:text-lg leading-relaxed max-w-md"
       >
-        Accesorios y equipos premium de Innovación.{' '}
-        <span className="text-slate-800 font-semibold">
-          Descubre equipos vanguardistas
+        Tecnología de vanguardia y equipos 100% originales con garantía.{' '}
+        <span className="text-slate-900 font-semibold">
+          Envíos asegurados a toda Venezuela por MRW y Zoom.
         </span>{' '}
-        con los precios más competitivos del mercado.
+        Paga en Bolívares a Tasa BCV oficial, Zelle o Binance Pay.
       </motion.p>
 
       <motion.div
@@ -305,12 +292,13 @@ function TextContent() {
         className="flex gap-8 pt-2"
       >
         {[
-          { value: '99%', label: 'Satisfacción' },
-          { value: '24/7', label: 'Soporte' },
+          { value: 'MRW / Zoom', label: 'Envíos Nacionales' },
+          { value: 'Tasa BCV', label: 'Pago en Bolívares' },
+          { value: '100% Original', label: 'Con Garantía' },
         ].map((stat) => (
           <div key={stat.label} className="flex flex-col gap-0.5">
-            <span className="text-2xl font-black text-slate-900 font-display">{stat.value}</span>
-            <span className="text-[10px] text-slate-400 uppercase tracking-widest">{stat.label}</span>
+            <span className="text-xl sm:text-2xl font-black text-slate-900 font-display">{stat.value}</span>
+            <span className="text-[10px] text-slate-400 uppercase tracking-wider">{stat.label}</span>
           </div>
         ))}
       </motion.div>

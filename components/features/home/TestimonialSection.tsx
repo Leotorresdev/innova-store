@@ -1,71 +1,92 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Star } from 'lucide-react';
+import { Star, CheckCircle2 } from 'lucide-react';
 
 const TESTIMONIALS = [
   {
-    name: 'María Hernández',
-    quote: 'Innova cambió por completo la forma en que trabajamos. Cada detalle se siente intencional y la calidad de construcción es simplemente de otro mundo.',
+    name: 'Alejandro Morales',
+    city: 'Caracas, Dto. Capital',
+    quote: 'Hice el pedido un martes y el miércoles en la mañana ya estaba retirando en la agencia MRW de Las Mercedes. Producto 100% original, sellado y la atención por WhatsApp fue rápida y transparente.',
+    delivery: 'Retiro en Agencia MRW',
   },
   {
-    name: 'Carlos Rivera',
-    quote: 'La precisión en cada producto es lo que nos hizo migrar todo nuestro equipo de ingeniería. No hay nada igual en el mercado.',
+    name: 'Valentina Castillo',
+    city: 'Valencia, Carabobo',
+    quote: 'Pagué en bolívares por Pago Móvil a la tasa oficial del BCV sin complicaciones. Me enviaron el número de guía de Zoom el mismo día. Excelente servicio para comprar tecnología en Venezuela.',
+    delivery: 'Envío asegurado por Zoom',
   },
   {
-    name: 'Sarah Jenkins',
-    quote: 'El nivel de inmersión y la latencia ultra-baja en sus equipos de audio me permite producir con una fidelidad asombrosa. Increíble.',
+    name: 'Ricardo Gómez',
+    city: 'Barquisimeto, Lara',
+    quote: 'Tenía dudas al inicio por comprar tecnología en línea, pero el asesor por WhatsApp me envió fotos reales del equipo y me acompañó hasta que tuve el paquete en mis manos. Recomendadísimos.',
+    delivery: 'Retiro en Agencia Zoom',
   },
 ];
 
 export function TestimonialSection() {
   return (
-    <section className="relative py-24 sm:py-32 overflow-hidden">
+    <section className="relative py-20 sm:py-28 overflow-hidden">
       {/* Subtle Glow Background */}
       <div className="absolute top-1/2 left-1/2 w-full h-75 bg-primary/5 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-      
+
       <div className="mx-auto max-w-7xl px-6 relative z-10">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <p className="font-mono text-xs uppercase tracking-widest text-primary mb-4 font-semibold">
-            Prueba Social
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <p className="font-mono text-xs uppercase tracking-widest text-primary mb-3 font-semibold">
+            Confianza y Experiencia
           </p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="font-display text-4xl sm:text-5xl font-bold tracking-tight mb-6"
+            className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4 text-ink"
           >
-            Voces de la <span className="text-gradient">innovación</span>
+            Clientes que confían en <span className="text-gradient">INNOVA</span>
           </motion.h2>
-          <p className="text-lg text-muted-foreground">
-            Descubre por qué los creadores y líderes de la industria confían en nosotros para potenciar su flujo de trabajo.
+          <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
+            Compradores en toda Venezuela respaldan la rapidez de nuestros envíos por MRW y Zoom y la seriedad de nuestra garantía.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
           {TESTIMONIALS.map((t, i) => (
             <motion.div
               key={t.name}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 35 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.25, duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
-              whileHover={{ y: -6 }}
-              className="relative p-8 rounded-[2rem] glass-card flex flex-col h-full border border-neutral-200/50 hover:border-primary/20 cursor-pointer"
+              transition={{ delay: i * 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ y: -5 }}
+              className="relative p-7 sm:p-8 rounded-[2rem] glass-card flex flex-col h-full border border-neutral-200/60 dark:border-white/10 hover:border-primary/30 transition-all shadow-sm"
             >
-              <div className="flex justify-center gap-1 mb-6">
+              {/* Estrellas */}
+              <div className="flex items-center gap-1 mb-5">
                 {[...Array(5)].map((_, j) => (
-                  <Star key={j} className="size-4 fill-primary text-primary" />
+                  <Star key={j} className="size-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-base text-foreground/80 leading-relaxed mb-8 italic text-center">
+
+              {/* Testimonio */}
+              <p className="text-sm sm:text-base text-foreground/85 leading-relaxed mb-6 italic">
                 &quot;{t.quote}&quot;
               </p>
-              <div className="flex flex-col items-center justify-center mt-auto">
-                <div className="size-12 rounded-full bg-primary/10 flex items-center justify-center font-display font-bold text-primary shrink-0 border border-primary/20 mb-2 shadow-sm">
-                  {t.name.charAt(0)}
+
+              {/* Footer con datos del cliente y verificación */}
+              <div className="mt-auto pt-4 border-t border-border/40 space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center font-display font-bold text-primary text-sm shrink-0 border border-primary/20">
+                    {t.name.charAt(0)}
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-sm text-ink leading-tight">{t.name}</h4>
+                    <p className="text-xs text-muted-foreground mt-0.5">{t.city}</p>
+                  </div>
                 </div>
-                <h4 className="font-semibold text-base text-ink text-center">{t.name}</h4>
+
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[11px] font-medium">
+                  <CheckCircle2 className="size-3.5 shrink-0" />
+                  <span>Compra Verificada · {t.delivery}</span>
+                </div>
               </div>
             </motion.div>
           ))}

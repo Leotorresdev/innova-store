@@ -92,7 +92,7 @@ export default async function RootLayout({
       <body className="antialiased font-sans relative">
         <NoiseBackground />
         <Navbar preventasEnabled={settings.preventasEnabled} />
-        <main className="pt-24">{children}</main>
+        <main className="pt-28 sm:pt-32">{children}</main>
         <Footer />
         <CartDrawer />
         <Analytics />

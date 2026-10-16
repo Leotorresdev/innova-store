@@ -1,13 +1,17 @@
 import { CartItem } from '@/store/useCartStore';
+import { useBCV } from '@/hooks/useBCV';
 import React from 'react';
 
 interface OrderSummaryProps {
   items: CartItem[];
   finalTotal: number;
-  exchangeRateVES: number | null;
+  exchangeRateVES?: number | null;
 }
 
 export function OrderSummary({ items, finalTotal, exchangeRateVES }: OrderSummaryProps) {
+  const { rate: hookRate } = useBCV();
+  const effectiveRate = (exchangeRateVES && exchangeRateVES > 0) ? exchangeRateVES : hookRate;
+
   return (
     <div className="bg-white dark:bg-card border border-zinc-200/60 dark:border-white/10 rounded-[2rem] p-6 md:p-8 shadow-sm">
       <h2 className="text-xl font-display font-semibold text-zinc-900 dark:text-white mb-6">Resumen del Pedido</h2>
@@ -45,10 +49,9 @@ export function OrderSummary({ items, finalTotal, exchangeRateVES }: OrderSummar
             <span className="text-2xl font-display font-bold text-zinc-900 dark:text-white block">
               ${finalTotal.toLocaleString('en-US')}
             </span>
-            <span className="text-sm font-medium text-zinc-500 mt-1 block">
-              {exchangeRateVES 
-                ? `~ Bs. ${(finalTotal * exchangeRateVES).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (BCV)`
-                : 'Calculando tasa BCV...'}
+            <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 mt-1 block">
+              ~ Bs. {(finalTotal * effectiveRate).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}{' '}
+              <span className="text-xs text-zinc-400 font-normal">(BCV)</span>
             </span>
           </div>
         </div>
