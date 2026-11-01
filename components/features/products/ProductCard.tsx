@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { ShoppingBag, Check, MessageCircle } from 'lucide-react';
+import Link from 'next/link';
+import { ShoppingBag, Check, MessageCircle, Eye } from 'lucide-react';
 import { useCartStore } from '@/store/useCartStore';
 import { PriceDisplay } from '@/components/ui/PriceDisplay';
 import { buildWhatsAppUrl } from '@/config/storeConfig';
@@ -17,7 +17,6 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, index = 0, className = '' }: ProductCardProps) {
-  const router = useRouter();
   const add = useCartStore((s) => s.add);
   const openExpressCheckout = useCartStore((s) => s.openExpressCheckout);
   const [added, setAdded] = useState(false);
@@ -101,15 +100,10 @@ export function ProductCard({ product, index = 0, className = '' }: ProductCardP
       />
       <div className={`block h-full group ${isOutOfStock ? '' : 'outline-none'}`}>
         <motion.article
-          onClick={() => {
-            if (!isOutOfStock) {
-              router.push(`/product/${product.id}`);
-            }
-          }}
           initial={{ opacity: 0, y: 50, scale: 0.95 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, margin: '-40px' }}
-          whileHover={!isOutOfStock ? { y: -8, scale: 1.015 } : {}}
+          whileHover={!isOutOfStock ? { y: -6, scale: 1.01 } : {}}
           transition={{
             duration: 0.8,
             delay: Math.min(index * 0.08, 0.4),
@@ -119,7 +113,7 @@ export function ProductCard({ product, index = 0, className = '' }: ProductCardP
           }}
           className={`
             relative flex flex-col h-full
-            glass-card ${isOutOfStock ? 'cursor-default opacity-80' : 'cursor-pointer'}
+            glass-card ${isOutOfStock ? 'opacity-80' : ''}
             ${className}
           `}
         >
@@ -232,13 +226,12 @@ export function ProductCard({ product, index = 0, className = '' }: ProductCardP
           <div className="flex flex-col flex-1 px-5 pt-4 pb-5 gap-3">
             {/* Title + Description */}
             <div>
-              <h3
-                className="font-display font-bold leading-tight
-                group-hover:text-primary transition-colors duration-200
-                text-lg sm:text-[1.1rem]"
+              <Link
+                href={`/product/${product.id}`}
+                className="font-display font-bold leading-tight hover:text-primary transition-colors duration-200 text-lg sm:text-[1.1rem] block cursor-pointer"
               >
                 {product.nombre}
-              </h3>
+              </Link>
               <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed line-clamp-2">
                 {product.tagline ?? product.descripcion}
               </p>
@@ -275,75 +268,85 @@ export function ProductCard({ product, index = 0, className = '' }: ProductCardP
             {/* ── Divider ── */}
             <div className="border-t border-border/50 mt-auto" />
 
-            {/* Price row + Add button */}
-            <div className="flex items-end justify-between gap-3 pt-0.5">
+            {/* Price row + Action buttons (Detalles + Cart) */}
+            <div className="flex items-end justify-between gap-2.5 pt-0.5">
               <PriceDisplay
                 amountUSD={product.precio}
                 originalAmountUSD={product.precioOriginal}
                 size="md"
               />
 
-              {/* Add-to-cart or WhatsApp Preorder button (>= 48px) */}
-              {isOutOfStock ? (
-                <a
-                  href={whatsappPreorderUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  title="Encargar por WhatsApp"
-                  aria-label={`Encargar ${product.nombre} por WhatsApp`}
-                  className="shrink-0 size-12 rounded-2xl flex items-center justify-center font-semibold text-sm bg-emerald-600 hover:bg-emerald-700 text-white transition-colors duration-300 shadow-sm"
+              <div className="flex items-center gap-2 shrink-0">
+                {/* Botón Detalles */}
+                <Link
+                  href={`/product/${product.id}`}
+                  className="h-12 px-3.5 sm:px-4 rounded-2xl border border-border/80 bg-surface/90 hover:bg-muted text-foreground text-xs sm:text-sm font-bold inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-xs hover:border-primary/50 group/btn cursor-pointer"
+                  aria-label={`Ver detalles de ${product.nombre}`}
                 >
-                  <MessageCircle className="size-5" />
-                </a>
-              ) : (
-                <motion.button
-                  type="button"
-                  id={`add-cart-${product.id}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleAdd();
-                  }}
-                  aria-label={`Añadir ${product.nombre} al carrito`}
-                  whileTap={{ scale: 0.88 }}
-                  className={`
-                    shrink-0 size-12 rounded-2xl flex items-center justify-center
-                    font-semibold text-sm cursor-pointer
-                    transition-colors duration-300
-                    shadow-sm
-                    ${
-                      added
-                        ? 'bg-emerald-500 text-white'
-                        : 'bg-primary text-primary-foreground shadow-[0_0_20px_rgba(var(--primary),0.4)] hover:bg-primary/90'
-                    }
-                  `}
-                >
-                  <AnimatePresence mode="wait" initial={false}>
-                    {added ? (
-                      <motion.span
-                        key="check"
-                        initial={{ scale: 0, rotate: -30 }}
-                        animate={{ scale: 1, rotate: 0 }}
-                        exit={{ scale: 0 }}
-                        transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-                      >
-                        <Check className="size-5" strokeWidth={2.5} />
-                      </motion.span>
-                    ) : (
-                      <motion.span
-                        key="bag"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        exit={{ scale: 0 }}
-                        transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-                      >
-                        <ShoppingBag className="size-5" />
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </motion.button>
-              )}
+                  <Eye className="size-4 text-primary group-hover/btn:scale-110 transition-transform shrink-0" />
+                  <span>Detalles</span>
+                </Link>
+
+                {/* Add-to-cart or WhatsApp Preorder button (>= 48px) */}
+                {isOutOfStock ? (
+                  <a
+                    href={whatsappPreorderUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Encargar por WhatsApp"
+                    aria-label={`Encargar ${product.nombre} por WhatsApp`}
+                    className="shrink-0 size-12 rounded-2xl flex items-center justify-center font-semibold text-sm bg-emerald-600 hover:bg-emerald-700 text-white transition-colors duration-300 shadow-sm"
+                  >
+                    <MessageCircle className="size-5" />
+                  </a>
+                ) : (
+                  <motion.button
+                    type="button"
+                    id={`add-cart-${product.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleAdd();
+                    }}
+                    aria-label={`Añadir ${product.nombre} al carrito`}
+                    whileTap={{ scale: 0.88 }}
+                    className={`
+                      shrink-0 size-12 rounded-2xl flex items-center justify-center
+                      font-semibold text-sm cursor-pointer
+                      transition-colors duration-300
+                      shadow-sm
+                      ${
+                        added
+                          ? 'bg-emerald-500 text-white'
+                          : 'bg-primary text-primary-foreground shadow-[0_0_20px_rgba(var(--primary),0.4)] hover:bg-primary/90'
+                      }
+                    `}
+                  >
+                    <AnimatePresence mode="wait" initial={false}>
+                      {added ? (
+                        <motion.span
+                          key="check"
+                          initial={{ scale: 0, rotate: -30 }}
+                          animate={{ scale: 1, rotate: 0 }}
+                          exit={{ scale: 0 }}
+                          transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                        >
+                          <Check className="size-5" strokeWidth={2.5} />
+                        </motion.span>
+                      ) : (
+                        <motion.span
+                          key="bag"
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          exit={{ scale: 0 }}
+                          transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                        >
+                          <ShoppingBag className="size-5" />
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </motion.button>
+                )}
+              </div>
             </div>
           </div>
         </motion.article>
