@@ -84,7 +84,7 @@ export function ProductsShowcase() {
       viewport={{ once: true, margin: '-100px' }}
       transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
       id="tienda"
-      className="relative mx-auto max-w-7xl px-6 pt-24 pb-12"
+      className="relative mx-auto max-w-7xl px-6 pt-24 pb-12 scroll-mt-20"
     >
       <div className="text-center mb-8 relative z-10">
         <motion.div
