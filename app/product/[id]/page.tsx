@@ -49,7 +49,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-20">
+    <div className="min-h-screen pt-24 pb-32 md:pb-20">
       <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
           
@@ -63,6 +63,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                 alt={product.nombre}
                 fill
                 priority
+                fetchPriority="high"
                 className="object-cover transition-transform duration-700 hover:scale-[1.03]"
                 sizes="(max-width: 1024px) 100vw, 60vw"
               />

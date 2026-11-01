@@ -1,131 +1,126 @@
 'use server';
 
 import { prisma } from '@/lib/prisma';
-import { supabase } from '@/lib/supabase';
 import { revalidatePath } from 'next/cache';
-import { v4 as uuidv4 } from 'uuid';
 import { sendOrderNotificationToTelegram } from '@/lib/telegram';
 
-export async function processCheckout(formData: FormData) {
+export interface ExpressOrderInput {
+  customerName: string;
+  customerPhone: string;
+  shippingAgency: string;
+  shippingAddress: string;
+  paymentMethod: string;
+  total: number;
+  totalBs: number;
+  items: {
+    id: string;
+    nombre: string;
+    cantidad: number;
+    precio: number;
+  }[];
+}
+
+/**
+ * Registra un pedido del Modal de Checkout Express en 1-Paso como "Pendiente de Pago"
+ * antes de redirigir al usuario a WhatsApp.
+ */
+export async function createExpressOrder(input: ExpressOrderInput) {
   try {
-    const itemsJson = formData.get('items') as string;
-    const items = JSON.parse(itemsJson);
-    
-    const customerName = formData.get('customerName') as string;
-    const customerIdDoc = formData.get('customerIdDoc') as string;
-    const customerPhone = formData.get('customerPhone') as string;
-    const shippingAgency = formData.get('shippingAgency') as string;
-    const shippingAddress = formData.get('shippingAddress') as string;
-    const paymentMethod = formData.get('paymentMethod') as string;
-    const total = parseFloat(formData.get('total') as string);
-    const totalBsStr = formData.get('totalBs');
-    const totalBs = totalBsStr ? parseFloat(totalBsStr as string) : undefined;
-    const file = formData.get('paymentProof') as File | null;
-
-    if (!file) {
-      throw new Error('Falta el capture de pago.');
-    }
-
-    // Subir imagen a Supabase (usamos el bucket de products o payments si existe)
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const filename = `payments/${uuidv4()}-${file.name.replace(/\s+/g, '-')}`;
-    
-    const { error: uploadError } = await supabase.storage
-      .from('products') // Usamos 'products' como base de almacenamiento general por ahora
-      .upload(filename, buffer, { contentType: file.type });
-
-    if (uploadError) throw uploadError;
-
-    const { data: publicUrlData } = supabase.storage
-      .from('products')
-      .getPublicUrl(filename);
-
-    const paymentProofUrl = publicUrlData.publicUrl;
-
-    // Usamos una transacción para asegurar la consistencia
-    const order = await prisma.$transaction(async (tx) => {
-      for (const item of items) {
-        // Verificar stock actual
-        const product = await tx.product.findUnique({
-          where: { id: item.id },
-          select: { stock: true, name: true }
-        });
-
-        if (!product) {
-          throw new Error(`Producto ${item.nombre} no encontrado en la base de datos.`);
-        }
-
-        if (product.stock < item.cantidad) {
-          throw new Error(`No hay suficiente stock para el producto: ${product.name || item.nombre}. Disponibles: ${product.stock}`);
-        }
-
-        // Descontar stock
-        await tx.product.update({
-          where: { id: item.id },
-          data: {
-            stock: {
-              decrement: item.cantidad
-            }
-          }
-        });
-      }
-
-      // Crear la orden
-      const newOrder = await tx.order.create({
-        data: {
-          customerName,
-          customerIdDoc,
-          customerPhone,
-          shippingAgency,
-          shippingAddress,
-          paymentMethod,
-          paymentProofUrl,
-          total,
-          status: 'PROCESSING',
-          items: {
-            create: items.map((item: any) => ({
-              productId: item.id,
-              quantity: item.cantidad,
-              price: item.precio
-            }))
-          }
-        }
-      });
-
-      return newOrder;
-    });
-
-    // Enviar notificación a Telegram (en segundo plano, sin bloquear la respuesta)
-    // Extraemos los nombres de los productos para que el mensaje sea más legible
-    const itemsWithNames = await Promise.all(items.map(async (item: any) => {
-      const product = await prisma.product.findUnique({ where: { id: item.id }, select: { name: true } });
-      return { ...item, productName: product?.name || 'Producto' };
-    }));
-    
-    sendOrderNotificationToTelegram({
-      id: order.id,
+    const {
       customerName,
-      customerIdDoc,
       customerPhone,
       shippingAgency,
       shippingAddress,
       paymentMethod,
       total,
       totalBs,
-      paymentProofUrl,
-      items: itemsWithNames
+      items,
+    } = input;
+
+    if (!items || items.length === 0) {
+      return { success: false, message: 'No hay productos en el pedido.' };
+    }
+
+    const order = await prisma.$transaction(async (tx) => {
+      for (const item of items) {
+        const product = await tx.product.findUnique({
+          where: { id: String(item.id) },
+          select: { stock: true, name: true },
+        });
+
+        if (product) {
+          const decrementQty = Math.min(product.stock, item.cantidad);
+          if (decrementQty > 0) {
+            await tx.product.update({
+              where: { id: String(item.id) },
+              data: {
+                stock: {
+                  decrement: decrementQty,
+                },
+              },
+            });
+          }
+        }
+      }
+
+      const newOrder = await tx.order.create({
+        data: {
+          customerName: customerName.trim(),
+          customerIdDoc: 'PENDIENTE-WA',
+          customerPhone: customerPhone.trim(),
+          shippingAgency,
+          shippingAddress: shippingAddress.trim(),
+          paymentMethod: `Pendiente de Pago (${paymentMethod})`,
+          paymentProofUrl: 'WHATSAPP_EXPRESS_PENDING',
+          total: Number(total.toFixed(2)),
+          status: 'PROCESSING',
+          items: {
+            create: items.map((item) => ({
+              productId: String(item.id),
+              quantity: item.cantidad,
+              price: Number(item.precio.toFixed(2)),
+            })),
+          },
+        },
+      });
+
+      return newOrder;
     });
 
-    // Revalidar rutas
+    // Notificar a Telegram sin bloquear el flujo
+    sendOrderNotificationToTelegram({
+      id: order.id,
+      customerName,
+      customerIdDoc: 'Pendiente por WhatsApp',
+      customerPhone,
+      shippingAgency,
+      shippingAddress,
+      paymentMethod: `Pendiente de Pago (${paymentMethod})`,
+      total,
+      totalBs,
+      paymentProofUrl: 'WHATSAPP_EXPRESS_PENDING',
+      items: items.map((i) => ({
+        ...i,
+        productName: i.nombre,
+      })),
+    }).catch((err) => console.warn('Aviso Telegram no enviado:', err));
+
     revalidatePath('/');
     revalidatePath('/preventas');
     revalidatePath('/admin');
     revalidatePath('/admin/orders');
 
-    return { success: true, message: 'Pedido procesado y stock actualizado correctamente.', orderId: order.id };
-  } catch (error: any) {
-    console.error('Error en checkout:', error);
-    return { success: false, message: error.message || 'Error procesando el pedido.' };
+    return {
+      success: true,
+      orderId: order.id,
+      message: 'Pedido registrado como Pendiente de Pago.',
+    };
+  } catch (error: unknown) {
+    const errMessage = error instanceof Error ? error.message : 'Error desconocido';
+    console.error('Error registrando orden express:', error);
+    return {
+      success: false,
+      message: errMessage || 'No se pudo registrar en base de datos, redirigiendo a WhatsApp.',
+    };
   }
 }

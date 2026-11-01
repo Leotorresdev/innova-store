@@ -118,7 +118,7 @@ export function HeroSection() {
             <span className="text-slate-900 font-semibold">
               Envíos seguros a toda Venezuela por MRW y Zoom.
             </span>{' '}
-            Paga en Bs (Tasa BCV), Zelle o Binance.
+            Paga en Bs (Tasa BCV) o Binance.
           </motion.p>
 
           {/* CTAs */}
@@ -257,7 +257,7 @@ function TextContent() {
         <span className="text-slate-900 font-semibold">
           Envíos asegurados a toda Venezuela por MRW y Zoom.
         </span>{' '}
-        Paga en Bolívares a Tasa BCV oficial, Zelle o Binance Pay.
+        Paga en Bolívares a Tasa BCV oficial, o Binance.
       </motion.p>
 
       <motion.div

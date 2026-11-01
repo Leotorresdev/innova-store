@@ -8,7 +8,6 @@ import {
   Minus,
   Trash2,
   ShoppingBag,
-  ArrowRight,
   Truck,
   ShieldCheck,
   MessageCircle,
@@ -20,54 +19,51 @@ import {
   selectCartTotal,
 } from '@/store/useCartStore';
 import { useBCV } from '@/hooks/useBCV';
-import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+import { PriceDisplay } from '@/components/ui/PriceDisplay';
+import { storeConfig } from '@/config/storeConfig';
 
 export function CartDrawer() {
   const open = useCartStore(selectCartIsOpen);
   const items = useCartStore(selectCartItems);
   const total = useCartStore(selectCartTotal);
   const setOpen = useCartStore((s) => s.setOpen);
+  const openExpressCheckout = useCartStore((s) => s.openExpressCheckout);
   const setQty = useCartStore((s) => s.setQty);
   const remove = useCartStore((s) => s.remove);
   const clear = useCartStore((s) => s.clear);
-  const router = useRouter();
 
-  const { formatBs } = useBCV();
-
-  const whatsappCartUrl = `https://wa.me/584262663234?text=${encodeURIComponent(
-    `¡Hola INNOVA! Tengo estos productos en mi carrito y me gustaría concretar mi pedido:\n${items
-      .map((i) => `• ${i.nombre} (x${i.cantidad}) - $${i.precio * i.cantidad}`)
-      .join('\n')}\n\nTotal: $${total} USD (~ ${formatBs(total)} a tasa BCV)`
-  )}`;
-
-  const handleCheckout = () => {
-    const productoExcedido = items.find(item => item.cantidad > item.stock);
-    if (productoExcedido) {
-      alert(`⚠️ Lo sentimos, no puedes llevar ${productoExcedido.cantidad} unidades de "${productoExcedido.nombre}". Solo quedan ${productoExcedido.stock} en el inventario.`);
-      return;
-    }
-    setOpen(false);
-    router.push('/pay');
-  };
+  const { formatBsNumber } = useBCV();
 
   const count = items.reduce((acc, i) => acc + i.cantidad, 0);
+  const qualifiesForFreeShipping = count >= storeConfig.FREE_SHIPPING_MIN_ITEMS;
+  const remainingForFreeShipping = Math.max(0, storeConfig.FREE_SHIPPING_MIN_ITEMS - count);
+
+  const handleExpressCheckout = () => {
+    const productoExcedido = items.find((item) => item.cantidad > item.stock);
+    if (productoExcedido) {
+      alert(
+        `⚠️ Lo sentimos, no puedes llevar ${productoExcedido.cantidad} unidades de "${productoExcedido.nombre}". Solo quedan ${productoExcedido.stock} en el inventario.`
+      );
+      return;
+    }
+    openExpressCheckout();
+  };
 
   return (
     <AnimatePresence>
       {open && (
         <>
-          {/* Backdrop (Darker and blurrier for premium feel) */}
+          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
             onClick={() => setOpen(false)}
-            className="fixed inset-0 bg-zinc-950/40 backdrop-blur-md z-60"
+            className="fixed inset-0 bg-zinc-950/45 backdrop-blur-md z-60"
           />
 
-          {/* Drawer (Tesla/Apple Physics) */}
+          {/* Drawer */}
           <motion.aside
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
@@ -84,7 +80,9 @@ export function CartDrawer() {
                   <ShoppingBag className="size-4.5 text-zinc-900 dark:text-white" />
                 </div>
                 <div>
-                  <h2 className="font-display text-lg font-semibold text-zinc-900 dark:text-white leading-none">Tu carrito</h2>
+                  <h2 className="font-display text-lg font-semibold text-zinc-900 dark:text-white leading-none">
+                    Tu carrito
+                  </h2>
                   <p className="text-sm text-zinc-500 mt-0.5 font-medium">
                     {count} {count === 1 ? 'artículo' : 'artículos'}
                   </p>
@@ -94,12 +92,26 @@ export function CartDrawer() {
                 type="button"
                 id="cart-close-btn"
                 onClick={() => setOpen(false)}
-                className="size-10 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 flex items-center justify-center transition-colors text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
+                className="size-11 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 flex items-center justify-center transition-colors text-zinc-500 hover:text-zinc-900 dark:hover:text-white cursor-pointer"
                 aria-label="Cerrar carrito"
               >
                 <X className="size-5" />
               </button>
             </div>
+
+            {/* ── Barra de Progreso Envío Gratis ── */}
+            {items.length > 0 && (
+              <div className="px-6 py-3 bg-emerald-500/8 border-b border-emerald-500/15 flex items-center gap-2.5">
+                <Truck className="size-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+                  {qualifiesForFreeShipping
+                    ? '🔥 ¡Felicidades! Tu pedido tiene ENVÍO GRATIS por MRW o Zoom.'
+                    : `Agrega ${remainingForFreeShipping} ${
+                        remainingForFreeShipping === 1 ? 'unidad más' : 'unidades más'
+                      } para obtener ENVÍO GRATIS nacional.`}
+                </p>
+              </div>
+            )}
 
             {/* ── Items list ── */}
             <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4 scrollbar-hide">
@@ -124,7 +136,7 @@ export function CartDrawer() {
                     <button
                       type="button"
                       onClick={() => setOpen(false)}
-                      className="mt-8 px-6 py-3 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-semibold hover:scale-105 transition-transform"
+                      className="mt-8 min-h-12 px-6 py-3 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-semibold hover:scale-105 transition-transform cursor-pointer"
                     >
                       Explorar tienda
                     </button>
@@ -147,6 +159,8 @@ export function CartDrawer() {
                           alt={item.nombre}
                           fill
                           sizes="80px"
+                          loading="lazy"
+                          decoding="async"
                           className="object-cover"
                         />
                       </div>
@@ -159,13 +173,13 @@ export function CartDrawer() {
                               {item.nombre}
                             </p>
                             <p className="text-xs text-zinc-500 truncate mt-0.5">
-                              {item.categoria}
+                              {item.bundleLabel || item.categoria}
                             </p>
                           </div>
                           <button
                             type="button"
                             onClick={() => remove(item.id)}
-                            className="size-7 rounded-full flex items-center justify-center text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors shrink-0"
+                            className="size-8 rounded-full flex items-center justify-center text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors shrink-0 cursor-pointer"
                             aria-label={`Eliminar ${item.nombre}`}
                           >
                             <Trash2 className="size-3.5" />
@@ -178,7 +192,7 @@ export function CartDrawer() {
                             <button
                               type="button"
                               onClick={() => setQty(item.id, item.cantidad - 1)}
-                              className="size-7 flex items-center justify-center transition-colors text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
+                              className="size-8 flex items-center justify-center transition-colors text-zinc-500 hover:text-zinc-900 dark:hover:text-white cursor-pointer"
                               aria-label="Restar cantidad"
                             >
                               <Minus className="size-3" />
@@ -189,7 +203,7 @@ export function CartDrawer() {
                             <button
                               type="button"
                               onClick={() => setQty(item.id, item.cantidad + 1)}
-                              className="size-7 flex items-center justify-center transition-colors text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
+                              className="size-8 flex items-center justify-center transition-colors text-zinc-500 hover:text-zinc-900 dark:hover:text-white cursor-pointer"
                               aria-label="Sumar cantidad"
                             >
                               <Plus className="size-3" />
@@ -198,14 +212,12 @@ export function CartDrawer() {
 
                           {/* Line total */}
                           <div className="text-right">
-                            <p className="font-display font-semibold text-sm text-zinc-900 dark:text-white">
-                              ${(item.precio * item.cantidad).toLocaleString('en-US')}
+                            <p className="font-display font-bold text-sm text-zinc-900 dark:text-white">
+                              ${(item.precio * item.cantidad).toFixed(2)}
                             </p>
-                            {item.cantidad > 1 && (
-                              <p className="text-[10px] text-zinc-400 font-medium mt-0.5">
-                                ${item.precio.toLocaleString('en-US')} c/u
-                              </p>
-                            )}
+                            <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">
+                              Ref. Bs. {formatBsNumber(item.precio * item.cantidad)}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -217,58 +229,48 @@ export function CartDrawer() {
 
             {/* ── Footer / Checkout ── */}
             {items.length > 0 && (
-              <div className="border-t border-zinc-100 dark:border-white/5 px-6 pt-5 pb-6 space-y-5 bg-white dark:bg-zinc-950">
+              <div className="border-t border-zinc-100 dark:border-white/5 px-6 pt-5 pb-6 space-y-4 bg-white dark:bg-zinc-950">
                 {/* Summary */}
                 <div className="flex justify-between items-end">
-                  <span className="text-sm font-semibold text-zinc-500 uppercase tracking-wider">Subtotal</span>
-                  <div className="text-right">
-                    <span className="font-display text-2xl font-bold text-zinc-900 dark:text-white leading-none block">
-                      ${total.toLocaleString('en-US')}
-                    </span>
-                    <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-1 block">
-                      ~ {formatBs(total)}{' '}
-                      <span className="text-[10px] text-zinc-400 font-normal">(BCV)</span>
-                    </span>
-                  </div>
+                  <span className="text-sm font-semibold text-zinc-500 uppercase tracking-wider">
+                    Total a Pagar
+                  </span>
+                  <PriceDisplay
+                    amountUSD={total}
+                    size="md"
+                    align="right"
+                    showOriginalPrice={false}
+                  />
                 </div>
 
                 {/* Trust badges */}
                 <div className="flex items-center justify-center gap-6 text-xs text-zinc-500 font-medium">
                   <span className="flex items-center gap-1.5">
-                    <ShieldCheck className="size-4 text-zinc-900 dark:text-white" />
-                    Pago seguro
+                    <ShieldCheck className="size-4 text-emerald-600" />
+                    Garantía Local
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <Truck className="size-4 text-zinc-900 dark:text-white" />
-                    MRW / Zoom
+                    <Truck className="size-4 text-primary" />
+                    Envíos {storeConfig.SHIPPING_AGENCIES.join(' / ')}
                   </span>
                 </div>
 
-                {/* CTA */}
+                {/* CTA Express */}
                 <div className="space-y-2.5">
-                  <Button
+                  <button
+                    type="button"
                     id="checkout-btn"
-                    onClick={handleCheckout}
-                    className="w-full rounded-2xl py-6 h-auto text-base font-semibold gap-2 shadow-sm transition-transform active:scale-[0.98]"
+                    onClick={handleExpressCheckout}
+                    className="w-full min-h-14 rounded-2xl py-4 px-6 bg-emerald-600 hover:bg-emerald-700 text-white text-base font-display font-bold flex items-center justify-center gap-2.5 shadow-lg shadow-emerald-600/25 transition-all active:scale-[0.98] cursor-pointer"
                   >
-                    Proceder al pago
-                    <ArrowRight className="size-4" />
-                  </Button>
-
-                  <a
-                    href={whatsappCartUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-semibold transition-all border border-emerald-500/20"
-                  >
-                    <MessageCircle className="size-4" />
-                    ¿Dudas con tu compra? Pedir por WhatsApp
-                  </a>
+                    <MessageCircle className="size-5 shrink-0" />
+                    <span>Pedir Ahora / Pagar al Confirmar</span>
+                  </button>
 
                   <button
                     type="button"
                     onClick={clear}
-                    className="w-full text-xs font-medium text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors py-1.5"
+                    className="w-full text-xs font-medium text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors py-1.5 cursor-pointer"
                   >
                     Vaciar carrito
                   </button>

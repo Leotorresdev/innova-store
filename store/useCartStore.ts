@@ -4,15 +4,32 @@ import type { Product } from '@/types';
 
 export interface CartItem extends Product {
   cantidad: number;
+  bundleLabel?: string;
+}
+
+export interface ExpressCheckoutItem {
+  id: string | number;
+  nombre: string;
+  precio: number;
+  precioOriginal?: number;
+  cantidad: number;
+  imagen: string;
+  categoria?: string;
+  bundleLabel?: string;
+  stock?: number;
 }
 
 interface CartState {
   items: CartItem[];
   isOpen: boolean;
   hasHydrated: boolean;
+  expressCheckoutOpen: boolean;
+  expressItems: ExpressCheckoutItem[] | null; // null = usar items del carrito
   setHasHydrated: (state: boolean) => void;
   setOpen: (open: boolean) => void;
-  add: (product: Product) => void;
+  openExpressCheckout: (directItems?: ExpressCheckoutItem[]) => void;
+  closeExpressCheckout: () => void;
+  add: (product: Product, qty?: number, customUnitPrice?: number, bundleLabel?: string) => void;
   remove: (id: string | number) => void;
   setQty: (id: string | number, cantidad: number) => void;
   clear: () => void;
@@ -35,26 +52,57 @@ export const useCartStore = create<CartStore>()(
       items: [],
       isOpen: false,
       hasHydrated: false,
+      expressCheckoutOpen: false,
+      expressItems: null,
 
       setHasHydrated: (state) => set({ hasHydrated: state }),
       setOpen: (open) => set({ isOpen: open }),
 
-      add: (product) =>
+      openExpressCheckout: (directItems) =>
+        set({
+          isOpen: false,
+          expressCheckoutOpen: true,
+          expressItems: directItems && directItems.length > 0 ? directItems : null,
+        }),
+
+      closeExpressCheckout: () =>
+        set({
+          expressCheckoutOpen: false,
+          expressItems: null,
+        }),
+
+      add: (product, qty, customUnitPrice, bundleLabel) =>
         set((state) => {
           const isWholesale = product.categoria === 'Mayorista';
-          const initialQty = isWholesale ? 5 : 1;
+          const initialQty = qty ?? (isWholesale ? 5 : 1);
+          const effectivePrice = customUnitPrice ?? product.precio;
 
           const existing = state.items.find((i) => i.id === product.id);
           if (existing) {
             return {
               items: state.items.map((i) =>
-                i.id === product.id ? { ...i, cantidad: i.cantidad + 1 } : i,
+                i.id === product.id
+                  ? {
+                      ...i,
+                      cantidad: qty ? qty : i.cantidad + 1,
+                      precio: effectivePrice,
+                      bundleLabel: bundleLabel ?? i.bundleLabel,
+                    }
+                  : i
               ),
               isOpen: true,
             };
           }
           return {
-            items: [...state.items, { ...product, cantidad: initialQty }],
+            items: [
+              ...state.items,
+              {
+                ...product,
+                precio: effectivePrice,
+                cantidad: initialQty,
+                bundleLabel,
+              },
+            ],
             isOpen: true,
           };
         }),
@@ -85,14 +133,20 @@ export const useCartStore = create<CartStore>()(
       clear: () => set({ items: [] }),
 
       getTotal: () =>
-        get().items.reduce((acc, i) => acc + i.precio * i.cantidad, 0),
+        Number(
+          get()
+            .items.reduce((acc, i) => acc + i.precio * i.cantidad, 0)
+            .toFixed(2)
+        ),
 
       getCount: () => get().items.reduce((acc, i) => acc + i.cantidad, 0),
 
       getTotals: () => {
         const items = get().items;
         return {
-          total: items.reduce((acc, i) => acc + i.precio * i.cantidad, 0),
+          total: Number(
+            items.reduce((acc, i) => acc + i.precio * i.cantidad, 0).toFixed(2)
+          ),
           count: items.reduce((acc, i) => acc + i.cantidad, 0),
         };
       },
@@ -115,4 +169,3 @@ export const selectCartIsOpen = (s: CartStore) => s.isOpen;
 export const selectCartCount = (s: CartStore) => s.getCount();
 export const selectCartTotal = (s: CartStore) => s.getTotal();
 export const selectCartHasHydrated = (s: CartStore) => s.hasHydrated;
-

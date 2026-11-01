@@ -7,14 +7,20 @@ export async function sendOrderNotificationToTelegram(orderData: any) {
     return;
   }
 
+  const isExpressPending =
+    !orderData.paymentProofUrl || orderData.paymentProofUrl === 'WHATSAPP_EXPRESS_PENDING';
+
   // Formatear los items para el mensaje
-  const itemsText = orderData.items.map((item: any) => 
-    `🔸 ${item.productName || item.nombre || item.productId}`
-  ).join('\n');
+  const itemsText = orderData.items
+    .map(
+      (item: any) =>
+        `🔸 ${item.productName || item.nombre || item.productId} (x${item.cantidad || item.quantity || 1})`
+    )
+    .join('\n');
 
   // Construir el mensaje en Markdown
   const message = `
-🔔 *NUEVA ORDEN RECIBIDA* 🔔
+${isExpressPending ? '⚡ *NUEVO PEDIDO EXPRESS (PENDIENTE DE PAGO)* ⚡' : '🔔 *NUEVA ORDEN RECIBIDA* 🔔'}
 _ID:_ #${orderData.id.slice(0, 8).toUpperCase()}
 
 👤 *DATOS DEL CLIENTE*
@@ -28,17 +34,31 @@ _ID:_ #${orderData.id.slice(0, 8).toUpperCase()}
 
 💰 *DATOS DE PAGO*
 - *Método:* ${orderData.paymentMethod}
-- *Total:* $${orderData.total} ${orderData.totalBs ? `(Bs. ${Number(orderData.totalBs).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})` : ''}
+- *Total:* $${Number(orderData.total).toFixed(2)} ${
+    orderData.totalBs
+      ? `(Bs. ${Number(orderData.totalBs).toLocaleString('es-VE', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })})`
+      : ''
+  }
 
 🛒 *PRODUCTOS COMPRADOS*
 ${itemsText}
 
-⚠️ _Verifica el capture adjunto para procesar y marcar como completado en el Panel._
+${
+  isExpressPending
+    ? '💬 _El cliente fue redirigido a WhatsApp para recibir los datos de pago._'
+    : '⚠️ _Verifica el capture adjunto para procesar y marcar como completado en el Panel._'
+}
   `;
 
   try {
-    // Si la orden tiene un capture (imagen), usamos sendPhoto
-    if (orderData.paymentProofUrl) {
+    // Si la orden tiene un capture válido (URL http/https), usamos sendPhoto
+    if (
+      orderData.paymentProofUrl &&
+      orderData.paymentProofUrl.startsWith('http')
+    ) {
       const url = `https://api.telegram.org/bot${botToken}/sendPhoto`;
       const response = await fetch(url, {
         method: 'POST',
@@ -47,8 +67,8 @@ ${itemsText}
           chat_id: chatId,
           photo: orderData.paymentProofUrl,
           caption: message,
-          parse_mode: 'Markdown'
-        })
+          parse_mode: 'Markdown',
+        }),
       });
 
       if (!response.ok) {
@@ -56,7 +76,7 @@ ${itemsText}
         console.error('Error al enviar foto a Telegram:', errorText);
       }
     } else {
-      // Si por alguna razón no hay foto, enviamos solo texto
+      // Pedido Express por WhatsApp (sin foto adjunta aún) -> sendMessage
       const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
       const response = await fetch(url, {
         method: 'POST',
@@ -64,8 +84,8 @@ ${itemsText}
         body: JSON.stringify({
           chat_id: chatId,
           text: message,
-          parse_mode: 'Markdown'
-        })
+          parse_mode: 'Markdown',
+        }),
       });
 
       if (!response.ok) {

@@ -4,6 +4,7 @@ import { siteConfig } from '@/config/site';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/layout/CartDrawer';
+import { ExpressCheckoutModal } from '@/components/features/checkout/ExpressCheckoutModal';
 import { NoiseBackground } from '@/components/ui/NoiseBackground';
 import { getGlobalSettings } from '@/app/actions/settings';
 import { Analytics } from "@vercel/analytics/next"
@@ -95,6 +96,7 @@ export default async function RootLayout({
         <main className="pt-28 sm:pt-32">{children}</main>
         <Footer />
         <CartDrawer />
+        <ExpressCheckoutModal />
         <Analytics />
       </body>
     </html>

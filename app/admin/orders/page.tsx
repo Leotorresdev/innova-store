@@ -3,10 +3,14 @@ import Link from 'next/link';
 import { ChevronLeft, LogOut } from 'lucide-react';
 import { OrdersClient } from './OrdersClient';
 import { logoutAction } from '@/app/actions/auth';
+import { autoReleaseExpiredOrders } from '@/app/actions/orders';
 
 export const dynamic = 'force-dynamic';
 
 export default async function OrdersPage() {
+  // Liberar automáticamente stock de órdenes en proceso con más de 4 horas
+  await autoReleaseExpiredOrders(4);
+
   const orders = await prisma.order.findMany({
     orderBy: { createdAt: 'desc' },
     include: {

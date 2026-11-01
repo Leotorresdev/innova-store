@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Search, X, MessageCircle } from 'lucide-react';
 import { ProductGrid } from '@/components/features/products/ProductGrid';
+import { buildWhatsAppUrl } from '@/config/storeConfig';
 import type { Product } from '@/types';
 
 type FilterType = 'ALL' | 'AVAILABLE' | 'OUT_OF_STOCK';
@@ -188,12 +189,12 @@ export function ProductsShowcase() {
               ¿Buscas algún equipo específico o preventa? Consulta directo con un asesor por WhatsApp.
             </p>
             <a
-              href={`https://wa.me/584262663234?text=${encodeURIComponent(
-                `¡Hola INNOVA! Estaba buscando en la web el producto "${searchQuery}" y no lo encontré. ¿Lo tienen disponible o pueden encargarlo?`
-              )}`}
+              href={buildWhatsAppUrl(
+                `¡Hola Innova Company! Estaba buscando en la web el producto "${searchQuery}" y no lo encontré. ¿Lo tienen disponible o pueden encargarlo?`
+              )}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition-all"
+              className="inline-flex items-center gap-2 min-h-12 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition-all"
             >
               <MessageCircle className="size-4" />
               Consultar por WhatsApp
