@@ -137,17 +137,20 @@ export function ProductCard({ product, index = 0, className = '' }: ProductCardP
               />
             )}
 
-            {/* Dark scrim — only visible on hover for the CTA */}
+            {/* Scrim degradado para contraste del botón (visible en móvil, en escritorio en hover) */}
             <div
-              className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/20 to-transparent
-              opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              className="absolute inset-x-0 bottom-0 h-28 sm:h-full sm:inset-0
+              bg-gradient-to-t from-black/80 via-black/40 to-transparent
+              opacity-100 sm:opacity-0 sm:group-hover:opacity-100
+              transition-opacity duration-500 pointer-events-none"
             />
 
-            {/* Quick-buy CTA that slides up */}
+            {/* Quick-buy CTA: Visible permanente en móvil, slide-up en desktop hover */}
             <div
-              className="absolute inset-x-4 bottom-4
-              translate-y-3 opacity-0
-              group-hover:translate-y-0 group-hover:opacity-100
+              className="absolute inset-x-3 bottom-3 sm:inset-x-4 sm:bottom-4
+              translate-y-0 opacity-100
+              sm:translate-y-3 sm:opacity-0
+              sm:group-hover:translate-y-0 sm:group-hover:opacity-100
               transition-all duration-300 ease-out z-20"
             >
               {isOutOfStock ? (
@@ -156,13 +159,13 @@ export function ProductCard({ product, index = 0, className = '' }: ProductCardP
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="w-full min-h-12 flex items-center justify-center gap-2
+                  className="w-full min-h-11 sm:min-h-12 flex items-center justify-center gap-2
                     bg-emerald-600 hover:bg-emerald-700 text-white
-                    text-xs font-semibold py-3 rounded-2xl
-                    transition-all duration-200 shadow-lg"
+                    text-xs sm:text-sm font-semibold py-2.5 sm:py-3 px-3 rounded-2xl
+                    transition-all duration-200 shadow-lg text-center"
                 >
-                  <MessageCircle className="size-4" />
-                  Encargar por WhatsApp
+                  <MessageCircle className="size-4 shrink-0" />
+                  <span>Encargar por WhatsApp</span>
                 </a>
               ) : (
                 <button
@@ -173,14 +176,14 @@ export function ProductCard({ product, index = 0, className = '' }: ProductCardP
                     e.stopPropagation();
                     handleExpressBuy();
                   }}
-                  className="w-full min-h-12 flex items-center justify-center gap-2
+                  className="w-full min-h-11 sm:min-h-12 flex items-center justify-center gap-2
                     bg-emerald-600 hover:bg-emerald-700 text-white
-                    text-sm font-bold py-3 rounded-2xl
+                    text-xs sm:text-sm font-bold py-2.5 sm:py-3 px-3 rounded-2xl
                     active:scale-[0.97]
-                    transition-all duration-200 shadow-lg cursor-pointer"
+                    transition-all duration-200 shadow-lg shadow-emerald-950/30 cursor-pointer text-center"
                 >
-                  <MessageCircle className="size-4" />
-                  Pedir Ahora / Pagar al Confirmar
+                  <MessageCircle className="size-4 shrink-0" />
+                  <span className="truncate">Pedir Ahora / Pagar al Confirmar</span>
                 </button>
               )}
             </div>
